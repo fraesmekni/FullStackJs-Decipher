@@ -1,0 +1,28 @@
+{
+  "name": "decipher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "backend": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "user": "node backend/server.js",
+    "dev": "concurrently \"npm run backend\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^7.6.0",
+    "dotenv": "^16.0.3",
+    "email-validator": "^2.0.4",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.9.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "nodemon": "^2.0.20",
+    "otp-generator": "^4.0.1"
+  }
+}
