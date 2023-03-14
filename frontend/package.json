@@ -6,8 +6,14 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+<<<<<<< HEAD
     "@material-ui/core": "4.11.4",
     "@material-ui/icons": "4.11.2",
+=======
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+>>>>>>> 16a7a304b62f6dbf93d83951d8a61ba87b5c6b88
     "@mui/material": "^5.11.12",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
@@ -25,7 +31,11 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+<<<<<<< HEAD
     "react-toastify": "^9.0.5",
+=======
+    "react-speech-recognition": "^3.10.0",
+>>>>>>> 16a7a304b62f6dbf93d83951d8a61ba87b5c6b88
     "redux-devtools-extension": "^2.13.9",
     "web-vitals": "^2.1.4"
   },
