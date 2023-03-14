@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL} from "./userconstant"
 import { useNavigate } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
@@ -40,7 +40,7 @@ export const login = (email,password) => async (dispatch)=>{
 
     }
 }
-export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor) => async (dispatch)=>{
+export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor,file,fil) => async (dispatch)=>{
   let messageSuccess ;  
   try {
         dispatch({
@@ -54,7 +54,7 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
 
         const { data } = await axios.post(
             'http://localhost:5000/api/user/register',
-            {firstName,lastName,cin,phone,dateOfBirth,imageUrl, email, password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor },
+            {firstName,lastName,cin,phone,dateOfBirth,imageUrl, email, password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor,file,fil },
             config
           );
 
@@ -176,3 +176,75 @@ export const approveUser = (id, role) => async (dispatch) => {
   }
 };
 
+
+export const Forget_Password = (email) => async (dispatch)=>{
+  try {
+      dispatch({
+          type:FORGET_PASSWORD_REQUEST
+      })
+      const config = {
+          headers:{
+              'Content-Type' : 'application/json'
+          }
+      }
+
+      const {data } =await axios.post(
+          'http://localhost:5000/api/user/forget-password',
+          {email},
+          config
+      )
+              
+      dispatch({
+          type : FORGET_PASSWORD_SUCCESS,
+          payload : data
+      })
+
+  } catch(error){
+      dispatch({
+          type: FORGET_PASSWORD_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        })
+        
+        
+        
+        
+  }
+}
+
+
+export const resetPassword = (password,id,token) => async (dispatch)=>{
+  try {
+      dispatch({
+          type:RESET_PASSWORD_REQUEST
+      })
+      const config = {
+          headers:{
+              'Content-Type' : 'application/json'
+          }
+      }
+
+      const {data } =await axios.post(
+          `http://localhost:5000/api/user/reset-password?id=${id}&token=${token}`,
+          {password},
+          config
+      )
+
+      dispatch({
+          type : RESET_PASSWORD_SUCCESS,
+          payload : data
+          
+      })
+  } catch(error){
+      dispatch({
+          type: RESET_PASSWORD_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        })
+
+  }
+}

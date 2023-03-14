@@ -1,5 +1,9 @@
 /* eslint-disable no-duplicate-case */
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS } from "./userconstant";
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
+     USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, 
+     USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS, 
+     FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, 
+     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -45,3 +49,31 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, U
         return state;
     }
   };
+
+  export const forgetPassword=(state={},action)=>{
+    switch (action.type) {
+        case FORGET_PASSWORD_REQUEST : 
+            return {loading : true}
+
+        case FORGET_PASSWORD_SUCCESS : 
+            return {loading : false, success: true }
+        case FORGET_PASSWORD_FAIL :
+            return {loading : false ,error: action.payload }    
+        default:
+            return state    
+
+    }
+}
+export const resetPassword=(state={},action)=>{
+    switch (action.type) {
+        case RESET_PASSWORD_REQUEST : 
+            return {loading : true}
+        case RESET_PASSWORD_SUCCESS : 
+            return {loading : false }
+        case RESET_PASSWORD_FAIL :
+            return {loading : false  ,error: action.payload }       
+        default:
+            return state    
+
+    }
+}

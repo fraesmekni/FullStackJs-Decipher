@@ -47,7 +47,7 @@ function Navbarr () {
                             ABOUT US                            
                              </Link>
                            
-                               <Link to="/presignup" style={{marginLeft: '700px'}}className="nav_links">
+                               <Link to="/register" style={{marginLeft: '700px'}}className="nav_links">
 
 SIGNUP                          </Link>
 

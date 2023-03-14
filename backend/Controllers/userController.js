@@ -10,6 +10,8 @@ const validator = require("email-validator");
 const crypto= require("crypto");
 const jwt = require("jsonwebtoken");
 const {storage } = require ('../routes/userRoute')
+const fs = require('fs')
+const handlebars = require('handlebars');
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
@@ -23,11 +25,9 @@ const registerUser = asynHandler( async ( req , res )=> {
     } = req.body
     const  imageUrl =req.file.filename 
 
-    const { entrepriseName,sector,descriptionSponsor} = req.body
-    const { speciality,descriptionCoach,dateDebutExperience ,
-        dateFinExperience,
-        titrePoste,
-        certification} = req.body
+    const { entrepriseName,sector,descriptionSponsor,file} = req.body
+   
+    
 
     if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUrl ||  !cin  || !dateOfBirth || !phone ){
             res.json({"message":"Please add  all fields"}).status(400)
@@ -70,13 +70,20 @@ const registerUser = asynHandler( async ( req , res )=> {
             user:user._id,
             entrepriseName:entrepriseName,
             sector:sector,
-            descriptionSponsor:descriptionSponsor
+            descriptionSponsor:descriptionSponsor,
+            file:file
+           
         })
             
     }
+    const fil=file
+    const { speciality,descriptionCoach,dateDebutExperience ,
+        dateFinExperience,
+        titrePoste
+        
+    } = req.body
         //Coach Creation
-
-    if (speciality &&  descriptionCoach && dateDebutExperience &&  dateFinExperience && titrePoste && certification){
+    if (speciality  ){
         const coach = await Coach.create({
             user:user._id,
             speciality:speciality,
@@ -84,11 +91,10 @@ const registerUser = asynHandler( async ( req , res )=> {
             dateDebutExperience: dateDebutExperience,
             dateFinExperience : dateFinExperience,
             titrePoste: titrePoste,
-            certification : certification 
-        })
-            
+            file:fil
+        })           
     }
-    
+
     //const token = createToken(user._id);
 
     
@@ -226,15 +232,13 @@ const logIn = asynHandler( async (req,res)=>{
 
 const forgetPass = asynHandler(async (req,res)=>{
     const  { email } = req.body
-if (!email){
-    res.status(401)
-    res.json('Invalid email')
+if (!email ){
+    res.status(404).json({"message":'Invalid email'})
   }
     const user = await User.findOne({ email: email })
     console.log(user)
     if(!user){
-        res.status(400)
-        throw new Error("Invalid User")
+        res.status(404).json({"message":"Invalid User"})
     }
     const otp = generatorOTP()
     console.log(otp)
@@ -243,19 +247,29 @@ if (!email){
         vtoken: otp
     })
     console.log("mail")
+    fs.readFile('backend\\utils\\content.html', {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+          console.log(err);
+        } else {
+            var template = handlebars.compile(html);
+            var replacements = {
+                name: user.lastName+" "+user.firstName,
+                action_url: `http://localhost:3000/reset-password?id=${user._id}&token=${otp}`,
+            };
+            var htmlToSend = template(replacements);
     mailTransport().sendMail({
         from:"devtestmailer101@gmail.com",
         to: user.email,
         subject: "Rest Password Mail",
-        html: `<a href="http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}"> http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}</a>`
-    })
+        html: htmlToSend
+    })}})
    return res.json("done")
 })
 const reset = asynHandler(async ( req,res)=>{
     const { password } =req.body
     const user = await User.findById(req.user._id)
     if (!user) {
-        res.Error(404)
+        res.status(404).json({"message":"User Not Found !!"})
         throw new Error(" User Not Found !!")
     }
     const salt = await bcrypt.genSalt(10)
@@ -264,12 +278,21 @@ const reset = asynHandler(async ( req,res)=>{
     user.password = headPassword
     await verficationToken.deleteOne({ owner : user._id })
     await user.save()
+    fs.readFile('backend\\utils\\index.html', {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+          console.log(err);
+        } else {
+            var template = handlebars.compile(html);
+            var replacements = {
+                action_url: `http://localhost:3000/login`,
+            };
+            var htmlToSend = template(replacements);
     mailTransport().sendMail({
         from: 'hazemmega55@gmail.com',
         to: user.email,
         subject: 'password changed',
-        html: `<h1>password changed</h1>`
-      })
+        html: htmlToSend
+      })}})
      res.json(" Password Updated ")
 
 

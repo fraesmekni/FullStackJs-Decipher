@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
 import "./register.css";
+import UploadfFile from "../UploadfFile";
 import SpecialButton from "../../Components/Button/button";
 import Loader from "../../Components/Loader";
 import { register } from "../../userredux/useraction";
@@ -38,6 +39,8 @@ const Register = () => {
   const [dateFinExperience, setDateFinExperience] = useState("");
   const [titrePoste, setTitrePoste] = useState("");
   const [certification, setCertification] = useState("");
+  const [file, setFile] = useState("");
+  const [fil, setFil] = useState(file);
   //states taa Sponsor
   const [sector, setSector] = useState("");
   const [descriptionSponsor, setDescriptionSponsor] = useState("");
@@ -111,10 +114,11 @@ const Register = () => {
         dateDebutExperience,
         dateFinExperience,
         titrePoste,
-        certification,
         sector,
         descriptionSponsor,
-        entrepriseName
+        entrepriseName,
+        file,
+        fil
       )
     );
   };
@@ -414,7 +418,7 @@ const Register = () => {
 
           {step === 3 && (
             <>
-              <input
+               <input
                 id="sector"
                 type="text"
                 placeholder="Sector"
@@ -436,7 +440,9 @@ const Register = () => {
                 placeholder="Entreprise Name"
                 value={entrepriseName}
                 onChange={(e) => setEntrepriseName(e.target.value)}
-              ></input>
+              ></input> 
+              <UploadfFile setFile={setFile}></UploadfFile>
+              
             </>
           )}
           {/* step 4 mtaa be9i el form for Coach */}
@@ -467,13 +473,7 @@ const Register = () => {
                 onChange={(e) => setTitrePoste(e.target.value)}
               ></input>
 
-              <input
-                id="certification"
-                type="file"
-                placeholder="Certification"
-                value={certification}
-                onChange={(e) => setCertification(e.target.value)}
-              ></input>
+              
 
               <input
                 id="dateDebutExperience"
@@ -489,6 +489,8 @@ const Register = () => {
                 value={dateFinExperience}
                 onChange={(e) => setDateFinExperience(e.target.value)}
               ></input>
+              <UploadfFile setFile={setFile} setFil={setFil} ></UploadfFile>
+              {console.log(fil)}
             </>
           )}
 
