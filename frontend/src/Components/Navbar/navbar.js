@@ -49,7 +49,8 @@ function Navbarr () {
                            
                                <Link to="/register" style={{marginLeft: '700px'}}className="nav_links">
 
-SIGNUP                          </Link>
+                                    SIGNUP                          
+                                    </Link>
 
            
             {userInfo?(
@@ -60,9 +61,9 @@ SIGNUP                          </Link>
                         <NavDropdown.Item onClick={logoutHandler} >Logout</NavDropdown.Item>
                     </NavDropdown>
             ): 
-            <Link to={"/login"}>
+            <LinkContainer to={"/login"}>
                 signin
-                </Link>         
+                </LinkContainer>         
             }
             
 

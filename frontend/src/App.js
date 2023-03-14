@@ -7,6 +7,7 @@ import Navbarr from './Components/Navbar/navbar';
 import Loader from './Components/Loader';
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
+const Profile = lazy(()=>import('./page/Profile'))
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/forget-password" element={<ForgetPassword/>} />
     <Route path="/reset-password" element={<ResetPassword/>} />
+    <Route path="/profile" element={<Profile/>} />
     </Routes>
     </Router>
     </Suspense>

@@ -3,7 +3,6 @@ import { Form , Button ,Container } from 'react-bootstrap'
 import Loader from '../Components/Loader'
 import axios from 'axios'
 import FileUplload from '../Components/FileUplload'
-import Toast from '../Components/Toast'
 
 
 const UploadfFile = ({setFile,setFil}) => {

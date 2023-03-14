@@ -4,7 +4,6 @@ import Loader from "../Components/Loader";
 import { Form ,Button,Container } from 'react-bootstrap'
 import { resetPassword } from '../userredux/useraction' 
 import { useDispatch , useSelector } from "react-redux";
-import Toast  from '../Components/Toast';
 import video from "../Components/HeroSection/pottery2.mp4"
 import {toast,ToastContainer} from 'react-toastify';
 
