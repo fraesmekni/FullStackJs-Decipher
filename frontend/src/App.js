@@ -17,6 +17,7 @@ import axios from "axios";
 import UserDashboard from './page/UserDashboard/UserDashboard';
 import ProductDetail from './page/ProductDetail/ProductDetail';
 import Shop from './page/Shop/shop';
+import Cart from './page/Cart/Cart';
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -80,6 +81,7 @@ function App() {
     <Route path="/" element={<><Navbarr /><Home/></>} />
     <Route path="/productdetail/:id" element={<> <div className="bgdetail"><Navbarr /><ProductDetail/></div></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
+    <Route path="/cart/:id?" element={<><Navbarr /><Cart/></>} />
 
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 

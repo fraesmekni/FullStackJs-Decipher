@@ -6,6 +6,7 @@ import {userLoginReducer, userReducers, userRegisterReducer,
   sponsorReducer,coachReducer} from '../userredux/userreducer'
 import { productAddReducer, productDetailReducer, productGetReducer } from '../productredux/productreducer';
 import { productDetails } from '../productredux/productaction';
+import { cartReducer } from '../cartredux/cartreducer';
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
@@ -19,12 +20,14 @@ const reducer = combineReducers({
     coachReducer:coachReducer,
     productAdd : productAddReducer,
     productGetReducer : productGetReducer,
-    productDetail: productDetailReducer
-})
+    productDetail: productDetailReducer,
+    cart: cartReducer,
+
+  })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 
 const ProductInfoFromStorage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : null 
-
+const cartItemsFromStorage = localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')) : []
 
 const initialState ={
         //localstorage
@@ -33,8 +36,9 @@ const initialState ={
           userInfo: userInfoFromStorage
         },
         productGetReducer: {
-          products: ProductInfoFromStorage
-        }
+          products: []
+        },
+        cart : { cartItems : cartItemsFromStorage}
   }
   const middleware = [thunk]
   
