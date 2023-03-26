@@ -2,8 +2,9 @@ const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
 const express = require('express');
-const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProduct, SearchProduct, GetProductsById } = require("../Controllers/productController");
+const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProduct, SearchProduct, GetProductsById,createReview } = require("../Controllers/productController");
 const router = express.Router()
+const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -32,6 +33,8 @@ router.delete('/delete/:id' ,deleteProduct),
 router.put('/updateProduct/:id' ,updateProduct),
 router.get('/search/:key',SearchProduct),
 router.get('/productById/:userId',GetProductsById)
+//review
+router.post('/:id/reviews' ,protectSimpleUser, createReview)
 
 
 
