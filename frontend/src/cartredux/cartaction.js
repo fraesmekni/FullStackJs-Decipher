@@ -9,7 +9,7 @@ import { CART_ADD_ITEM, CART_SET_ITEMS, CART_REMOVE_ITEM } from './cartconstant'
     const existingItemIndex = cartItems.findIndex((item) => item.product === data._id);
     if (existingItemIndex !== -1) {
       // If the item already exists in the cart, update the quantity of the item
-      cartItems[existingItemIndex].qty += qty;
+      cartItems[existingItemIndex].qty = qty;
     } else {
       // If the item does not exist in the cart, add it to the cart
       cartItems.push({

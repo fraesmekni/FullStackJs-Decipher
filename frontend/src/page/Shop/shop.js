@@ -4,6 +4,7 @@ import React, {useState,useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from "../../productredux/productaction";
 import { Link } from "react-router-dom";
+import { Carousel, Image } from "react-bootstrap";
 
 function Shop()
 {
@@ -26,7 +27,16 @@ function Shop()
    };
 
     return (
-        <>
+        <> 
+         {/* <Carousel style={{marginTop:"100px",maxLength:"300px"}} pause='hover' className='bg-light'>
+         {Array.isArray(products) && products.map((p) => (
+        <Carousel.Item key={p._id}>
+          <Link to={`/productDetail/${p._id}`}>
+            <Image src={`${process.env.PUBLIC_URL}/images/${p.imageProduct}`} alt={p.productName} fluid />
+          </Link>
+        </Carousel.Item>  
+      ))}
+    </Carousel> */}
         <div className="shopcontainer">
         {Array.isArray(products) && products.map((p) => (
           <Product product={p} >

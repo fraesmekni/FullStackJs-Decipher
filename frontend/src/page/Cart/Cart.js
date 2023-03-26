@@ -75,7 +75,7 @@ const removeFromCartHandler = (id)=>{
                     <Col md={3}>
                       {item.productName}
                     </Col>
-                    <Col md={2}>{item.price} DT x {qty}</Col>
+                    <Col md={2}>{item.price} DT x {item.qty}</Col>
                    
                     <Col md={1}>
                       <Button
