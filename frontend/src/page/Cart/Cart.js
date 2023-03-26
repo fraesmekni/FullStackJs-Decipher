@@ -5,20 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { addToCart } from '../../cartredux/cartaction';
 import "./Cart.css"
+import { CART_LOAD_ITEMS } from '../../cartredux/cartconstant';
 
 const Cart= (location) => {
   const { id } = useParams();
-  const cart = useSelector((state=>state.cart))
-  const {cartItems} = cart 
-  const qty = location.search ? Number(location.search.split('=')[1]):1;
-  const dispatch = useDispatch()
+  const cart = useSelector((state) => state.cart);
+const { cartItems } = cart;
+const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+const user = useSelector((state) => state.userLogin.userInfo._id); // Get the user ID from the store
+const dispatch = useDispatch();
 console.log(id);
-console.log("ena quantity"+ qty)
-useEffect(()=>{
-  if(id){
-    dispatch(addToCart(id,qty))
+console.log("ena quantity" + qty);
+useEffect(() => {
+  if (id) {
+    dispatch(addToCart(id, qty,user));
   }
-},[dispatch,id,qty])
+
+  const cartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || []; // Get the cart items for the current user
+  dispatch({ type: CART_LOAD_ITEMS, payload: cartItems }); // Load the cart items from localStorage to the store
+}, [dispatch, id, qty, user]);
+
     return (<div style={{marginTop:"200px"}} classname="shoppingcart">
     <Row >
         <Col  md={8}>

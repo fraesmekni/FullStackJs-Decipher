@@ -7,6 +7,7 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST,
      USER_BLOCK_SUCCESS, USER_BLOCK_FAIL, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, 
      ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS } from "./userconstant"
 import { useNavigate ,  redirect } from 'react-router-dom'
+import { CART_LOAD_ITEMS } from '../cartredux/cartconstant'
 
 export const login = (email,password) => async (dispatch)=>{
     try {
@@ -30,6 +31,8 @@ export const login = (email,password) => async (dispatch)=>{
             type : USER_LOGIN_SUCCESS,
             payload : data
         }) 
+        const cartItems = JSON.parse(localStorage.getItem(`cartItems_${data._id}`)) || [];
+        dispatch({ type: CART_LOAD_ITEMS, payload: cartItems }); 
         localStorage.setItem('userInfo', JSON.stringify(data))
    
     
