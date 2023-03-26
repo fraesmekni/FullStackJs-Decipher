@@ -39,3 +39,12 @@ export const ADD_SPONSOR_SUCCESS = 'ADD_SPONSOR_SUCCESS'
 export const UPDATE_USER_REQUEST='UPDATE_USER_REQUEST'
 export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL'
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS'
+// ===================================================
+export const UPDATE_COACH_REQUEST='UPDATE_COACH_REQUEST'
+export const UPDATE_COACH_FAIL = 'UPDATE_COACH_FAIL'
+export const UPDATE_COACH_SUCCESS = 'UPDATE_COACH_SUCCESS'
+// ===================================================
+export const UPDATE_SPONSOR_REQUEST='UPDATE_SPONSOR_REQUEST'
+export const UPDATE_SPONSOR_FAIL = 'UPDATE_SPONSOR_FAIL'
+export const UPDATE_SPONSOR_SUCCESS = 'UPDATE_SPONSOR_SUCCESS'
+

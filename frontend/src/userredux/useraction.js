@@ -5,7 +5,9 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST,
     FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, 
     BLOCK_USER, UNBLOCK_USER, USER_VERIFY_REQUEST, USER_VERIFY_SUCCESS, USER_VERIFY_FAIL, USER_BLOCK_REQUEST,
      USER_BLOCK_SUCCESS, USER_BLOCK_FAIL, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, 
-     ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS } from "./userconstant"
+     ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS 
+     ,UPDATE_COACH_REQUEST,UPDATE_COACH_FAIL,UPDATE_COACH_SUCCESS,UPDATE_SPONSOR_REQUEST,UPDATE_SPONSOR_FAIL,
+     UPDATE_SPONSOR_SUCCESS} from "./userconstant"
 import { useNavigate ,  redirect } from 'react-router-dom'
 import { CART_LOAD_ITEMS } from '../cartredux/cartconstant'
 
@@ -404,7 +406,6 @@ export const sponsoraction = (sponsor) => async (dispatch)=>{
 }
 
 
-
 export const update = ({firstName,lastName,phone,email,cin,imageUrl,password,dateOfBirth,id}) => async (dispatch)=>{
   try {
         dispatch({
@@ -438,6 +439,98 @@ export const update = ({firstName,lastName,phone,email,cin,imageUrl,password,dat
       } else {
           dispatch({
               type: UPDATE_USER_FAIL,
+              payload: error.response && error.response.data.message
+                  ? error.response.data.data.message
+                  : error.message
+          });
+      }
+      console.log(error.response.data.message);
+  }
+}
+
+export const updateCoch = ({firstName,lastName ,phone, email 
+  ,password,cin,imageUrl,dateOfBirth,speciality,descriptionCoach,dateDebutExperience
+  ,dateFinExperience,titrePoste,file,id}) => async (dispatch)=>{
+  try {
+        dispatch({
+            type:UPDATE_COACH_REQUEST
+        })
+        const config = {
+            headers:{
+                'Content-Type' : 'multipart/form-data'
+            }
+        }
+
+        const { data } = await axios.put(
+          `http://localhost:5000/api/user/updateCoach/${id}`,
+            {firstName,lastName ,phone, email 
+              ,password,cin,imageUrl,dateOfBirth,speciality,descriptionCoach,dateDebutExperience
+              ,dateFinExperience,titrePoste,file},
+            config
+          );
+
+        dispatch({
+            type : UPDATE_COACH_SUCCESS,
+            payload : data
+        })
+     
+       // localStorage.setItem('userInfo', JSON.stringify(data))
+
+       } catch(error){
+      if (error.response && error.response.data.message === 'Coach with this E-mail adress already exists') {
+          dispatch({
+              type: UPDATE_COACH_FAIL,
+              payload: error.response.data.message
+          });
+      } else {
+          dispatch({
+              type: UPDATE_COACH_FAIL,
+              payload: error.response && error.response.data.message
+                  ? error.response.data.data.message
+                  : error.message
+          });
+      }
+      console.log(error.response.data.message);
+  }
+}
+
+
+
+export const updateSponsor = ({firstName,lastName ,phone, email ,password,cin,dateOfBirth,imageUrl,
+  entrepriseName,sector,descriptionSponsor,fil,id}) => async (dispatch)=>{
+  try {
+        dispatch({
+            type:UPDATE_SPONSOR_REQUEST
+        })
+        const config = {
+            headers:{
+                'Content-Type' : 'multipart/form-data'
+            }
+        }
+
+        const { data } = await axios.put(
+          `http://localhost:5000/api/user/updateSponsor/${id}`,
+            {firstName,lastName ,phone, email ,password,cin,dateOfBirth,imageUrl,
+              entrepriseName,sector,descriptionSponsor,fil},
+            config
+          );
+
+        dispatch({
+            type : UPDATE_SPONSOR_SUCCESS,
+            payload : data
+        })
+     
+       // localStorage.setItem('userInfo', JSON.stringify(data))
+
+       } catch(error){
+      if (error.response && error.response.data.message === 'Sponsor with this E-mail adress already exists') {
+          dispatch({
+              type: UPDATE_SPONSOR_FAIL,
+              payload: error.response.data.message
+          });
+      } else {
+          dispatch({
+              type: UPDATE_SPONSOR_FAIL,
               payload: error.response && error.response.data.message
                   ? error.response.data.data.message
                   : error.message
