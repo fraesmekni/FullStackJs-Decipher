@@ -25,22 +25,22 @@ useEffect(() => {
   dispatch({ type: CART_LOAD_ITEMS, payload: cartItems }); // Load the cart items from localStorage to the store
 }, [dispatch, id, qty, user]);
 
-    return (<div style={{marginTop:"200px"}} classname="shoppingcart">
+    return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
     <Row >
         <Col  md={8}>
-          <h1>Shopping Cart</h1>
-            {cartItems.length===0? <p>your card is emptyyyyy</p> :(
-            <ListGroup variant='flush'>
+          <h1 style={{marginLeft:"-120px"}}> Your Shopping Cart</h1>
+            {cartItems.length===0?( <div style={{marginLeft:"140px"}}><img style={{width:"120px"}}src='http://cdn.onlinewebfonts.com/svg/img_290414.png'/> <p>Your cart is empty </p> </div>):(
+            <ListGroup  variant='flush'>
               {cartItems.map(item =>
                 <ListGroup.Item >
                   <Row>
                     <Col md={2}>
-                      <Image src={item.imageProduct} alt={item.productName} fluid rounded />
+                      <Image src={`${process.env.PUBLIC_URL}/images/${item.imageProduct}`} alt={item.productName} fluid rounded />
                     </Col>
                     <Col md={3}>
                       {item.productName}
                     </Col>
-                    <Col md={2}>{item.price} </Col>
+                    <Col md={2}>{item.price} DT</Col>
                     <Col md={2}>
                     <Form.Control
                       as='select'
@@ -75,11 +75,15 @@ useEffect(() => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <h2>
-                  Subtotal 
-                  items
-                </h2>
-             
+              <h2>
+                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                items
+              </h2>
+              
+              {cartItems
+                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .toFixed(2)}
+              DT
               </ListGroup.Item>
               <ListGroup.Item>
                 <button
