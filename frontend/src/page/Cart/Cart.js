@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import "../ProductDetail/ProductDetail.css";
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { addToCart , removeFromCart} from '../../cartredux/cartaction';
 import "./Cart.css"
 import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
@@ -11,31 +11,44 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 
-const Cart= (location) => {
+const Cart= () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const cart = useSelector((state) => state.cart);
 const { cartItems } = cart;
-const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+
+const location = useLocation(); // Get the location object from React Router
+  
+const [qty, setQty] = useState(() => {
+  const params = new URLSearchParams(location.search);
+  const qtyParam = params.get("qty");
+  const defaultQty = qtyParam ? Number(qtyParam) : 9;
+  return defaultQty;
+});
+
 const user = useSelector((state) => state.userLogin.userInfo._id); // Get the user ID from the store
 const dispatch = useDispatch();
 console.log(id);
 console.log("ena quantity" + qty);
 useEffect(() => {
   
-  if (cartItems.length === 0) {
-    // Redirect to '/cart' when cart is empty
-    navigate('/cart');
-  }
-  if (id) {
-    dispatch(addToCart(id, qty,user));
-  }
+ 
   const storedCartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
   if (storedCartItems.length > 0) {
     dispatch({
       type: CART_SET_ITEMS,
       payload: storedCartItems.filter((item) => item.qty > 0),
     });
+  }
+  if (location.search) {
+    const qtyParam = new URLSearchParams(location.search).get('qty');
+    if (qtyParam) {
+      setQty(Number(qtyParam));
+    }
+  }
+  if (id) {
+    setQty(qty);
+    dispatch(addToCart(id, qty,user));
   }
 }, [dispatch, id, qty, user]);
 
@@ -45,6 +58,7 @@ const removeFromCartHandler = (id)=>{
   const updatedCartItems = storedCartItems.filter((item) => item.product !== id);
   localStorage.setItem(`cartItems_${user}`, JSON.stringify(updatedCartItems));
 }
+
 
     return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
     <Row >
@@ -61,25 +75,9 @@ const removeFromCartHandler = (id)=>{
                     <Col md={3}>
                       {item.productName}
                     </Col>
-                    <Col md={2}>{item.price} DT</Col>
-                    <Col md={2}>
-                    <Form.Control
-                      as='select'
-                      value={item.qty}
-                      onChange={(e) =>
-                        dispatch(
-                          addToCart(item.product, Number(e.target.value), user)
-                        )
-                      }
-                    >
-                      {[...Array(item.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                    <Col md={2}>
+                    <Col md={2}>{item.price} DT x {qty}</Col>
+                   
+                    <Col md={1}>
                       <Button
                         type='button'
                         variant='light'
