@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CART_ADD_ITEM, CART_SET_ITEMS } from './cartconstant'
+import { CART_ADD_ITEM, CART_SET_ITEMS, CART_REMOVE_ITEM } from './cartconstant'
  export const addToCart = (id,qty) =>async(dispatch,getState)=>
  {
     const {data}= await axios.get(`http://localhost:5000/product/${id}`)
@@ -34,4 +34,20 @@ import { CART_ADD_ITEM, CART_SET_ITEMS } from './cartconstant'
         const cartItems = getState().cart.cartItems.filter((item) => item.user === user)
         localStorage.setItem(`cartItems_${user}`, JSON.stringify(cartItems))
       })
+}
+
+
+export const removeFromCart = (id) => ( dispatch , getState) =>{
+  const user = getState().userLogin.userInfo._id;
+  const cartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
+  dispatch({
+     type : CART_REMOVE_ITEM ,
+     payload : id
+  })
+  localStorage.setItem(`cartItems_${user}`, JSON.stringify(cartItems)); // Store the updated cart items back to the localStorage
+  window.addEventListener('beforeunload', () => {
+    const user = getState().userLogin.userInfo._id
+    const cartItems = getState().cart.cartItems.filter((item) => item.user === user)
+    localStorage.setItem(`cartItems_${user}`, JSON.stringify(cartItems))
+  })
 }

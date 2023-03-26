@@ -3,11 +3,16 @@ import "../ProductDetail/ProductDetail.css";
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { addToCart } from '../../cartredux/cartaction';
+import { addToCart , removeFromCart} from '../../cartredux/cartaction';
 import "./Cart.css"
 import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
 
 const Cart= (location) => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const cart = useSelector((state) => state.cart);
 const { cartItems } = cart;
@@ -17,6 +22,11 @@ const dispatch = useDispatch();
 console.log(id);
 console.log("ena quantity" + qty);
 useEffect(() => {
+  
+  if (cartItems.length === 0) {
+    // Redirect to '/cart' when cart is empty
+    navigate('/cart');
+  }
   if (id) {
     dispatch(addToCart(id, qty,user));
   }
@@ -28,6 +38,13 @@ useEffect(() => {
     });
   }
 }, [dispatch, id, qty, user]);
+
+const removeFromCartHandler = (id)=>{
+  dispatch(removeFromCart(id));
+  const storedCartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
+  const updatedCartItems = storedCartItems.filter((item) => item.product !== id);
+  localStorage.setItem(`cartItems_${user}`, JSON.stringify(updatedCartItems));
+}
 
     return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
     <Row >
@@ -51,7 +68,7 @@ useEffect(() => {
                       value={item.qty}
                       onChange={(e) =>
                         dispatch(
-                          addToCart(item.product, Number(e.target.value))
+                          addToCart(item.product, Number(e.target.value), user)
                         )
                       }
                     >
@@ -70,6 +87,13 @@ useEffect(() => {
                         <i className='fas fa-trash'></i>
                       </Button>
                     </Col>
+                    <Col md={1}>
+          <FontAwesomeIcon icon={faTrash} size="xl" 
+                  onClick={() => {
+                        removeFromCartHandler(item.product);
+                  }}
+            
+          />          </Col>
                   </Row>
                 </ListGroup.Item>)}
             </ListGroup>
