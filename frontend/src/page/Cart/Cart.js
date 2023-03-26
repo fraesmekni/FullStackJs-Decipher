@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { addToCart } from '../../cartredux/cartaction';
 import "./Cart.css"
-import { CART_LOAD_ITEMS } from '../../cartredux/cartconstant';
+import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
 
 const Cart= (location) => {
   const { id } = useParams();
@@ -20,9 +20,13 @@ useEffect(() => {
   if (id) {
     dispatch(addToCart(id, qty,user));
   }
-
-  const cartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || []; // Get the cart items for the current user
-  dispatch({ type: CART_LOAD_ITEMS, payload: cartItems }); // Load the cart items from localStorage to the store
+  const storedCartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
+  if (storedCartItems.length > 0) {
+    dispatch({
+      type: CART_SET_ITEMS,
+      payload: storedCartItems.filter((item) => item.qty > 0),
+    });
+  }
 }, [dispatch, id, qty, user]);
 
     return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">

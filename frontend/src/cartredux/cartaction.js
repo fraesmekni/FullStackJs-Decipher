@@ -4,29 +4,34 @@ import { CART_ADD_ITEM, CART_SET_ITEMS } from './cartconstant'
  {
     const {data}= await axios.get(`http://localhost:5000/product/${id}`)
     const user = getState().userLogin.userInfo._id;
+    const cartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
 
-    dispatch({
-        type: CART_ADD_ITEM,
-        payload : {
-            product: data._id,
-            productName: data.productName,
-            imageProduct:data.imageProduct,
-            price: data.price,
-            countInStock : data.countInStock,
-            qty,user
-        }
-    })
-    localStorage.setItem(`cartItems_${user}`, JSON.stringify(getState().cart.cartItems.filter((item) => item.user === user))
-    );
-}
-export const setCartItems = (userId, cartItems) => async (dispatch) => {
-    try {
-      localStorage.setItem(`cartItems-${userId}`, JSON.stringify(cartItems));
-      dispatch({
-        type: CART_SET_ITEMS,
-        payload: cartItems,
+    const existingItemIndex = cartItems.findIndex((item) => item.product === data._id);
+    if (existingItemIndex !== -1) {
+      // If the item already exists in the cart, update the quantity of the item
+      cartItems[existingItemIndex].qty += qty;
+    } else {
+      // If the item does not exist in the cart, add it to the cart
+      cartItems.push({
+        product: data._id,
+        productName: data.productName,
+        imageProduct: data.imageProduct,
+        price: data.price,
+        countInStock: data.countInStock,
+        qty,
+        user,
       });
-    } catch (error) {
-      console.log(error);
     }
-  };
+   
+    dispatch({
+        type: CART_SET_ITEMS,
+        payload: cartItems.filter((item) => item.qty > 0), // Filter out any items with zero quantity
+      });
+    
+      localStorage.setItem(`cartItems_${user}`, JSON.stringify(cartItems)); // Store the updated cart items back to the localStorage
+      window.addEventListener('beforeunload', () => {
+        const user = getState().userLogin.userInfo._id
+        const cartItems = getState().cart.cartItems.filter((item) => item.user === user)
+        localStorage.setItem(`cartItems_${user}`, JSON.stringify(cartItems))
+      })
+}
