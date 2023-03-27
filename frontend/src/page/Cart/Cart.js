@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import "../ProductDetail/ProductDetail.css";
-import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
+import { Row, Col, ListGroup, Image, Form, Button, Card,Message } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { addToCart , removeFromCart} from '../../cartredux/cartaction';
@@ -25,6 +25,8 @@ const [qty, setQty] = useState(() => {
   const defaultQty = qtyParam ? Number(qtyParam) : 9;
   return defaultQty;
 });
+
+
 
 const user = useSelector((state) => state.userLogin.userInfo._id); // Get the user ID from the store
 const dispatch = useDispatch();
@@ -122,6 +124,10 @@ const removeFromCartHandler = (id)=>{
             </ListGroup>
           </Card>
         </Col>
-      </Row></div>)
+      </Row>
+      
+   
+      
+      </div>)
 }
 export default Cart;
