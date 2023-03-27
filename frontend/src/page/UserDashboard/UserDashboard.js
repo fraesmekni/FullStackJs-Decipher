@@ -137,45 +137,18 @@ const submitHandlerj = (e) => {
 
     <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
 >  <div className="library_album">
-      <h3>User Dashboard</h3>
+      <h1>Welcome {userInfo.firstName} to Your User Dashboard!</h1>
 
 
-      <div className="library_album_albums">
-        <div className="library_album_covers">
-
-          
+      
 
  {loadingDelete && <div className="alertgreen"> && <p>Loading...</p> </div>} 
 
 {errorDelete  && <div className="alertgreen"> && <p>{errorDelete}</p> </div>}
 {successDelete  && <div className="alertgreen"> && <p>{successDelete}</p> </div>}
-          <img src="https://media.smallbiztrends.com/2021/05/beekeeping.png" alt="" className="album_cover" />
-          <h5>Bee Keeping</h5>
-          <p>Explore</p>
-          <span></span>
-        </div>
-        <div className="library_album_covers">
-          <img src="https://i.pinimg.com/736x/0a/ac/95/0aac95ac71eb2ae6f40dcb330c09d70b.jpg" alt="" className="album_cover" />
-          <h5>Sculpture</h5>
-          <p>Explore</p>
-          <span></span>
-        </div>
-        <div className="library_album_covers">
-          <img src="https://images.unsplash.com/photo-1605117012605-b68dedd4accc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="" className="album_cover" />
-          <h5>Pottery</h5>
-          <p>Explore</p>
-          <span></span>
-        </div>
-        <div className="library_album_covers">
-          <img src="https://media.smallbiztrends.com/2021/05/beekeeping.png" alt="" className="album_cover" />
-          <h5>Bee Keeping</h5>
-          <p>Explore</p>
-          <span></span>
-        </div>
-      </div>
-    </div>     
+            
 <h3 className="library_trending_title">Review Your products</h3>
-
+</div>
       <table>
      {product && product.map((i , index) => {
            return(
@@ -226,33 +199,7 @@ const submitHandlerj = (e) => {
       </table>
     </div>
   </div>
-  <div className="mp_playlist">
-    <h3>Welcome {userInfo.firstName} to your mini Shop!</h3>
-    <div className="mp_playlist_content">
-      <div className="mp_playlist_song">
-<div >
-<img src={process.env.PUBLIC_URL + "/images/logo.png"}/>
-<p>This is your Dashboard : Here you can sell and review your products!</p>
-<ol>
-    <li>Focus on one craft</li>
-    <li>Be patient</li>
-    <li>Take courses on marketing</li>
-    <li>Share on social media</li>
-    <li>el section hedhi bch twali khir matkhafouch</li>
-    <SpecialButton name="tips"></SpecialButton>
-
-
-
-
-
-</ol>
-</div>      
-      
-        
-          </div>
-        </div>
-        
-      </div>
+ 
       <hr />
       </div>
 </main> </body>

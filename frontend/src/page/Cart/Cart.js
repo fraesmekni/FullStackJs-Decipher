@@ -33,10 +33,12 @@ const dispatch = useDispatch();
 console.log(id);
 console.log("ena quantity" + qty);
 useEffect(() => {
-  
+  navigate("/cart");
  
   const storedCartItems = JSON.parse(localStorage.getItem(`cartItems_${user}`)) || [];
   if (storedCartItems.length > 0) {
+    navigate("/cart");
+
     dispatch({
       type: CART_SET_ITEMS,
       payload: storedCartItems.filter((item) => item.qty > 0),
@@ -79,14 +81,7 @@ const removeFromCartHandler = (id)=>{
                     </Col>
                     <Col md={2}>{item.price} DT x {item.qty}</Col>
                    
-                    <Col md={1}>
-                      <Button
-                        type='button'
-                        variant='light'
-                      >
-                        <i className='fas fa-trash'></i>
-                      </Button>
-                    </Col>
+                   
                     <Col md={1}>
           <FontAwesomeIcon icon={faTrash} size="xl" 
                   onClick={() => {

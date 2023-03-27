@@ -66,12 +66,12 @@ const submitHandler = (e)=>{
     <h1 className="h1detail">{product.productName}</h1>
     <h2 className="h2detail">{product.price} Dt </h2>
     <p class="desc pdetail">{product.description}.</p>
-    <ListGroup.Item>
+    <ListGroup.Item> 
                   <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} reviews`}
+                    value={product.rating}  color="#D9AAB7"
+                 
                   />
-                </ListGroup.Item>
+                </ListGroup.Item> <br />
 
     <div class="buttons">
 
@@ -85,7 +85,8 @@ const submitHandler = (e)=>{
   </div>
   <Row>
         <Col style={{marginLeft:"50px"}}md={10}>
-          <h2>Reviews</h2>
+          <h2> Reviews({`${product.numReviews}`})
+</h2>
           {product.reviews.length=== 0 && <p> No Reviews </p> }
           <ListGroup variant="flush">
             {product.reviews.map(review=>(
@@ -93,7 +94,7 @@ const submitHandler = (e)=>{
                 <strong>{review.name}</strong> 
                 <Rating
                     value={product.rating}
-                    text={`${product.numReviews} reviews`}
+                    color="#D9AAB7"
                   />
                   <p>{review.createdAt?.substring(0,10)}</p>
                   <p>{review.comment}</p>
