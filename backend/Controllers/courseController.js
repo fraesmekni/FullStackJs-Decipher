@@ -79,10 +79,48 @@ const DisplayLesson= asynHandler(async(req,res)=>{
     res.json(course)
   
 });
+//delete course
+const deleteCourse = asynHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id)
+  if (course) {
+    await course.remove()
+    res.json("Course removed")
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+})
+//update course
 
+const updateCourse = asynHandler(async (req, res) => {
+  const {
+    titleCourse ,
+    descriptionCourse , 
+    category ,
+  } = req.body
 
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    course.titleCourse = titleCourse
+    course.descriptionCourse = descriptionCourse
+    course.category = category
+    
+    const updatedCourse = await course.save()
+    res.status(201).json({
+      _id: course.id,
+      titleCourse: course.titleCourse,
+      user : course.user,
+      category: course.category,
+      descriptionCourse: course.descriptionCourse
+  })
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+})
 
 
 module.exports={
-    createCourse,createLesson,DisplayLesson
+    createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse
 }
