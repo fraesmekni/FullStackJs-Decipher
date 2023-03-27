@@ -49,6 +49,7 @@ font-size: 0.9rem;
   .buttons {
     bottom: -30% ;
     position: relative;
+    margin-top: -320px;
   }
   .slideshow-buttons {
     top: 70%;

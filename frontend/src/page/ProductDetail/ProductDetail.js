@@ -84,7 +84,7 @@ const submitHandler = (e)=>{
     </div>
   </div>
   <Row>
-        <Col md={6}>
+        <Col style={{marginLeft:"50px"}}md={10}>
           <h2>Reviews</h2>
           {product.reviews.length=== 0 && <p> No Reviews </p> }
           <ListGroup variant="flush">
