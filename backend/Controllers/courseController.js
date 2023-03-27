@@ -119,8 +119,24 @@ const updateCourse = asynHandler(async (req, res) => {
     throw new Error('Course not found')
   }
 })
+// search course 
+const SearchCourse = asynHandler( async (req, res) => {
+  const key = req.params.key;
+  
+  const courseResults = await Course.find({
+    $or: [
+      { titleCourse: { $regex:  new RegExp(key, 'i')  } },
+      { category: { $regex:  new RegExp(key, 'i')  } },
+      { descriptionCourse: { $regex:  new RegExp(key, 'i')  } },
+    ],
+  });
+
+  const results = courseResults;
+  
+  res.send(results);
+});
 
 
 module.exports={
-    createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse
+  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse
 }
