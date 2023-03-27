@@ -12,6 +12,7 @@ const reviewSchema = mongoose.Schema(
     },
   )
 
+
 const ProductSchema = new mongoose.Schema({
     user : {type: mongoose.Types.ObjectId,ref:'User'},
     imageProduct: {
@@ -51,3 +52,4 @@ const ProductSchema = new mongoose.Schema({
 
 })
 module.exports = mongoose.model('Product', ProductSchema)
+
