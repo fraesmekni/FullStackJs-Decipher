@@ -69,7 +69,7 @@ const submitHandler = (e)=>{
     <ListGroup.Item>
                   <Rating
                     value={product.rating}
-                    text={`${product.numReviews} reviews`}
+                    text={`  ${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
 
@@ -92,8 +92,8 @@ const submitHandler = (e)=>{
               <ListGroup.Item key={review._id} >
                 <strong>{review.name}</strong> 
                 <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} reviews`}
+                    value={review.rating}
+                    
                   />
                   <p>{review.createdAt?.substring(0,10)}</p>
                   <p>{review.comment}</p>
