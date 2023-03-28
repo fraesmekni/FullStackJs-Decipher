@@ -65,10 +65,64 @@ const DisplayLesson= asynHandler(async(req,res)=>{
     res.json(course)
   
 });
+//delete course
+const deleteCourse = asynHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id)
+  if (course) {
+    await course.remove()
+    res.json("Course removed")
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+})
+//update course
 
+const updateCourse = asynHandler(async (req, res) => {
+  const {
+    titleCourse ,
+    descriptionCourse , 
+    category ,
+  } = req.body
 
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    course.titleCourse = titleCourse
+    course.descriptionCourse = descriptionCourse
+    course.category = category
+    
+    const updatedCourse = await course.save()
+    res.status(201).json({
+      _id: course.id,
+      titleCourse: course.titleCourse,
+      user : course.user,
+      category: course.category,
+      descriptionCourse: course.descriptionCourse
+  })
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+})
+// search course 
+const SearchCourse = asynHandler( async (req, res) => {
+  const key = req.params.key;
+  
+  const courseResults = await Course.find({
+    $or: [
+      { titleCourse: { $regex:  new RegExp(key, 'i')  } },
+      { category: { $regex:  new RegExp(key, 'i')  } },
+      { descriptionCourse: { $regex:  new RegExp(key, 'i')  } },
+    ],
+  });
+
+  const results = courseResults;
+  
+  res.send(results);
+});
 
 
 module.exports={
-    createCourse,createLesson,DisplayLesson
+  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse
 }
