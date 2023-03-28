@@ -21,6 +21,7 @@ import Shop from './page/Shop/shop';
 import Cart from './page/Cart/Cart';
 import CourseDetail from './page/CourseDetail/CourseDetail';
 import CoachDashboard from './page/CoachDashboard/CoachDashboard';
+import Courses from './page/Courses/courses';
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -85,7 +86,7 @@ function App() {
     <Route path="/productdetail/:id" element={<> <div className="bgdetail"><Navbarr /><ProductDetail/></div></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
     <Route path="/cart/:id?" element={<><Navbarr /><Cart/></>} />
-    <Route path="/courses" element={<><Navbarr /><CourseDetail/></>} />
+    <Route path="/coursedetail" element={<><Navbarr /><CourseDetail/></>} />
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
@@ -94,7 +95,7 @@ function App() {
     <Route path="/spnsorupdate" element={<> <Navbarr /> <UpdateSponsor></UpdateSponsor> </>} />
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/coachdashboard" element={<><div className='yo'><Navbarr /> <CoachDashboard/></div></> } /> 
-
+    <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}

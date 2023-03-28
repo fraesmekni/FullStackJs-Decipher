@@ -63,11 +63,17 @@ const createLesson = async(req,res)=>{
         };
 
 const DisplayLesson= asynHandler(async(req,res)=>{
-   
-    const course= await Course.findById(req.params.id) //It proceeds to find the product by its id using Product.findById()
-    res.json(course)
-  
-});
+       
+    const courses = await Course.find( {});
+    if (!courses) {
+        res.Error(404)
+        throw new Error(" courses Not Found !!")
+    }
+    res.json(courses)
+
+})
+
+
 //delete course
 const deleteCourse = asynHandler(async (req, res) => {
   const course = await Course.findById(req.params.id)

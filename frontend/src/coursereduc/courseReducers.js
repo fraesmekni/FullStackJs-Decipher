@@ -1,4 +1,4 @@
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID } from "./courseConstants"
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID } from "./courseConstants"
 
 export const addCourseReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -29,3 +29,13 @@ export const addCourseReducer=(state={},action)=>{
 
     }
  }
+ export const courseReducers = (state={}, action) => {
+    switch (action.type) {
+      case COURSE_GET_SUCCESS:
+        return {
+          courses: action.payload,
+        };
+      default:
+        return state;
+    }
+  };

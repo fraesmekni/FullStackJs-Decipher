@@ -28,7 +28,7 @@ const router = express.Router()
   // Create a new Multer upload instance
   let upload = multer({ storage, fileFilter});
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
-router.get('/getCourses/:id',DisplayLesson),
+router.get('/getCourses',DisplayLesson),
 router.post('/createlesson',createLesson),
 router.delete('/delete/:id' ,deleteCourse),
 router.put('/updateCourse/:id' ,updateCourse),
