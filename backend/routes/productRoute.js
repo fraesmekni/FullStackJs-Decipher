@@ -6,7 +6,7 @@ const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProd
 const router = express.Router()
 const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
-const storage = multer.diskStorage({
+ const storage = multer.diskStorage({
     destination: function(req, file, cb) {
       cb(null, path.join(__dirname, '../../frontend/public/images')); // use absolute path for uploaded files
   },
@@ -33,9 +33,6 @@ router.delete('/delete/:id' ,deleteProduct),
 router.put('/updateProduct/:id' ,updateProduct),
 router.get('/search/:key',SearchProduct),
 router.get('/productById/:userId',GetProductsById)
-//review
 router.post('/:id/reviews' ,protectSimpleUser, createReview)
-
-
 
 module.exports = router

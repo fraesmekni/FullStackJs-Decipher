@@ -1,21 +1,25 @@
 const Course = require('../models/course');
 const Lesson = require('../models/lesson');
 const asynHandler = require("express-async-handler")
-
-const createCourse = async (req, res) => {
+const createCourse= asynHandler(async (req, res) => {
     const {  
         titleCourse ,
         descriptionCourse , 
         category , 
         coach ,
-      } = req.body
-  try {
+        
+      } = req.body;
+      const thumbnailCourse = req.file ? req.file.filename : null;
+
+       
+  try {  
     // create a new course
     const course = new Course({
-        titleCourse : req.body.titleCourse ,
-        descriptionCourse: req.body.descriptionCourse,
-        category: req.body.category,
-        coach: req.body.coach
+        titleCourse : titleCourse ,
+        descriptionCourse: descriptionCourse,
+        category: category,
+        coach: coach,
+        thumbnailCourse:thumbnailCourse
     });
     
     // save the course to the database
@@ -26,8 +30,7 @@ const createCourse = async (req, res) => {
     console.error(err);
     res.json({"message":"Server Error"}).status(400)
     throw new Error('Server Error')  }
-};
-
+})
 
 const createLesson = async(req,res)=>{
     const { titleLesson,

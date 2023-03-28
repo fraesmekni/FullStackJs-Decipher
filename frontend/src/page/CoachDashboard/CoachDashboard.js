@@ -9,6 +9,7 @@ import {addCourse, addLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import axios from "axios";
 
 
 function CoachDashboard(){
@@ -25,13 +26,13 @@ function CoachDashboard(){
     const [ titleLesson, setTitleLesson] = useState(""); 
     const [descriptionLesson, setDescriptionLesson] = useState(""); 
     const [contentLesson, setContentLesson] = useState(""); 
-    const [typeLesson, setTypeLesson] = useState(""); 
 
+    const [typeLesson, setTypeLesson] = useState(""); 
+    const [thumbnailCourse, setThumbnailCourse] = useState(""); 
     /////////////////////
+    const [course_id, setcourse_id] = useState(null);
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
-    const courseId = useSelector(state => state.addLesson.courseId);
-console.log(courseId)
     function handleContentLessonChange(editorState) {
       setContentLesson(editorState);
     }
@@ -55,28 +56,57 @@ console.log(courseId)
         setStep(5);
       } else setStep((prevStep) => prevStep + 1);
     };
-
-
-    const submitHandlerLesson = async (e) => {
-      e.preventDefault()
-      dispatch(
-        addCourse({
+const submitNew = async (e)=>{
+  e.preventDefault();
+  setContentLesson("");
+  setDescriptionLesson("");
+  setTitleLesson("");
+  setTypeLesson("");
+}
+console.log(thumbnailCourse);
+    const submitHandlerCourse = async (e) => {
+      e.preventDefault();
+      try {
+        const { data } = await axios.post('http://localhost:5000/course/createcourse', {
           titleCourse,
           descriptionCourse,
           category,
+          thumbnailCourse,
           coach: userInfo._id,
-        })
-      );
-      dispatch(
-        addLesson({
-          titleLesson,
-          descriptionLesson,
-          contentLesson,
-          typeLesson,
-          course: courseId,
-        })
-      );
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+  
+       setcourse_id(data.course._id); // define course_id and set it to the _id of the newly created course
+
+        dispatch(addCourse({
+          titleCourse,
+          descriptionCourse,
+          category,
+          thumbnailCourse,
+          coach: userInfo._id,
+          course_id: data.course._id, // set course_id to the _id of the newly created course
+        }));
+       
+        // define course_id and set it to the _id of the newly created course
+      } catch (error) {
+        console.error(error);
+      }
     };
+    console.log("lbara"+course_id);
+
+    const submitHandlerLesson = async (e) => {
+      e.preventDefault()
+    dispatch(
+      addLesson({
+        titleLesson,
+        descriptionLesson,
+        contentLesson,
+        typeLesson,
+        course: course_id,
+      })
+    );  };
     
   const handleCreateClick = () => {
     setShowCreate(true);
@@ -136,16 +166,14 @@ console.log(courseId)
                 
           <input type="text" placeholder="What is this course about?"  value={descriptionCourse}
                 onChange={(e) => setDescriptionCourse(e.target.value)}></input>
+                <input type="file" name="thumbnailCourse" 
+                onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
+                <SpecialButton name="Create" onClick={submitHandlerCourse} type="submit"/> 
                 </> )}
-                {step === 2 && ( <>
+                
+                 {step === 2 && ( <>
  
- <h3 align="center" className="library_trending_title">Step 2 : How many lessons does your course contain? </h3>
-
-          <input type="text" placeholder="What is this course about?"  value={lessonQty}
-                onChange={(e) => setLessonQty(e.target.value)}></input> </> )}
-                 {step === 3 && ( <>
- 
- <h3 align="center" className="library_trending_title">Step 3 : Submit the details of each Lesson and move on to the next! </h3>
+ <h3 align="center" className="library_trending_title">Step 2 : Add A course ! </h3>
 
  <input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
                 onChange={(e) => setTitleLesson(e.target.value)}></input>
@@ -163,7 +191,7 @@ console.log(courseId)
           
           <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
                 onChange={(e) => setDescriptionLesson(e.target.value)}></input> <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>
-                </> )}
+        <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>         </> )}
         
 
  </div>

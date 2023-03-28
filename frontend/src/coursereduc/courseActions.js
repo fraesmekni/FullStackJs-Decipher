@@ -4,15 +4,15 @@ import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_REQ
 
 export const addCourse = ({ titleCourse ,
     descriptionCourse , 
-    category , 
-    coach }) => async (dispatch)=>{
+    category ,thumbnailCourse,
+    coach,course_id }) => async (dispatch)=>{
 
           dispatch({
               type:COURSE_ADD_REQUEST
           })
           const config = {
               headers:{
-                  'Content-Type' : 'application/json'
+                  'Content-Type' : 'multipart/form-data'
               }
           }
   
@@ -20,7 +20,7 @@ export const addCourse = ({ titleCourse ,
               'http://localhost:5000/course/createcourse',
               { titleCourse ,
                 descriptionCourse , 
-                category , 
+                category ,thumbnailCourse,
                 coach },
               config
             );
@@ -28,11 +28,10 @@ export const addCourse = ({ titleCourse ,
           dispatch({
               type : COURSE_ADD_SUCCESS,
               payload : data
-          })
-          dispatch({
-            type: SET_COURSE_ID,
-            payload: data._id
-          });         // localStorage.setItem('userInfo', JSON.stringify(data))
+          })        
+          return data._id=course_id;
+
+          // localStorage.setItem('userInfo', JSON.stringify(data))
   
          
       }
@@ -62,7 +61,7 @@ export const addLesson = ({ titleLesson,
           dispatch({
               type : LESSON_ADD_SUCCESS,
               payload : data
-          })
+          }) ;
        
          // localStorage.setItem('userInfo', JSON.stringify(data))
   
