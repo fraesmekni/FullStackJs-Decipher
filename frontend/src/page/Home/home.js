@@ -18,9 +18,11 @@ return(
 
 
      <Section1 />
+     <Products/>
      <div align="center">
      <Crowdfunding /></div>
 <br />
+
      <Partenairec />
      <br />
      </>);

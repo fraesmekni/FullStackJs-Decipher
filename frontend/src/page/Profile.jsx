@@ -8,7 +8,7 @@ import Camera from "@material-ui/icons/Camera";
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShop, faShopLock} from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardTeacher, faDashboard, faShop,faChalkboard, faShopLock} from '@fortawesome/free-solid-svg-icons';
 import Favorite from "@material-ui/icons/Favorite";
 // core components
 // import Header from "/components/Header/Header.js";
@@ -28,6 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
 import { useNavigate } from "react-router-dom";
+import { FaChalkboard, FaChalkboardTeacher } from "react-icons/fa";
 
 const useStyles = makeStyles(styles);
 
@@ -37,6 +38,10 @@ export default function Profile() {
 const GotoUserDashboard=()=>{
 
   navigate('/userdashboard');
+
+}
+const GotoCoachDashboard=()=>{
+  navigate('/coachdashboard');
 
 }
   const handle=()=>{
@@ -90,12 +95,13 @@ const GotoUserDashboard=()=>{
                       style={{"borderRadius": "50%","height":"160px"}}
                     />
                   </div>
-                  {userInfo.certified ? 
-                  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop} size="2x" /> 
-           :     
-           <FontAwesomeIcon style={{marginTop:"-300px"}} icon={faShopLock} size="2x" /> 
+                  {userInfo.certified ? (
+  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop} size="2x" />
+) : (
+  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={userInfo.role.name === "coach" ? faChalkboardTeacher : faShopLock} size="2x" />
+)}
 
-           } 
+             
                   <div className={classes.name +"py-3"}>
                     <h3 style={{ color: "#93643b"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
                      <h6>{userInfo.role.name}</h6> 

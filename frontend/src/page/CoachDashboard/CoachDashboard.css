@@ -6,15 +6,16 @@ body {
 
   
 }
-.yoo{
+.coach{
+  align-content: center;
     background-size: cover ; 
     background-repeat: repeat ; 
-    background-image: url(https://www.thegreekfoundation.com/wp-content/uploads/2021/12/the-greek-foundation-pilosclayart11-500x750.jpg);
+    background-image: url(https://i.etsystatic.com/38121758/r/il/9fe766/4394688309/il_fullxfull.4394688309_s723.jpg);
 
     
 }
 
-.mp_main {
+.mp_maincoach {
   
   position: relative;
   top: 50%;
@@ -22,9 +23,9 @@ body {
   transform: translate(-50%, -50%);
   width: 1300px;
   height: 760px;
-  background: rgba(215, 200, 200, 0.299);
+background: rgba(180, 164, 164, 0.427);
   box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.49);
-  backdrop-filter: blur(60px);
+  backdrop-filter: blur(70px);
   border-radius: 20px;
   z-index: 99;
 }
@@ -96,7 +97,7 @@ body {
 
 .mp_library .library_search {
   padding-top: 30px;
-  width: 1000px;
+  width: 850px;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -104,7 +105,7 @@ body {
 }
 
 .library_search .searchbar {
-  width: 1000px;
+  width: 600px;
   height: 40px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 50px;
@@ -218,34 +219,35 @@ body {
 }
 
 /* ------------------ Library (part 3 )------------------- */
-.library_trending {
+.library_trending_coach {
   width: 1150px;
   height: auto;
   padding: 0 20px;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  max-height: 1000px;
-}
+  max-height: 700px;
+left:50%}
 
-.library_trending_create {
-    width: 850px;
-    height: 800px;
-    padding: 0 20px;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
+.library_trending_coach_create {
+  width: 1150px;
+  height: auto;
+  padding: 0 20px;
+  max-height: 700px;
+left:50%
+    
   }
 
-.library_trending::-webkit-scrollbar {
+.library_trending_coach::-webkit-scrollbar {
   width: 10px;
 }
-.library_trending::-webkit-scrollbar-thumb {
+.library_trending_coach::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.33);
 }
-.library_trending::-webkit-scrollbar-thumb:hover {
+.library_trending_coach::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.321);
 }
 
-.library_trending_title {
+.library_trending_coach_title {
   color: #fff;
   font-size: 17px;
   margin-top: 30px;
@@ -253,17 +255,17 @@ body {
   padding-left: 20px;
 }
 
-.library_trending table {
+.library_trending_coach table {
   width: 120%;
   color: #fff;
   border-collapse: collapse;
 }
 
-.library_trending img {
+.library_trending_coach img {
   width: 20px;
 }
 
-.library_trending table tr {
+.library_trending_coach table tr {
   border: solid;
   border-width: 0.2px 0;
   border-color: rgba(125, 125, 125, 0.419);
@@ -271,21 +273,21 @@ body {
   transition: 0.2s ease-in-out;
 }
 
-.library_trending table tr:hover {
+.library_trending_coach table tr:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.library_trending table tr td {
+.library_trending_coach table tr td {
   padding: 10px;
 }
 
-.library_trending table tr td p {
+.library_trending_coach table tr td p {
   font-size: 13px;
   color: white;
 }
 
-.library_trending table tr .song {
+.library_trending_coach table tr .song {
   display: flex;
   flex-direction: column;
   color: white;
@@ -296,7 +298,7 @@ body {
 .off{
     display: none;
 }
-.library_trending > input {
+.library_trending_coach_create > input {
     display: block;
     height: 50px;
     width: 50%;
@@ -305,26 +307,29 @@ body {
     padding: 0 10px;
     margin-top: 8px;
     color:white;
+   margin-left: 280px;
+    align-self: center;
     font-size: 14px;
     border-color: #fff;
+    
 } .twocolumns{
 margin-left: 300px; 
 height: 200px;
 background-image: url(../../../public/images/logo.png);
 }
 
-.library_trending table tr .song h4 {
+.library_trending_coach table tr .song h4 {
   font-size: 15px;
   color: white;
 
 }
 
-.library_trending table tr .song p {
+.library_trending_coach table tr .song p {
   font-size: 13px;
   color: rgb(209, 199, 156);
 }
 
-.library_trending .song_cover {
+.library_trending_coach .song_cover {
   width: 60px;
   border-radius: 8px;
 }

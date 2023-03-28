@@ -40,18 +40,19 @@ const reviewSchema = mongoose.Schema(
 const courseSchema = new mongoose.Schema({
   titleCourse: {
     type: String,
-    required: true
+  },  
+  thumbnailCourse: {
+    type: String,
   },  
   category: {
     type: String,
   },
   descriptionCourse: {
     type: String,
-    required: true
   },
   coach: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Coach',
+    ref: 'User',
   },
   DateCourse: {
     type: Date,
