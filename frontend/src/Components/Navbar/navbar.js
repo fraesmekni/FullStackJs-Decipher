@@ -23,6 +23,7 @@ function Navbarr () {
   const [redirectUrl, setRedirectUrl] = useState("")
   const logoutHandler = () => {
       dispatch(Logout())
+      navigate("/");
   }
   const commands = [
     {

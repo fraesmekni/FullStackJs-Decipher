@@ -83,12 +83,14 @@ const removeFromCartHandler = (id)=>{
                    
                    
                     <Col md={1}>
-          <FontAwesomeIcon icon={faTrash} size="xl" 
-                  onClick={() => {
-                        removeFromCartHandler(item.product);
-                  }}
-            
-          />          </Col>
+          
+                          <lord-icon
+                              src="https://cdn.lordicon.com/jmkrnisz.json"
+                              trigger="hover" onClick={() => {
+                                removeFromCartHandler(item.product);
+                          }}>                   
+                          </lord-icon>
+                   </Col>
                   </Row>
                 </ListGroup.Item>)}
             </ListGroup>
