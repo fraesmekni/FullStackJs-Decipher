@@ -5,14 +5,79 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-
+import {addCourse, addLesson} from "../../coursereduc/courseActions"
+import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
 function CoachDashboard(){
     const userLogin = useSelector(state => state.userLogin)
+    const addCourses = useSelector(state => state.addCourse)
+    const { loading, error,messageSuccess } = addCourses;
+
     const {userInfo } = userLogin
     const [showCreate, setShowCreate] = useState(false);    
+    const [ titleCourse, setTitleCourse] = useState(""); 
+    const [ descriptionCourse, setDescriptionCourse] = useState(""); 
+    const [ category, setCategory] = useState(""); 
 
+    const [ titleLesson, setTitleLesson] = useState(""); 
+    const [descriptionLesson, setDescriptionLesson] = useState(""); 
+    const [contentLesson, setContentLesson] = useState(""); 
+    const [typeLesson, setTypeLesson] = useState(""); 
+
+    /////////////////////
+    const [step, setStep] = useState(1);
+    const [lessonQty, setLessonQty] = useState(3);
+    const courseId = useSelector(state => state.addLesson.courseId);
+console.log(courseId)
+    function handleContentLessonChange(editorState) {
+      setContentLesson(editorState);
+    }
+
+    const dispatch = useDispatch();
+
+    const handlePrevStep = () => {
+      if (step === 4) {
+        setStep(1);
+      } else if (step === 3) {
+        setStep(1);
+        if (step === 5) setStep(1);
+      } else setStep((prevStep) => prevStep - 1);
+    }
+    //Fonction Onclick taa el next step
+  
+    const handleNextStep = () => {
+      if (step === 4) {
+        setStep(5);
+      } else if (step === 3) {
+        setStep(5);
+      } else setStep((prevStep) => prevStep + 1);
+    };
+
+
+    const submitHandlerLesson = async (e) => {
+      e.preventDefault()
+      dispatch(
+        addCourse({
+          titleCourse,
+          descriptionCourse,
+          category,
+          coach: userInfo._id,
+        })
+      );
+      dispatch(
+        addLesson({
+          titleLesson,
+          descriptionLesson,
+          contentLesson,
+          typeLesson,
+          course: courseId,
+        })
+      );
+    };
+    
   const handleCreateClick = () => {
     setShowCreate(true);
   };
@@ -20,10 +85,11 @@ function CoachDashboard(){
   const handleListClick = () => {
     setShowCreate(false);
   };
+  console.log(lessonQty)
     return(
 
-        <><body className="coach">
-        <main className="mp_maincoach">
+        <><body  className="coach">
+        <main align="center" className="mp_maincoach">
             <div style={{marginTop:"500px"}}>
            
   <div className="mp_sidebar">
@@ -48,18 +114,57 @@ function CoachDashboard(){
    
     <div
         id="create"
-        className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
-      >     <h3 className="library_trending_title">Add A Course </h3>
+        className={`create ${showCreate ? "show" : "hide"} ${showCreate ? " library_trending_coach_create" : ""}`}
+      >   
+      <div style={{marginLeft:"300px"}}> <ArrowWrapperLeft 
+            onClick={handlePrevStep}
+            disabled={step === 1}
+          /></div>
+          <div style={{marginLeft:"500px"}}>
+          <ArrowWrapperRight
+            onClick={handleNextStep}
+            
+          /></div>
+        <h3 align="center" className="library_trending_title">Add A Course In three Simple Steps!</h3>
+        {step === 1 && ( <>
+ 
+ <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
+<input type="text" placeholder="Course name" id="Cname"   value={titleCourse}
+                onChange={(e) => setTitleCourse(e.target.value)}></input>
+          <input type="text" placeholder=" Category"  value={category}
+                onChange={(e) => setCategory(e.target.value)}></input>
+                
+          <input type="text" placeholder="What is this course about?"  value={descriptionCourse}
+                onChange={(e) => setDescriptionCourse(e.target.value)}></input>
+                </> )}
+                {step === 2 && ( <>
+ 
+ <h3 align="center" className="library_trending_title">Step 2 : How many lessons does your course contain? </h3>
 
-          <input type="text" placeholder="Product name" id="name"  ></input>
-          <input type="text" placeholder="Product name" id="name"  ></input>
-          <input type="text" placeholder="Product name" id="name"  ></input>
-          <input type="text" placeholder="Product name" id="name"  ></input>
-          <input type="text" placeholder="Product name" id="name"  ></input>
-          <input type="text" placeholder="Product name" id="name"  ></input>
+          <input type="text" placeholder="What is this course about?"  value={lessonQty}
+                onChange={(e) => setLessonQty(e.target.value)}></input> </> )}
+                 {step === 3 && ( <>
+ 
+ <h3 align="center" className="library_trending_title">Step 3 : Submit the details of each Lesson and move on to the next! </h3>
 
-         
-<SpecialButton name="Create"type="submit"/>
+ <input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
+                onChange={(e) => setTitleLesson(e.target.value)}></input>
+                       <input type="text" placeholder=" Category"  value={typeLesson}
+                onChange={(e) => setTypeLesson(e.target.value)}></input>
+                                       <input type="text" placeholder="Content"  value={contentLesson}
+                onChange={(e) => setContentLesson(e.target.value)}></input>
+                 {/* <Editor
+      editorState={contentLesson}
+      toolbarClassName="toolbarClassName"
+      wrapperClassName="wrapperClassName"
+      editorClassName="editorClassName"
+      onEditorStateChange={handleContentLessonChange}
+    /> */}
+          
+          <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
+                onChange={(e) => setDescriptionLesson(e.target.value)}></input> <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>
+                </> )}
+        
 
  </div>
 

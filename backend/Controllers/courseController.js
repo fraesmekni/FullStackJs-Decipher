@@ -24,8 +24,8 @@ const createCourse = async (req, res) => {
     res.status(201).json({ course });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
+    res.json({"message":"Server Error"}).status(400)
+    throw new Error('Server Error')  }
 };
 
 

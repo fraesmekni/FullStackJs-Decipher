@@ -51,7 +51,7 @@ const courseSchema = new mongoose.Schema({
   },
   coach: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Coach',
+    ref: 'User',
   },
   DateCourse: {
     type: Date,
