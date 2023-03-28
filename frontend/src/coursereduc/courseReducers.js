@@ -21,11 +21,6 @@ export const addCourseReducer=(state={},action)=>{
             return {loading : true}
         case LESSON_ADD_SUCCESS : 
             return {loading : false ,messageSuccess : "WE SENT YOU A VERIFICATION E-MAIL!"}
-        case SET_COURSE_ID:
-      return {
-        ...state,
-        courseId: action.payload
-      }
         case LESSON_ADD_FAIL :
             return {loading : false , error: action.payload }        
 
