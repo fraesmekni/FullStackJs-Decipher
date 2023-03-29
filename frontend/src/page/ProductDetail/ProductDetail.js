@@ -68,8 +68,10 @@ const submitHandler = (e)=>{
     <p class="desc pdetail">{product.description}.</p>
     <ListGroup.Item> 
                   <Rating
-                    value={product.rating}  color="#D9AAB7"
-                 
+
+                    value={product.rating}
+                    text={`  ${product.numReviews} reviews`}
+
                   />
                 </ListGroup.Item> <br />
 
@@ -94,8 +96,9 @@ const submitHandler = (e)=>{
               <ListGroup.Item key={review._id} >
                 <strong>{review.name}</strong> 
                 <Rating
-                    value={product.rating}
-                    color="#D9AAB7"
+                    value={review.rating}
+                    
+
                   />
                   <p>{review.createdAt?.substring(0,10)}</p>
                   <p>{review.comment}</p>

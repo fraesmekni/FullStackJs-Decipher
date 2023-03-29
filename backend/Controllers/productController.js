@@ -73,7 +73,7 @@ const getProductById = asynHandler(async (req, res) => {
 
 const GetProductsById = asynHandler(  async (req, res) => {
   try {
-    const product = await Product.find( { user: req.params.userId } ).populate('user');
+    const product = await Product.find( { user: req.params.userId } ).populate('user'); 
     if (!product) {
       return res.status(404).json({ message: 'product not found' });
     }
@@ -83,6 +83,7 @@ const GetProductsById = asynHandler(  async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 const deleteProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
@@ -149,7 +150,7 @@ const SearchProduct = asynHandler( async (req, res) => {
 
 //@Desc : If the user hasn't already reviewed the product, it creates a new review object with the user's name, rating, comment, and user id. It then pushes the new review into the reviews array of the product object, updates the numReviews field to reflect the new number of reviews, and calculates the new rating by taking the average of all the review ratings. 
 //Create Review 
-//@Route : POST /product/:id/reviews
+//@Route : POST /product/:id/reviews 
 //@Access : Private 
 
 

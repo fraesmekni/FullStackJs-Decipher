@@ -7,6 +7,7 @@ import { addToCart , removeFromCart} from '../../cartredux/cartaction';
 import "./Cart.css"
 import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
 import { useNavigate } from 'react-router-dom';
+import {createOrder} from '../../orderRedux/orderActions'
 
 
 const Cart= () => {
@@ -62,6 +63,32 @@ const removeFromCartHandler = (id)=>{
 }
 
 
+const orderCreate = useSelector(state =>state.orderCreate)
+const {order , success , error} = orderCreate
+
+useEffect(()=>{
+  if(success){
+    navigate(`/order/${order._id}`)
+  }
+})
+
+const placeOrderHandler=()=>{
+  dispatch(createOrder({
+    orderItems: cart.cartItems,
+    shippingAddress : cart.shippingAddress,
+    paymentMethod : cart.paymentMethod,
+    itemsPrice : cart.itemsPrice,
+    shippingPrice : cart.shippingPrice,
+    taxPrice : cart.taxPrice,
+    totalPrice : cart.totalPrice
+  }
+  ))
+}
+
+const checkoutHandler = () => {
+  navigate('/shipping')
+}
+
     return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
     <Row >
         <Col  md={8}>
@@ -112,6 +139,7 @@ const removeFromCartHandler = (id)=>{
                 <button
                   type='button'
                   className='add'
+                  onClick={checkoutHandler}
                 >
                   Proceed To Checkout
                 </button>

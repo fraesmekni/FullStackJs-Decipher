@@ -8,6 +8,7 @@ import { useDispatch , useSelector , } from "react-redux";
 import {addCourse, addLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
+import Swal from 'sweetalert2';
 import Loader from "../../Components/Loader";
 import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
 
@@ -39,6 +40,21 @@ function CoachDashboard(){
     function handleContentLessonChange(editorState) {
       setContentLesson(editorState);
     }
+    //=Course=
+    const [course , setCourse]= useState([])
+    const getCourse = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/course/courseById/${userInfo._id}`, { method: 'GET' });
+        const data = await response.json();
+        setCourse(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    useEffect(() => {
+      getCourse();
+      
+    }, [userInfo._id])
 
     const dispatch = useDispatch();
 
@@ -124,6 +140,16 @@ console.log(thumbnailCourse);
   const handleListClick = () => {
     setShowCreate(false);
   };
+ 
+
+
+const handleRefresh = () => {
+setTimeout(() => {
+  dispatch(getCourse());
+}, 1000); 
+console.log("after 1 second");// Refresh after 1 seconds (adjust the number as needed)
+};
+//console.log(course?.lessons?.titleLesson)
   console.log(lessonQty)
     return(
 
@@ -216,32 +242,60 @@ console.log(thumbnailCourse);
 <h3 className="library_trending_title">Your Courses</h3>
 
       <table>
-        <tr >
+      {course && course.map((i , index) => {
+           return(
+        <tr key={i.id}>
           <td>
-            <p></p>
+            <p>{index + 1}</p>
           </td>
-          <td>
-          <img className="song_cover" />
-          </td>
+          
           <td className="song">
-            <h4></h4>
-            <p> </p>
+            <h4>{i.titleCourse}</h4>
+            <p> {i.descriptionCourse}</p>
           </td>
           <td>
-            <p></p>
+            <p>{i.category}</p>
           </td>
           <td>
-            <p></p>
+            <p>{i.DateCourse}</p>
           </td>
           <td>
-            <p></p>
+            <p>{i.thumbnailCourse}</p>
           </td>
-          
+          { <td>
             
+            <p>{i?.lessons?.titleLesson}</p>
+          </td> }
+         
+          <td>
+          <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
+                              trigger="hover" colors="primary:#ffffff" onClick={() => {
+                                Swal.fire({
+                                  title: 'Do you want to Delete this Product?',
+                                  showDenyButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Save',
+                                  denyButtonText: `Don't save`,
+                                }).then((result) => {
+                                  if (result.isConfirmed ) {
+                                   
+                                    handleRefresh();
+                                    Swal.fire('Product Deleted!', '', 'success');
+                                  } else if (result.isDenied) {
+                                    Swal.fire('Product is not Deleted', '', 'info');
+                                  }
+                                });
+                              }}>                   
+            </lord-icon>
           
+                 </td>
+          <td>
+          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
         </tr>
-     
+     )})}
       </table>
+     
+    
     </div>
   </div>
   

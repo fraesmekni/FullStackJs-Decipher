@@ -130,8 +130,32 @@ const SearchCourse = asynHandler( async (req, res) => {
   
   res.send(results);
 });
+//getCourseById
+const getCourseById = asynHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    res.json(course)
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+})
+//getCoursesById
+const getCoursesById = asynHandler(  async (req, res) => {
+  try {
+    const course = await Course.find( { user: req.params.userId } ).populate('coach'); 
+    if (!course) {
+      return res.status(404).json({ message: 'course not found' });
+    }
+    res.json(course);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 module.exports={
-  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse
+  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById
 }

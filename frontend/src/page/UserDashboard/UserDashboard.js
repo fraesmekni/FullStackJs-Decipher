@@ -49,9 +49,11 @@ function UserDashboard(){
             console.error(error);
           }
         };
+        //getcourse
 
     useEffect(() => {
       getProduct();
+      //getcourse()
     }, [userInfo._id , successDelete ]);
 
 

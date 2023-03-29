@@ -1,6 +1,6 @@
 
 const express = require('express');
-const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,SearchCourse} = require('../Controllers/courseController');
+const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById} = require('../Controllers/courseController');
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
@@ -33,4 +33,6 @@ router.post('/createlesson',createLesson),
 router.delete('/delete/:id' ,deleteCourse),
 router.put('/updateCourse/:id' ,updateCourse),
 router.get('/search/:key',SearchCourse),
+router.get('/:id',getCourseById),
+router.get('/courseById/:userId',getCoursesById)
 module.exports = router
