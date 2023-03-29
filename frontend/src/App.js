@@ -19,8 +19,14 @@ import UserDashboard from './page/UserDashboard/UserDashboard';
 import ProductDetail from './page/ProductDetail/ProductDetail';
 import Shop from './page/Shop/shop';
 import Cart from './page/Cart/Cart';
+import shipping from './page/Shipping/shipping'
 import CourseDetail from './page/CourseDetail/CourseDetail';
 import CoachDashboard from './page/CoachDashboard/CoachDashboard';
+import Shipping from './page/Shipping/shipping';
+import Payment from './page/Payment/payment';
+import PlaceOrder from './page/PlaceOrder/PlaceOrder';
+
+import OrderScreen from './page/Order/order';
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -96,6 +102,11 @@ function App() {
     <Route path="/coachdashboard" element={<><div className='yo'><Navbarr /> <CoachDashboard/></div></> } /> 
 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
+    <Route path="/shipping" element={<Shipping/>} />
+    <Route path="/payment" element={<Payment/>} />
+    <Route path="/PlaceOrder" element={<PlaceOrder/>} />
+    <Route path="/order/:id" element={<OrderScreen/>} />
+
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>

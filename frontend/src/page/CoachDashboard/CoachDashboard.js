@@ -249,10 +249,10 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <td>
             <p>{i.thumbnailCourse}</p>
           </td>
-          {/* <td>
+          { <td>
             
             <p>{i?.lessons?.titleLesson}</p>
-          </td> */}
+          </td> }
          
           <td>
           <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"

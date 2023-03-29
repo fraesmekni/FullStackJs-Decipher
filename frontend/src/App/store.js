@@ -8,6 +8,7 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 import { addCourseReducer, addLessonReducer } from '../coursereduc/courseReducers';
+import {orderCreateReducer,orderDetailsReducer} from '../orderRedux/orderReducers'
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
@@ -26,7 +27,9 @@ const reducer = combineReducers({
        cart: cartReducer,
        productReview :productReviewReducer,
        addCourse: addCourseReducer,
-       addLesson: addLessonReducer
+       addLesson: addLessonReducer,
+       orderCreate : orderCreateReducer,
+       orderDetails :orderDetailsReducer
 
 
 })
@@ -34,7 +37,7 @@ const reducer = combineReducers({
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 
 const ProductInfoFromStorage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : null 
 const cartItemsFromStorage = localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')) : []
-
+const ShippingAddressFromStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {} 
 const initialState ={
         //localstorage
         userLogin : {userInfo: userInfoFromStorage},
@@ -44,7 +47,8 @@ const initialState ={
         productGetReducer: {
           products: []
         },
-        cart : { cartItems : cartItemsFromStorage}
+        cart : { cartItems : cartItemsFromStorage,
+                  shippingAddress : ShippingAddressFromStorage}
   }
   const middleware = [thunk]
   
