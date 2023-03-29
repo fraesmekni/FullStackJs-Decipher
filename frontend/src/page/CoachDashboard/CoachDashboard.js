@@ -34,7 +34,6 @@ function CoachDashboard(){
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
     const [create,setCreate]= useState(true);
-    const [add,setAdd]= useState(false);
 
 
     function handleContentLessonChange(editorState) {
@@ -248,7 +247,9 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <td>
             <p>{index + 1}</p>
           </td>
-          
+          <td>
+          <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.thumbnailCourse}`} alt="My Image" className="song_cover" />
+          </td>
           <td className="song">
             <h4>{i.titleCourse}</h4>
             <p> {i.descriptionCourse}</p>
@@ -259,9 +260,7 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <td>
             <p>{i.DateCourse}</p>
           </td>
-          <td>
-            <p>{i.thumbnailCourse}</p>
-          </td>
+
           { <td>
             
             <p>{i?.lessons?.titleLesson}</p>

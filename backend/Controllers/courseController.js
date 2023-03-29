@@ -154,8 +154,18 @@ const getCoursesById = asynHandler(  async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+const getCoursesByIds = asynHandler(  async (req, res) => {
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    res.json(course)
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+});
 
 
 module.exports={
-  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById
+  createCourse,createLesson,DisplayLesson,getCoursesByIds,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById
 }

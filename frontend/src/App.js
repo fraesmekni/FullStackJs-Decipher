@@ -91,7 +91,7 @@ function App() {
     <Route path="/productdetail/:id" element={<> <div className="bgdetail"><Navbarr /><ProductDetail/></div></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
     <Route path="/cart/:id?" element={<><Navbarr /><Cart/></>} />
-    <Route path="/coursedetail" element={<><Navbarr /><CourseDetail/></>} />
+    <Route path="/coursedetail/:id?" element={<><Navbarr /><CourseDetail/></>} />
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
