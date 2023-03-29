@@ -2,7 +2,7 @@ const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
 const express = require('express');
-const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProduct, SearchProduct, GetProductsById,createReview } = require("../Controllers/productController");
+const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProduct, SearchProduct, GetProductsById,createReview, getProductByIdProduct } = require("../Controllers/productController");
 const router = express.Router()
 const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
@@ -30,7 +30,8 @@ router.post('/createProduct',upload.single('imageProduct') ,createProduct),
 router.get('/getAll' ,getAllProducts),
 router.get('/:id',getProductById),
 router.delete('/delete/:id' ,deleteProduct),
-router.put('/updateProduct/:id' ,updateProduct),
+router.put('/updateProduct/:id',upload.single('imageProduct')  ,updateProduct),
+router.get('/productByIdProduct/:productId',getProductByIdProduct),
 router.get('/search/:key',SearchProduct),
 router.get('/productById/:userId',GetProductsById)
 router.post('/:id/reviews' ,protectSimpleUser, createReview)
