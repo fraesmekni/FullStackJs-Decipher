@@ -7,11 +7,11 @@ import { Form , Row ,Col, ListGroup, Button} from "react-bootstrap";
 import { createProductReview } from '../../productredux/productaction';
 import {CREATE_REVIEW_RESET} from '../../productredux/productconstant';
 import Rating from "../../Components/Rating/Rating.js"
-
 const ProductDetail=()=>{
   const navigate = useNavigate();
     const dispatch = useDispatch();
       const products = useSelector((state) => state.productGetReducer.products);
+
       const { id } = useParams();
       const [qty,setQty]= useState(1);
 //initialise state
@@ -79,7 +79,8 @@ const submitHandler = (e)=>{
     {product.countInStock> 0 ? (
      <><Form.Control required as='select' value={qty} onChange={(e)=>setQty(e.target.value)}>{[
       ...Array(product.countInStock).keys()].map(x=>(<option key={x+1} value={x+1}>{x+1}</option>))}
-    </Form.Control><button onClick={addtoCart}className="add">Add to Cart</button><button className="like"><span>♥</span></button></>  ): ''}
+    </Form.Control>
+    {userInfo ? (<div><button onClick={addtoCart}className="add">Add to Cart</button><button className="like"><span>♥</span></button></div>):('')}</>  ): ''}
     
     </div>
   </div>

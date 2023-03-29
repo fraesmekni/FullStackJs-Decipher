@@ -7,10 +7,9 @@ import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
 import {addCourse, addLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import Loader from "../../Components/Loader";
+import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
 
 
 function CoachDashboard(){
@@ -67,29 +66,32 @@ const submitNew = async (e)=>{
 console.log(thumbnailCourse);
     const submitHandlerCourse = async (e) => {
       e.preventDefault();
-      try {
+      try { console.log("awel"+thumbnailCourse)
+      dispatch({
+        type:COURSE_ADD_REQUEST
+    })
+    const config = {
+        headers:{
+            'Content-Type' : 'multipart/form-data'
+        }
+    }
+    console.log("theni"+thumbnailCourse)
         const { data } = await axios.post('http://localhost:5000/course/createcourse', {
           titleCourse,
           descriptionCourse,
           category,
           thumbnailCourse,
-          coach: userInfo._id,
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-  
-       setcourse_id(data.course._id); // define course_id and set it to the _id of the newly created course
+          coach: userInfo,
+            config
 
-        dispatch(addCourse({
-          titleCourse,
-          descriptionCourse,
-          category,
-          thumbnailCourse,
-          coach: userInfo._id,
-          course_id: data.course._id, // set course_id to the _id of the newly created course
-        }));
-       
+          }); console.log(JSON.stringify(data))
+  
+        // define course_id and set it to the _id of the newly created course
+  dispatch({
+              type : COURSE_ADD_SUCCESS,
+              payload : data
+          })        
+          setcourse_id(data.course._id);
         // define course_id and set it to the _id of the newly created course
       } catch (error) {
         console.error(error);

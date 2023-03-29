@@ -20,14 +20,15 @@ function Courses() {
      console.log("after 1 second");// Refresh after 1 seconds (adjust the number as needed)
    };
   return (
-    <div>
+    <div>        
+
  {Array.isArray(courses) && courses.map((c) => (
           <Event course={c} key={c._id} >
 
           </Event>
         ))}
 
-    </div>
+    </div> 
   )
 }
 
