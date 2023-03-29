@@ -6,7 +6,7 @@ export const addCourseReducer=(state={},action)=>{
         case COURSE_ADD_REQUEST : 
             return {loading : true}
         case COURSE_ADD_SUCCESS : 
-            return {loading : false ,messageSuccess : "WE SENT YOU A VERIFICATION E-MAIL!"}
+            return {loading : false ,messageSuccess : "Course Added!"}
         case COURSE_ADD_FAIL :
             return {loading : false , error: action.payload }        
         default:
@@ -20,7 +20,7 @@ export const addCourseReducer=(state={},action)=>{
         case LESSON_ADD_REQUEST : 
             return {loading : true}
         case LESSON_ADD_SUCCESS : 
-            return {loading : false ,messageSuccess : "WE SENT YOU A VERIFICATION E-MAIL!"}
+            return {loading : false ,messageSuccess : "Lesson Added!"}
         case LESSON_ADD_FAIL :
             return {loading : false , error: action.payload }        
 

@@ -26,13 +26,16 @@ function CoachDashboard(){
     const [ titleLesson, setTitleLesson] = useState(""); 
     const [descriptionLesson, setDescriptionLesson] = useState(""); 
     const [contentLesson, setContentLesson] = useState(""); 
-
     const [typeLesson, setTypeLesson] = useState(""); 
     const [thumbnailCourse, setThumbnailCourse] = useState(""); 
     /////////////////////
     const [course_id, setcourse_id] = useState(null);
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
+    const [create,setCreate]= useState(true);
+    const [add,setAdd]= useState(false);
+
+
     function handleContentLessonChange(editorState) {
       setContentLesson(editorState);
     }
@@ -62,11 +65,18 @@ const submitNew = async (e)=>{
   setDescriptionLesson("");
   setTitleLesson("");
   setTypeLesson("");
+  setCreate(true);
+
 }
 console.log(thumbnailCourse);
     const submitHandlerCourse = async (e) => {
       e.preventDefault();
-      try { console.log("awel"+thumbnailCourse)
+      const formData = new FormData();
+      formData.append('titleCourse', titleCourse);
+      formData.append('descriptionCourse', descriptionCourse);
+      formData.append('category', category);
+      formData.append('thumbnailCourse', thumbnailCourse);
+      formData.append('coach', userInfo._id);      try { console.log("awel"+thumbnailCourse)
       dispatch({
         type:COURSE_ADD_REQUEST
     })
@@ -75,16 +85,9 @@ console.log(thumbnailCourse);
             'Content-Type' : 'multipart/form-data'
         }
     }
-    console.log("theni"+thumbnailCourse)
-        const { data } = await axios.post('http://localhost:5000/course/createcourse', {
-          titleCourse,
-          descriptionCourse,
-          category,
-          thumbnailCourse,
-          coach: userInfo,
-            config
+        const { data } = await axios.post('http://localhost:5000/course/createcourse', 
 
-          }); console.log(JSON.stringify(data))
+          formData); console.log(JSON.stringify(data))
   
         // define course_id and set it to the _id of the newly created course
   dispatch({
@@ -97,6 +100,7 @@ console.log(thumbnailCourse);
         console.error(error);
       }
     };
+    
     console.log("lbara"+course_id);
 
     const submitHandlerLesson = async (e) => {
@@ -109,7 +113,9 @@ console.log(thumbnailCourse);
         typeLesson,
         course: course_id,
       })
-    );  };
+
+    );       setCreate(false);
+  };
     
   const handleCreateClick = () => {
     setShowCreate(true);
@@ -170,12 +176,13 @@ console.log(thumbnailCourse);
           <input type="text" placeholder="What is this course about?"  value={descriptionCourse}
                 onChange={(e) => setDescriptionCourse(e.target.value)}></input>
                 <input type="file" name="thumbnailCourse" 
-                onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
+                onChange={(e) =>  setThumbnailCourse(e.target.files[0])}></input>
                 <SpecialButton name="Create" onClick={submitHandlerCourse} type="submit"/> 
                 </> )}
                 
                  {step === 2 && ( <>
- 
+                  {loading && < Loader style={{marginLeft:"600px"}}/>}
+
  <h3 align="center" className="library_trending_title">Step 2 : Add A course ! </h3>
 
  <input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
@@ -193,8 +200,11 @@ console.log(thumbnailCourse);
     /> */}
           
           <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
-                onChange={(e) => setDescriptionLesson(e.target.value)}></input> <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>
-        <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>         </> )}
+                onChange={(e) => setDescriptionLesson(e.target.value)}></input>
+                
+                {create ?
+                 <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>:
+        <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>  }       </> )}
         
 
  </div>
