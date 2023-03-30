@@ -18,3 +18,10 @@ export const COURSE_GET_SUCCESS = 'COURSE_GET_SUCCESS'
 
 export const SET_COURSE_ID = 'SET_COURSE_ID'
 
+//===================================================
+
+export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
+export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
+export const DELETE_COURSE_FAIL = 'DELETE_COURSE_FAIL';
+
+

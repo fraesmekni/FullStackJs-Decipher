@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, DELETE_COURSE_FAIL, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
 
 
 export const addCourse = ({ titleCourse ,
@@ -164,4 +164,37 @@ export const addLesson = ({ titleLesson,
         }
       };
      
+  export const deleteCourse = (id) => async (dispatch)=>{
+    try {
+        dispatch({
+            type:DELETE_COURSE_REQUEST
+        })
+        const config = {
+            headers:{
+                'Content-Type' : 'application/json'
+            }
+        }
+  
+        const {data } =await axios.delete(
+            `http://localhost:5000/course/delete/${id}`,
+            config
+        )
+  
+        dispatch({
+            type : DELETE_COURSE_SUCCESS,
+            payload : data
+            
+        })
+    } catch(error){
+        dispatch({
+            type: DELETE_COURSE_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+          })
+  
+    }
+  }
+
 
