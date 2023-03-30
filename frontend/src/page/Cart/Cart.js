@@ -6,8 +6,6 @@ import { useLocation, useParams } from 'react-router-dom';
 import { addToCart , removeFromCart} from '../../cartredux/cartaction';
 import "./Cart.css"
 import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import {createOrder} from '../../orderRedux/orderActions'
 

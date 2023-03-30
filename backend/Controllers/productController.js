@@ -98,39 +98,66 @@ const deleteProduct = asynHandler(async (req, res) => {
 })
 
 const updateProduct = asynHandler(async (req, res) => {
+  
+  console.log('req.file:', req.file);
+  console.log('req.body:', req.body);
   const {
-    name,
+    productName,
     price,
     description,
     category,
-    countInStock,
+    countInStock
   } = req.body
+ const  imageProduct =req.file 
 
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.name = name
+    product.productName = productName
     product.price = price
     product.description = description
     product.category = category
     product.countInStock = countInStock
+    product.imageProduct = imageProduct
 
     const updatedProduct = await product.save()
-    res.status(201).json({
-      _id: product.id,
-      name: product.name,
-      user : product.user,
-      price: product.price,
-      category: product.category,
-      countInStock: product.countInStock,
-      description: product.description
-  })
+    if (updatedProduct){
+      res.status(201).json({
+        _id: product.id,
+        productName: product.productName,
+        user : product.user,
+        price: product.price,
+        category: product.category,
+        countInStock: product.countInStock,
+        description: product.description,
+        imageProduct: product.imageProduct
+      })
+    }
   } else {
     res.status(404)
     throw new Error('Product not found')
   }
 })
 
+const getProductByIdProduct = asynHandler(async (req, res) => {
+  const product = await Product.findById(req.params.productId)
+
+  if (product) {
+    res.json({
+      _id: product.id,
+      productName: product.productName,
+      user : product.user,
+      price: product.price,
+      category: product.category,
+      countInStock: product.countInStock,
+      description: product.description,
+      imageProduct: product.imageProduct
+    })
+  } else {
+    res.status(404)
+    throw new Error('Product not found')
+  }
+})
 
 const SearchProduct = asynHandler( async (req, res) => {
   const key = req.params.key;
@@ -195,7 +222,8 @@ module.exports = {
    SearchProduct,
    GetProductsById,
    getProductById,
-   createReview
+   createReview,
+   getProductByIdProduct
 
 }
   

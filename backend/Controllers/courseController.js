@@ -63,11 +63,17 @@ const createLesson = async(req,res)=>{
         };
 
 const DisplayLesson= asynHandler(async(req,res)=>{
-   
-    const course= await Course.findById(req.params.id) //It proceeds to find the product by its id using Product.findById()
-    res.json(course)
-  
-});
+       
+    const courses = await Course.find( {});
+    if (!courses) {
+        res.Error(404)
+        throw new Error(" courses Not Found !!")
+    }
+    res.json(courses)
+
+})
+
+
 //delete course
 const deleteCourse = asynHandler(async (req, res) => {
   const course = await Course.findById(req.params.id)
@@ -201,8 +207,20 @@ const getCoursesById = asynHandler(  async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+const getCoursesByIds = asynHandler(  async (req, res) => {
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    res.json(course)
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+});
 
 
 module.exports={
-  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById,updateLesson, getLessonById
+
+  createCourse,createLesson,DisplayLesson,getCoursesByIds,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById,updateLesson, getLessonById
+
 }

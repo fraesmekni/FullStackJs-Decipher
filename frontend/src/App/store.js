@@ -7,9 +7,9 @@ import {userLoginReducer, userReducers, userRegisterReducer,
 import { productAddReducer, productDetailReducer, productGetReducer, productDeleteReducer ,productReviewReducer} from '../productredux/productreducer';
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
-import { addCourseReducer, addLessonReducer } from '../coursereduc/courseReducers';
-import {orderCreateReducer,orderDetailsReducer} from '../orderRedux/orderReducers'
+import { addCourseReducer, addLessonReducer, courseReducers } from '../coursereduc/courseReducers';
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
+import {orderCreateReducer,orderDetailsReducer} from '../orderRedux/orderReducers';
 
 const reducer = combineReducers({
     //reducers
@@ -27,6 +27,7 @@ const reducer = combineReducers({
        cart: cartReducer,
        productReview :productReviewReducer,
        addCourse: addCourseReducer,
+       courseDisplay: courseReducers,
        addLesson: addLessonReducer,
        orderCreate : orderCreateReducer,
        orderDetails :orderDetailsReducer
@@ -47,8 +48,10 @@ const initialState ={
         productGetReducer: {
           products: []
         },
-        cart : { cartItems : cartItemsFromStorage,
-                  shippingAddress : ShippingAddressFromStorage}
+        courseDisplay: {
+          courses: []
+        },
+        cart : { cartItems : cartItemsFromStorage}
   }
   const middleware = [thunk]
   

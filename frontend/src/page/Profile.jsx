@@ -80,9 +80,10 @@ const GotoCoachDashboard=()=>{
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
   return (
     <div>
+
     {loading && <Loader></Loader>}
       <Parallax small filter image="/images/handmade.jpg" />
-      <div style={{backgroundColor: "#FCFFE7"}} className={classNames(classes.main, classes.mainRaised)}>
+      <div style={{backgroundColor: "#FCFFE7",backgroundImage:"url('./olive.png')"}} className={classNames(classes.main, classes.mainRaised)}>
         <div> <div></div>
           <div className={classes.container}>
             <GridContainer  justify="center">

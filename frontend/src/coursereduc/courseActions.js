@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
+
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
+
 
 export const addCourse = ({ titleCourse ,
     descriptionCourse , 
@@ -67,6 +69,7 @@ export const addLesson = ({ titleLesson,
   
          
       }
+
       export const updateCourse = ({titleCourse,descriptionCourse,category,coach,thumbnailCourse,id}) => async (dispatch)=>{
         try {
               dispatch({
@@ -142,3 +145,23 @@ export const addLesson = ({ titleLesson,
       }
       
   
+
+    
+      export const getCourses = () => async (dispatch) => {
+        try {
+          const response = await fetch('http://localhost:5000/course/getCourses', {
+            method: 'GET',
+            headers: {
+              accept: 'multipart/form-data',
+            },
+          });
+      
+          const data = await response.json();
+  
+          dispatch({ type: COURSE_GET_SUCCESS, payload: data });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+     
+

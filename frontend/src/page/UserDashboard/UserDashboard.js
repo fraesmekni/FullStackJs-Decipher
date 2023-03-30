@@ -68,7 +68,7 @@ function UserDashboard(){
     const dispatch = useDispatch();
 
  
-
+console.log(imageProduct);
 const submitHandlerj = (e) => {
     e.preventDefault();
     dispatch(
