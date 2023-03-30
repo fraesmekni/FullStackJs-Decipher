@@ -22,11 +22,14 @@ import Cart from './page/Cart/Cart';
 import shipping from './page/Shipping/shipping'
 import CourseDetail from './page/CourseDetail/CourseDetail';
 import CoachDashboard from './page/CoachDashboard/CoachDashboard';
+import UpdateCourses from './page/CoachDashboard/UpdateCourses';
 import Shipping from './page/Shipping/shipping';
 import Payment from './page/Payment/payment';
 import PlaceOrder from './page/PlaceOrder/PlaceOrder';
 import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
+import UpdateProduct from './page/UpdateProduct/UpdateProduct';
+
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -100,12 +103,15 @@ function App() {
     <Route path="/spnsorupdate" element={<> <Navbarr /> <UpdateSponsor></UpdateSponsor> </>} />
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/coachdashboard" element={<><div className='yo'><Navbarr /> <CoachDashboard/></div></> } /> 
+    <Route path="/updatecourses/:id" element={<><div className='yo'><Navbarr /> <UpdateCourses/></div></> } /> 
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/shipping" element={<Shipping/>} />
     <Route path="/payment" element={<Payment/>} />
     <Route path="/PlaceOrder" element={<PlaceOrder/>} />
     <Route path="/order/:id" element={<OrderScreen/>} />
+    <Route path="/updateProduct/:id" element={<><div className='yo'><Navbarr /> <UpdateProduct></UpdateProduct></div></> } /> 
+
 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}

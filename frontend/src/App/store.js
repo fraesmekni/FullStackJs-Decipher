@@ -4,7 +4,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {userLoginReducer, userReducers, userRegisterReducer,
   forgetPassword,resetPassword,
   sponsorReducer,coachReducer} from '../userredux/userreducer'
-import { productAddReducer, productDetailReducer, productGetReducer, productDeleteReducer ,productReviewReducer} from '../productredux/productreducer';
+import { productAddReducer, productDetailReducer, productGetReducer, productDeleteReducer ,
+  productReviewReducer, productUpdateReducer} from '../productredux/productreducer';
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 import { addCourseReducer, addLessonReducer, courseReducers } from '../coursereduc/courseReducers';
@@ -30,7 +31,8 @@ const reducer = combineReducers({
        courseDisplay: courseReducers,
        addLesson: addLessonReducer,
        orderCreate : orderCreateReducer,
-       orderDetails :orderDetailsReducer
+       orderDetails :orderDetailsReducer,
+       productUpdate : productUpdateReducer,
 
 
 })

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { PRODUCT_ADD_FAIL, PRODUCT_ADD_REQUEST, PRODUCT_ADD_SUCCESS,GET_PRODUCT_SUCCESS, PRODUCT_DETAIL_REQUEST, 
   PRODUCT_DETAIL_SUCCESS, PRODUCT_DETAIL_FAIL, DELETE_PRODUCT_FAIL, 
-  DELETE_PRODUCT_REQUEST , DELETE_PRODUCT_SUCCESS , CREATE_REVIEW_FAIL, CREATE_REVIEW_REQUEST , CREATE_REVIEW_SUCCESS,CREATE_REVIEW_RESET } from './productconstant';
+  DELETE_PRODUCT_REQUEST , DELETE_PRODUCT_SUCCESS , CREATE_REVIEW_FAIL, CREATE_REVIEW_REQUEST , 
+  CREATE_REVIEW_SUCCESS,CREATE_REVIEW_RESET, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST , PRODUCT_UPDATE_SUCCESS } from './productconstant';
 
 export const productadd = ({ 
     productName ,
@@ -172,6 +173,52 @@ export const productadd = ({
     } catch(error){
         dispatch({
             type: CREATE_REVIEW_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+          })
+  
+    }
+  }
+
+   export const productUpdate = ({id, productName ,
+    price , 
+    imageProduct,
+    user,
+    category , 
+    countInStock ,
+    description}) => async (dispatch)=>{
+    try {
+        dispatch({
+            type:PRODUCT_UPDATE_REQUEST
+        })
+        const config = {
+            headers:{
+               'Content-Type' : 'multipart/form-data'
+            }
+        }
+  
+        const {data } =await axios.put(
+            `http://localhost:5000/product/updateProduct/${id}`,
+            {productName ,
+            price , 
+            imageProduct,
+            user,
+            category , 
+            countInStock ,
+            description},
+            config
+        )
+  
+        dispatch({
+            type : PRODUCT_UPDATE_SUCCESS,
+            payload : data
+            
+        })
+    } catch(error){
+        dispatch({
+            type: PRODUCT_UPDATE_FAIL,
             payload:
               error.response && error.response.data.message
                 ? error.response.data.message
