@@ -108,7 +108,8 @@ const updateProduct = asynHandler(async (req, res) => {
     category,
     countInStock
   } = req.body
- const  imageProduct =req.file 
+ const  imageProduct =req.file?
+ req.file.filename: null;
 
   const product = await Product.findById(req.params.id)
 
