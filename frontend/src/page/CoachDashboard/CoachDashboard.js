@@ -9,16 +9,11 @@ import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseAction
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
 import Swal from 'sweetalert2';
-
-import { useNavigate } from 'react-router-dom';
-
 import Loader from "../../Components/Loader";
 import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
 
 
-
 function CoachDashboard(){
-    const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin)
     const addCourses = useSelector(state => state.addCourse)
     const { loading, error,messageSuccess } = addCourses;
@@ -43,6 +38,7 @@ function CoachDashboard(){
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
     const [create,setCreate]= useState(true);
+    const [add,setAdd]= useState(false);
 
     const [details,setDetails]= useState(true);
 
@@ -151,15 +147,35 @@ console.log(thumbnailCourse);
     );       setCreate(false);
   };
     
+  const submitHandlerLessonadd = async (e) => {
+    e.preventDefault()
+  dispatch(
+    addLesson({
+      titleLesson,
+      descriptionLesson,
+      contentLesson,
+      typeLesson,
+      course: details,
+    })
+
+  );  setCreate(false);     
+};
+  
   const handleCreateClick = () => {
     setShowCreate(true);
     setShowList(false);
+    setShowDetail(false);
+    setAdd(false);
+
 
   };
 
   const handleListClick = () => {
     setShowCreate(false);
     setShowList(true);
+    setShowDetail(false);
+    setAdd(false);
+
 
   };
  
@@ -173,13 +189,6 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
 };
 //console.log(course?.lessons?.titleLesson)
   console.log(lessonQty)
-
-  const updateCourses=( id )=>{
-    let path =`/updatecourses/${id}`
-          navigate(path)
-   };
-
-
     return(
 
         <><body  className="coach">
@@ -192,16 +201,8 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
     </div>
 
     <div className="sidebar_menu">
-      <lord-icon
-    src="https://cdn.lordicon.com/slduhdil.json"
-    trigger="hover" colors="primary:#ffffff"
-    onClick={handleListClick} 
-    />
-<lord-icon
-    src="https://cdn.lordicon.com/mrdiiocb.json"
-    trigger="hover" colors="primary:#ffffff"
-    onClick={handleCreateClick} 
-  />
+      <img onClick={handleListClick} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABEElEQVRIie2TMUqDQRCF34T8hdgELYVYpdAmnY05QTyCpLHzBJZioTdIo50B7YWkUSzVIs1/nghfCkdYAstOfkkh+mCbnXnvzczOSn8KwAgYbULYgHOg9nMBtCJcC4hXkq4knUha+HUlaSrp0swWOW4RwBYw9qrfgWPgCHjzuztgu6l4B5i40CtwkMR6wLPHHoHddcX3gCcXmALdQs4M2I+K94AXJz4AO4Uu75MuD0vi6XxvI/NdeacPYJBLHALzZBXbJfGE2054c2D4HWt5wqmka32tnyTJzD6jBiu5laQb4CxXTQ3UUfESLzSGnKGZ9Uvc0Hf/CdYyMLN+pOrGBk3w+w2yWxRZ1UjOxjv4RxFLW3QYbNPY/+0AAAAASUVORK5CYII=" />
+      <img onClick={handleCreateClick} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAQElEQVRIiWNgGAXUBIcPHz5y+PDhI6ToYaKVY0YtGLWAeoARmUNqGscFbG1tbWBsmvuAJDCak0ctGKYWjAKCAAB8yhBUbF/pJwAAAABJRU5ErkJggg==" />
     </div>
     <div className="sidebar_logout">
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACAklEQVRoge2ZP2tUQRTFfydEwfULJCpY5ANYqa1FlECwUhArIU0QrG1SaKG9RZZ0EWtBUEQQBC39A8GPYCEkRYqNkigYcizegMsSzMzbu3nN/JrLwpvzzr0zs+++eVCpVCqVMVCUkO0p4AZwAZhuIbEPfAVeSDqI8pWFbdl+5Rhe2s4ubMgM2F4EXgObQJ+mmqVMA/eAGWBR0psIb1nYXknVezSmzuOks5I7ZmqcGw5xIsU2lR/mz4jekUQl0Bk1ga6pCST2UtwN0sumzRPzMNaAbeB5kF42IQlI+gmsR2iV0noJ2T5r+6HtmUhDpbSaAdvngA/AHDAAnkSaKqF4BkbMfwGeRpsqoSiBZP49jfkNYEHSziSM5ZK9hGyf4V/lD2iqf992rsQ+sCppq9Tk/yjZA7dozEMzc8st7rdN8H4pSWAduA1cTL9Xge8F43eBZwXXZ5GdgKQd21eBt8Bl4DpwRdK3aFMlFG3itGEXaNb/eeCd7dlJGMul+G9U0gC4RpPEHM3e6IxWDzJJA9vzwE066H+Gad0LSfpBR/3PMCHttO3ZrvqiqPeBJeBBisdK9KnEySC9bOorZdfUBLomKoHfKZ4aU6eX4q/cAVGnEh9TvGu7R7vjldPAnRG948N2P+j7QL/kvmFfaFISl2ha7d5R1x7CHvBJ0udIT5VKpTJZ/gIArCTzj9YnhAAAAABJRU5ErkJggg==" />
@@ -327,25 +328,24 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           
                  </td>
           <td>
-          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateCourses( i._id)} />          </td>
+          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
         </tr>
      )})}
       </table>
-     
+      
     
     </div>
 
 
 
-    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${!showList && !showCreate ? "show" : "hide"} ${!showList && !showCreate ? "library_trending" : ""}`}
+    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${showDetail ? "show" : "hide"} ${showDetail  ? "library_trending" : ""}`}
 >      
-<h3 className="library_trending_title">Lessons <lord-icon
+ <h3 className="library_trending_title">Lessons <lord-icon
     src="https://cdn.lordicon.com/mrdiiocb.json"
     trigger="hover" colors="primary:#ffffff"
-    onClick={addlesson} 
-  /></h3>
+    onClick={() => (setAdd(true),setShowDetail(false))}  /></h3> 
 
-      <table >
+      <table>
       {coursse&& coursse.lessons.map((i , index) => {
            return( 
             <tr key={i._id}>
@@ -388,14 +388,33 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           
                  </td>
           <td>
-          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateCourses( i._id)} />          </td>
+          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
         </tr>
      )})}
       </table>
      
     
-    </div>
-      </div>
+      
+    </div>{console.log(showDetail)}
+      </div> <div id="lists"  style={{marginLeft : "100px"}}      className={`create ${add? "show" : "hide"} ${add ?"library_trending" : ""}`}>      
+
+<h3 align="center" className="library_trending_title"> Add A lesson  </h3>
+
+<input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
+               onChange={(e) => setTitleLesson(e.target.value)}></input>
+                      <input type="text" placeholder=" Lesson type"  value={typeLesson}
+               onChange={(e) => setTypeLesson(e.target.value)}></input>
+                                      <input type="text" placeholder="Content"  value={contentLesson}
+               onChange={(e) => setContentLesson(e.target.value)}></input>
+     
+         
+         <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
+               onChange={(e) => setDescriptionLesson(e.target.value)}></input>
+               
+               {create ?
+                <SpecialButton name="Create" onClick={submitHandlerLessonadd} type="submit"/>:
+       <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>  }      
+     </div>
 </main> </body>
         </>
     )
