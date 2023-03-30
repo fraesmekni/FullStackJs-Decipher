@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {addCourse, addLesson} from "../../coursereduc/courseActions"
+import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
 import Swal from 'sweetalert2';
@@ -46,9 +46,13 @@ function CoachDashboard(){
 
     const [details,setDetails]= useState(true);
 
+  const courseDelete = useSelector((state) => state.courseDelete);
+const { loading: loadingDelete, error: errorDelete, success: successDelete } = courseDelete;
 
-
-    
+    const deleteHandler = (id) => {
+      dispatch(deleteCourse(id));
+  
+};
     //=Course=
     const [course , setCourse]= useState([])
     const getCourse = async () => {
@@ -304,18 +308,18 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
                               trigger="hover" colors="primary:#ffffff" onClick={() => {
                                 Swal.fire({
-                                  title: 'Do you want to Delete this Product?',
+                                  title: 'Do you want to Delete this Course?',
                                   showDenyButton: true,
                                   showCancelButton: true,
-                                  confirmButtonText: 'Save',
-                                  denyButtonText: `Don't save`,
+                                  confirmButtonText: 'Delete',
+                                  denyButtonText: `Don't Delete`,
                                 }).then((result) => {
                                   if (result.isConfirmed ) {
-                                   
+                                    deleteHandler(i._id);
                                     handleRefresh();
-                                    Swal.fire('Product Deleted!', '', 'success');
+                                    Swal.fire('Course Deleted!', '', 'success');
                                   } else if (result.isDenied) {
-                                    Swal.fire('Product is not Deleted', '', 'info');
+                                    Swal.fire('Course is not Deleted', '', 'info');
                                   }
                                 });
                               }}>                   
