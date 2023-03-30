@@ -1,6 +1,6 @@
 import "./CoachDashboard.css"
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { Link, useParams } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
@@ -19,7 +19,11 @@ function CoachDashboard(){
     const { loading, error,messageSuccess } = addCourses;
 
     const {userInfo } = userLogin
-    const [showCreate, setShowCreate] = useState(false);    
+    const [showCreate, setShowCreate] = useState(false);  
+    const [showList, setShowList] = useState(true);  
+
+    const [showDetail, setShowDetail] = useState(false);    
+  
     const [ titleCourse, setTitleCourse] = useState(""); 
     const [ descriptionCourse, setDescriptionCourse] = useState(""); 
     const [ category, setCategory] = useState(""); 
@@ -35,10 +39,11 @@ function CoachDashboard(){
     const [lessonQty, setLessonQty] = useState(3);
     const [create,setCreate]= useState(true);
 
+    const [details,setDetails]= useState(true);
 
-    function handleContentLessonChange(editorState) {
-      setContentLesson(editorState);
-    }
+
+
+    
     //=Course=
     const [course , setCourse]= useState([])
     const getCourse = async () => {
@@ -56,6 +61,7 @@ function CoachDashboard(){
     }, [userInfo._id])
 
     const dispatch = useDispatch();
+    const coursse = course.find((p) => p._id=== details);
 
     const handlePrevStep = () => {
       if (step === 4) {
@@ -117,7 +123,11 @@ console.log(thumbnailCourse);
     };
     
     console.log("lbara"+course_id);
-
+    const addlesson = () => {
+   setStep(2)
+   console.log("step dekhel"+step);
+  };
+    console.log("step lbara"+step);
     const submitHandlerLesson = async (e) => {
       e.preventDefault()
     dispatch(
@@ -134,10 +144,14 @@ console.log(thumbnailCourse);
     
   const handleCreateClick = () => {
     setShowCreate(true);
+    setShowList(false);
+
   };
 
   const handleListClick = () => {
     setShowCreate(false);
+    setShowList(true);
+
   };
  
 
@@ -208,11 +222,11 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
                  {step === 2 && ( <>
                   {loading && < Loader style={{marginLeft:"600px"}}/>}
 
- <h3 align="center" className="library_trending_title">Step 2 : Add A course ! </h3>
+ <h3 align="center" className="library_trending_title">Step 2 : Add A lesson ! </h3>
 
  <input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
                 onChange={(e) => setTitleLesson(e.target.value)}></input>
-                       <input type="text" placeholder=" Category"  value={typeLesson}
+                       <input type="text" placeholder=" Lesson type"  value={typeLesson}
                 onChange={(e) => setTypeLesson(e.target.value)}></input>
                                        <input type="text" placeholder="Content"  value={contentLesson}
                 onChange={(e) => setContentLesson(e.target.value)}></input>
@@ -236,14 +250,17 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
 
 
 
-    <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
+   
+  </div>
+  
+      <hr /> <div id="list"  style={{marginLeft : "100px"}}      className={`create ${showList ? "show" : "hide"} ${showList ? "library_trending" : ""}`}
 >      
 <h3 className="library_trending_title">Your Courses</h3>
 
       <table>
       {course && course.map((i , index) => {
-           return(
-        <tr key={i.id}>
+           return( 
+            <tr key={i._id}>
           <td>
             <p>{index + 1}</p>
           </td>
@@ -251,7 +268,8 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.thumbnailCourse}`} alt="My Image" className="song_cover" />
           </td>
           <td className="song">
-            <h4>{i.titleCourse}</h4>
+          <Link onClick={() => (setDetails(i._id),setShowDetail(true),setShowCreate(false),setShowList(false))}>
+  <h4>{i.titleCourse}</h4> </Link>
             <p> {i.descriptionCourse}</p>
           </td>
           <td>
@@ -261,10 +279,6 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
             <p>{i.DateCourse}</p>
           </td>
 
-          { <td>
-            
-            <p>{i?.lessons?.titleLesson}</p>
-          </td> }
          
           <td>
           <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
@@ -296,9 +310,67 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
      
     
     </div>
-  </div>
-  
-      <hr />
+
+
+
+    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${!showList && !showCreate ? "show" : "hide"} ${!showList && !showCreate ? "library_trending" : ""}`}
+>      
+<h3 className="library_trending_title">Lessons <lord-icon
+    src="https://cdn.lordicon.com/mrdiiocb.json"
+    trigger="hover" colors="primary:#ffffff"
+    onClick={addlesson} 
+  /></h3>
+
+      <table >
+      {coursse&& coursse.lessons.map((i , index) => {
+           return( 
+            <tr key={i._id}>
+          <td>
+            <p>{index + 1}</p>
+          </td>
+         
+          <td className="song">
+            <h4>{i.titleLesson}</h4>
+            <p> {i.descriptionLesson}</p>
+          </td>
+          <td>
+            <p>{i.typeLesson}</p>
+          </td>
+          <td>
+            <p>{i.DateCourse}</p>
+          </td>
+
+         
+          <td>
+          <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
+                              trigger="hover" colors="primary:#ffffff" onClick={() => {
+                                Swal.fire({
+                                  title: 'Do you want to Delete this Product?',
+                                  showDenyButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Save',
+                                  denyButtonText: `Don't save`,
+                                }).then((result) => {
+                                  if (result.isConfirmed ) {
+                                   
+                                    handleRefresh();
+                                    Swal.fire('Product Deleted!', '', 'success');
+                                  } else if (result.isDenied) {
+                                    Swal.fire('Product is not Deleted', '', 'info');
+                                  }
+                                });
+                              }}>                   
+            </lord-icon>
+          
+                 </td>
+          <td>
+          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
+        </tr>
+     )})}
+      </table>
+     
+    
+    </div>
       </div>
 </main> </body>
         </>
