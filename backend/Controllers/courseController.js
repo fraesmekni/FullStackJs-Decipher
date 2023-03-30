@@ -87,12 +87,16 @@ const deleteCourse = asynHandler(async (req, res) => {
 })
 //update course
 
+
+
 const updateCourse = asynHandler(async (req, res) => {
   const {
     titleCourse ,
     descriptionCourse , 
     category ,
+    coach
   } = req.body
+  const thumbnailCourse = req.file ? req.file.filename : null;
 
   const course = await Course.findById(req.params.id)
 
@@ -100,20 +104,57 @@ const updateCourse = asynHandler(async (req, res) => {
     course.titleCourse = titleCourse
     course.descriptionCourse = descriptionCourse
     course.category = category
-    
+    course.coach = coach
+    course.thumbnailCourse = thumbnailCourse
     const updatedCourse = await course.save()
     res.status(201).json({
       _id: course.id,
       titleCourse: course.titleCourse,
       user : course.user,
       category: course.category,
-      descriptionCourse: course.descriptionCourse
+      descriptionCourse: course.descriptionCourse,
+      coach: course.coach,
+      thumbnailCourse: course.thumbnailCourse 
+
   })
   } else {
     res.status(404)
     throw new Error('Course not found')
   }
 })
+
+const updateLesson = asynHandler(async (req, res) => {
+  const {
+    titleLesson,
+    descriptionLesson,
+     contentLesson,typeLesson,course } = req.body
+     const lesson = await Lesson.findById(req.params.id)
+     
+     if (!titleLesson || !descriptionLesson || !contentLesson || !typeLesson || !course) {
+      res.status(400).json({ message: 'Missing required fields' })
+    } else {
+  if (lesson) {
+    lesson.titleLesson = titleLesson
+    lesson.descriptionLesson = descriptionLesson
+    lesson.contentLesson = contentLesson
+    lesson.typeLesson = typeLesson
+    lesson.course = course
+    const updateLesson = await lesson.save()
+    res.status(201).json({
+      _id: lesson.id,
+      titleLesson: lesson.titleLesson,
+      user : lesson.user,
+      descriptionLesson: lesson.descriptionLesson,
+      contentLesson: lesson.contentLesson,
+      typeLesson: lesson.typeLesson,
+      course: lesson.course 
+
+  })
+  } else {
+    res.status(404)
+    throw new Error('Lesson not found')
+  }
+}})
 // search course 
 const SearchCourse = asynHandler( async (req, res) => {
   const key = req.params.key;
@@ -141,6 +182,18 @@ const getCourseById = asynHandler(async (req, res) => {
     throw new Error('Course not found')
   }
 })
+
+const getLessonById = asynHandler(async (req, res) => {
+  const lesson = await Lesson.findById(req.params.id)
+
+  if (lesson) {
+    res.json(lesson)
+  } else {
+    res.status(404)
+    throw new Error('Lesson not found')
+  }
+})
+
 //getCoursesById
 const getCoursesById = asynHandler(  async (req, res) => {
   try {
@@ -154,8 +207,20 @@ const getCoursesById = asynHandler(  async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+const getCoursesByIds = asynHandler(  async (req, res) => {
+  const course = await Course.findById(req.params.id)
+
+  if (course) {
+    res.json(course)
+  } else {
+    res.status(404)
+    throw new Error('Course not found')
+  }
+});
 
 
 module.exports={
-  createCourse,createLesson,DisplayLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById
+
+  createCourse,createLesson,DisplayLesson,getCoursesByIds,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById,updateLesson, getLessonById
+
 }

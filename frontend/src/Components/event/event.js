@@ -3,6 +3,7 @@ import "./event.css";
 import miel from"./miel.png"
 function Event({course}){
     return(<>
+      <Link to={`/coursedetail/${course._id}`} key={course._id} >
 
     <div className="grid">
     <div className="card">
@@ -26,6 +27,6 @@ function Event({course}){
         </div>
       </div>
     </div>
-</div> </>)
+</div> </Link> </>)
 }
 export default Event;

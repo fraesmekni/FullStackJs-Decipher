@@ -11,7 +11,6 @@ const ProductDetail=()=>{
   const navigate = useNavigate();
     const dispatch = useDispatch();
       const products = useSelector((state) => state.productGetReducer.products);
-
       const { id } = useParams();
       const [qty,setQty]= useState(1);
 //initialise state
@@ -38,7 +37,7 @@ const successProductReview = productReviewCreate ? productReviewCreate.success :
     console.table(products)
     const product = products.find((p) => p._id === id);
 console.table(product);
-console.log(id);
+console.log(product.name);
 const addtoCart=()=>{
 
   navigate(`/cart/${id}?qty=${qty}`)
