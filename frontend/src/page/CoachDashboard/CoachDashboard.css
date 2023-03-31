@@ -227,6 +227,9 @@ background: rgba(180, 164, 164, 0.427);
   scroll-behavior: smooth;
   max-height: 700px;
 left:50%}
+.tabledetails{
+  max-height:"100px"
+}
 
 .library_trending_coach_create {
   width: 1150px;

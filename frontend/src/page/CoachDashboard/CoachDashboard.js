@@ -1,16 +1,16 @@
 import "./CoachDashboard.css"
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { Link, useParams } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {addCourse, addLesson} from "../../coursereduc/courseActions"
+import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import Swal from 'sweetalert2';
+import Loader from "../../Components/Loader";
+import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
 
 
 function CoachDashboard(){
@@ -19,7 +19,11 @@ function CoachDashboard(){
     const { loading, error,messageSuccess } = addCourses;
 
     const {userInfo } = userLogin
-    const [showCreate, setShowCreate] = useState(false);    
+    const [showCreate, setShowCreate] = useState(false);  
+    const [showList, setShowList] = useState(true);  
+
+    const [showDetail, setShowDetail] = useState(false);    
+  
     const [ titleCourse, setTitleCourse] = useState(""); 
     const [ descriptionCourse, setDescriptionCourse] = useState(""); 
     const [ category, setCategory] = useState(""); 
@@ -27,16 +31,24 @@ function CoachDashboard(){
     const [ titleLesson, setTitleLesson] = useState(""); 
     const [descriptionLesson, setDescriptionLesson] = useState(""); 
     const [contentLesson, setContentLesson] = useState(""); 
-
     const [typeLesson, setTypeLesson] = useState(""); 
     const [thumbnailCourse, setThumbnailCourse] = useState(""); 
     /////////////////////
     const [course_id, setcourse_id] = useState(null);
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
-    function handleContentLessonChange(editorState) {
-      setContentLesson(editorState);
-    }
+    const [create,setCreate]= useState(true);
+    const [add,setAdd]= useState(false);
+
+    const [details,setDetails]= useState(true);
+
+  const courseDelete = useSelector((state) => state.courseDelete);
+const { loading: loadingDelete, error: errorDelete, success: successDelete } = courseDelete;
+
+    const deleteHandler = (id) => {
+      dispatch(deleteCourse(id));
+  
+};
     //=Course=
     const [course , setCourse]= useState([])
     const getCourse = async () => {
@@ -54,6 +66,7 @@ function CoachDashboard(){
     }, [userInfo._id])
 
     const dispatch = useDispatch();
+    const coursse = course.find((p) => p._id=== details);
 
     const handlePrevStep = () => {
       if (step === 4) {
@@ -78,40 +91,48 @@ const submitNew = async (e)=>{
   setDescriptionLesson("");
   setTitleLesson("");
   setTypeLesson("");
+  setCreate(true);
+
 }
 console.log(thumbnailCourse);
     const submitHandlerCourse = async (e) => {
       e.preventDefault();
-      try {
-        const { data } = await axios.post('http://localhost:5000/course/createcourse', {
-          titleCourse,
-          descriptionCourse,
-          category,
-          thumbnailCourse,
-          coach: userInfo._id,
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-  
-       setcourse_id(data.course._id); // define course_id and set it to the _id of the newly created course
+      const formData = new FormData();
+      formData.append('titleCourse', titleCourse);
+      formData.append('descriptionCourse', descriptionCourse);
+      formData.append('category', category);
+      formData.append('thumbnailCourse', thumbnailCourse);
+      formData.append('coach', userInfo._id);      try { console.log("awel"+thumbnailCourse)
+      dispatch({
+        type:COURSE_ADD_REQUEST
+    })
+    const config = {
+        headers:{
+            'Content-Type' : 'multipart/form-data'
+        }
+    }
+        const { data } = await axios.post('http://localhost:5000/course/createcourse', 
 
-        dispatch(addCourse({
-          titleCourse,
-          descriptionCourse,
-          category,
-          thumbnailCourse,
-          coach: userInfo._id,
-          course_id: data.course._id, // set course_id to the _id of the newly created course
-        }));
-       
+          formData); console.log(JSON.stringify(data))
+  
+        // define course_id and set it to the _id of the newly created course
+  dispatch({
+              type : COURSE_ADD_SUCCESS,
+              payload : data
+          })        
+          setcourse_id(data.course._id);
         // define course_id and set it to the _id of the newly created course
       } catch (error) {
         console.error(error);
       }
     };
+    
     console.log("lbara"+course_id);
-
+    const addlesson = () => {
+   setStep(2)
+   console.log("step dekhel"+step);
+  };
+    console.log("step lbara"+step);
     const submitHandlerLesson = async (e) => {
       e.preventDefault()
     dispatch(
@@ -122,14 +143,40 @@ console.log(thumbnailCourse);
         typeLesson,
         course: course_id,
       })
-    );  };
+
+    );       setCreate(false);
+  };
     
+  const submitHandlerLessonadd = async (e) => {
+    e.preventDefault()
+  dispatch(
+    addLesson({
+      titleLesson,
+      descriptionLesson,
+      contentLesson,
+      typeLesson,
+      course: details,
+    })
+
+  );  setCreate(false);     
+};
+  
   const handleCreateClick = () => {
     setShowCreate(true);
+    setShowList(false);
+    setShowDetail(false);
+    setAdd(false);
+
+
   };
 
   const handleListClick = () => {
     setShowCreate(false);
+    setShowList(true);
+    setShowDetail(false);
+    setAdd(false);
+
+
   };
  
 
@@ -167,7 +214,7 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABxElEQVRIidWUv27UQBCHv1m7ubsUpCf0EY9wXh/HKyBFugaq0PAEFKmQ8gKIhj9NhHSRDvEKR7y+gheAPtCeghRSIMs7FLeGBBzbR4IQv2bs0fzm2x2vF/53SV3SObcpIjtAoqpbIX0cRVFeluXMWnvyx4DFYnHXe78H9GsNImfAkyRJ5msDQvP9VR858t4fxnH8MTTeLopiIiKpiHhVfWytfdcZ4JzbBN4CfWPM0+Fw+LrO4Jy7DzwSka9FUdwbj8dfmgDmB2k1876IHF3WHMBaewA4Vd2I43inbQfm3LMF8N4ftpmAaYhJZ4Cq3gSoZt6kXq9X1Ww1FnJxB9pWXGm5XNYe70aAiHwOcbvNNBgMqppPnQHGGAdQFMWkzaSqkxBdZ0BZljMRORORNBzFWuV5/oDVxz0VkTdtgAuzzPN8DOyrqgEcMI2i6AOA9/52WHkS3p+PRqNXawEAnHN3RGRPVTcu8Zx676fGmIcAqvoyTdMXnQEA8/n8RviJEuBWSB8DOTCz1p44595X9U2QzsftV1VXxrnUgbX22bUBukKuBOgCuTKgDWLqLesp3LA/Vy3y7Tr6/qYsy3azLNv9K83/mb4D+s23Z1Qya+gAAAAASUVORK5CYII=" />
       </div>
     </div>
-   
+    {loading && < Loader style={{marginLeft:"600px"}}/>}
     <div
         id="create"
         className={`create ${showCreate ? "show" : "hide"} ${showCreate ? " library_trending_coach_create" : ""}`}
@@ -193,17 +240,18 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <input type="text" placeholder="What is this course about?"  value={descriptionCourse}
                 onChange={(e) => setDescriptionCourse(e.target.value)}></input>
                 <input type="file" name="thumbnailCourse" 
-                onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
+                onChange={(e) =>  setThumbnailCourse(e.target.files[0])}></input>
                 <SpecialButton name="Create" onClick={submitHandlerCourse} type="submit"/> 
                 </> )}
                 
                  {step === 2 && ( <>
- 
- <h3 align="center" className="library_trending_title">Step 2 : Add A course ! </h3>
+                  {loading && < Loader style={{marginLeft:"600px"}}/>}
+
+ <h3 align="center" className="library_trending_title">Step 2 : Add A lesson ! </h3>
 
  <input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
                 onChange={(e) => setTitleLesson(e.target.value)}></input>
-                       <input type="text" placeholder=" Category"  value={typeLesson}
+                       <input type="text" placeholder=" Lesson type"  value={typeLesson}
                 onChange={(e) => setTypeLesson(e.target.value)}></input>
                                        <input type="text" placeholder="Content"  value={contentLesson}
                 onChange={(e) => setContentLesson(e.target.value)}></input>
@@ -216,28 +264,37 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
     /> */}
           
           <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
-                onChange={(e) => setDescriptionLesson(e.target.value)}></input> <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>
-        <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>         </> )}
+                onChange={(e) => setDescriptionLesson(e.target.value)}></input>
+                
+                {create ?
+                 <SpecialButton name="Create" onClick={submitHandlerLesson} type="submit"/>:
+        <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>  }       </> )}
         
 
  </div>
 
 
 
-    <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
+   
+  </div>
+  
+      <hr /> <div id="list"  style={{marginLeft : "100px"}}      className={`create ${showList ? "show" : "hide"} ${showList ? "library_trending" : ""}`}
 >      
 <h3 className="library_trending_title">Your Courses</h3>
 
       <table>
       {course && course.map((i , index) => {
-           return(
-        <tr key={i.id}>
+           return( 
+            <tr key={i._id}>
           <td>
             <p>{index + 1}</p>
           </td>
-          
+          <td>
+          <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.thumbnailCourse}`} alt="My Image" className="song_cover" />
+          </td>
           <td className="song">
-            <h4>{i.titleCourse}</h4>
+          <Link onClick={() => (setDetails(i._id),setShowDetail(true),setShowCreate(false),setShowList(false))}>
+  <h4>{i.titleCourse}</h4> </Link>
             <p> {i.descriptionCourse}</p>
           </td>
           <td>
@@ -246,13 +303,67 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <td>
             <p>{i.DateCourse}</p>
           </td>
+
+         
           <td>
-            <p>{i.thumbnailCourse}</p>
+          <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
+                              trigger="hover" colors="primary:#ffffff" onClick={() => {
+                                Swal.fire({
+                                  title: 'Do you want to Delete this Course?',
+                                  showDenyButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Delete',
+                                  denyButtonText: `Don't Delete`,
+                                }).then((result) => {
+                                  if (result.isConfirmed ) {
+                                    deleteHandler(i._id);
+                                    handleRefresh();
+                                    Swal.fire('Course Deleted!', '', 'success');
+                                  } else if (result.isDenied) {
+                                    Swal.fire('Course is not Deleted', '', 'info');
+                                  }
+                                });
+                              }}>                   
+            </lord-icon>
+          
+                 </td>
+          <td>
+          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
+        </tr>
+     )})}
+      </table>
+      
+    
+    </div>
+
+
+
+    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${showDetail ? "show" : "hide"} ${showDetail  ? "library_trending" : ""}`}
+>      
+ <h3 className="library_trending_title">Lessons <lord-icon
+    src="https://cdn.lordicon.com/mrdiiocb.json"
+    trigger="hover" colors="primary:#ffffff"
+    onClick={() => (setAdd(true),setShowDetail(false))}  /></h3> 
+
+      <table>
+      {coursse&& coursse.lessons.map((i , index) => {
+           return( 
+            <tr key={i._id}>
+          <td>
+            <p>{index + 1}</p>
           </td>
-          { <td>
-            
-            <p>{i?.lessons?.titleLesson}</p>
-          </td> }
+         
+          <td className="song">
+            <h4>{i.titleLesson}</h4>
+            <p> {i.descriptionLesson}</p>
+          </td>
+          <td>
+            <p>{i.typeLesson}</p>
+          </td>
+          <td>
+            <p>{i.DateCourse}</p>
+          </td>
+
          
           <td>
           <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
@@ -283,11 +394,27 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
       </table>
      
     
-    </div>
-  </div>
-  
-      <hr />
-      </div>
+      
+    </div>{console.log(showDetail)}
+      </div> <div id="lists"  style={{marginLeft : "100px"}}      className={`create ${add? "show" : "hide"} ${add ?"library_trending" : ""}`}>      
+
+<h3 align="center" className="library_trending_title"> Add A lesson  </h3>
+
+<input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
+               onChange={(e) => setTitleLesson(e.target.value)}></input>
+                      <input type="text" placeholder=" Lesson type"  value={typeLesson}
+               onChange={(e) => setTypeLesson(e.target.value)}></input>
+                                      <input type="text" placeholder="Content"  value={contentLesson}
+               onChange={(e) => setContentLesson(e.target.value)}></input>
+     
+         
+         <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
+               onChange={(e) => setDescriptionLesson(e.target.value)}></input>
+               
+               {create ?
+                <SpecialButton name="Create" onClick={submitHandlerLessonadd} type="submit"/>:
+       <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>  }      
+     </div>
 </main> </body>
         </>
     )

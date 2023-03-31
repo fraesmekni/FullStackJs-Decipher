@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID } from "./courseConstants";
+
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, DELETE_COURSE_FAIL, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
+
 
 export const addCourse = ({ titleCourse ,
     descriptionCourse , 
@@ -67,5 +69,132 @@ export const addLesson = ({ titleLesson,
   
          
       }
-    
+
+      export const updateCourse = ({titleCourse,descriptionCourse,category,coach,thumbnailCourse,id}) => async (dispatch)=>{
+        try {
+              dispatch({
+                  type:UPDATE_COURSE_REQUEST
+              })
+              const config = {
+                  headers:{
+                      'Content-Type' : 'multipart/form-data'
+                  }
+              }
+      
+              const { data } = await axios.put(
+                `http://localhost:5000/course/updateCourse/${id}`,
+                  {titleCourse,descriptionCourse,category,coach,thumbnailCourse},
+                  config
+                );
+      
+              dispatch({
+                  type : UPDATE_COURSE_SUCCESS,
+                  payload : data
+              })
+           
+             // localStorage.setItem('userInfo', JSON.stringify(data))
+      
+             } catch(error){
+
+                dispatch({
+                    type: UPDATE_COURSE_FAIL,
+                    payload: error.response && error.response.data.message
+                        ? error.response.data.data.message
+                        : error.message
+                });
+            
+            console.log(error.response.data.message);
+        }
+      }
+      
+      export const updateLesson = ({titleLesson, descriptionLesson,contentLesson,typeLesson,course,id}) => async (dispatch)=>{
+        try {
+              dispatch({
+                  type:UPDATE_LESSON_REQUEST
+              })
+              const config = {
+                  headers:{
+                      'Content-Type' : 'multipart/form-data'
+                  }
+              }
+      
+              const { data } = await axios.put(
+                `http://localhost:5000/course/updateLesson/${id}`,
+                  {titleLesson, descriptionLesson,contentLesson,typeLesson,course},
+                  config
+                );
+      
+              dispatch({
+                  type : UPDATE_COURSE_SUCCESS,
+                  payload : data
+              })
+           
+             // localStorage.setItem('userInfo', JSON.stringify(data))
+      
+             } catch(error){
+
+                dispatch({
+                    type: UPDATE_COURSE_FAIL,
+                    payload: error.response && error.response.data.message
+                        ? error.response.data.data.message
+                        : error.message
+                });
+            
+            console.log(error.response.data.message);
+        }
+      }
+      
   
+
+    
+      export const getCourses = () => async (dispatch) => {
+        try {
+          const response = await fetch('http://localhost:5000/course/getCourses', {
+            method: 'GET',
+            headers: {
+              accept: 'multipart/form-data',
+            },
+          });
+      
+          const data = await response.json();
+  
+          dispatch({ type: COURSE_GET_SUCCESS, payload: data });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+     
+  export const deleteCourse = (id) => async (dispatch)=>{
+    try {
+        dispatch({
+            type:DELETE_COURSE_REQUEST
+        })
+        const config = {
+            headers:{
+                'Content-Type' : 'application/json'
+            }
+        }
+  
+        const {data } =await axios.delete(
+            `http://localhost:5000/course/delete/${id}`,
+            config
+        )
+  
+        dispatch({
+            type : DELETE_COURSE_SUCCESS,
+            payload : data
+            
+        })
+    } catch(error){
+        dispatch({
+            type: DELETE_COURSE_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+          })
+  
+    }
+  }
+
+

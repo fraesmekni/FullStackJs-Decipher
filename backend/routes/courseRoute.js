@@ -1,6 +1,11 @@
 
 const express = require('express');
-const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,SearchCourse,getCourseById,getCoursesById} = require('../Controllers/courseController');
+
+const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
+  SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
+  getLessonById,
+  deleteLesson} = require('../Controllers/courseController');
+
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
@@ -28,11 +33,16 @@ const router = express.Router()
   // Create a new Multer upload instance
   let upload = multer({ storage, fileFilter});
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
-router.get('/getCourses/:id',DisplayLesson),
+router.get('/getCourses',DisplayLesson),
 router.post('/createlesson',createLesson),
 router.delete('/delete/:id' ,deleteCourse),
-router.put('/updateCourse/:id' ,updateCourse),
+router.delete('/deleteLesson/:id' ,deleteLesson),
+router.put('/updateCourse/:id' ,upload.single('thumbnailCourse'),updateCourse),
+router.put('/updateLesson/:id' ,updateLesson),
 router.get('/search/:key',SearchCourse),
 router.get('/:id',getCourseById),
+router.get('/lesson/:id',getLessonById),
 router.get('/courseById/:userId',getCoursesById)
+router.get('/courseByIds/:id',getCoursesByIds)
+
 module.exports = router

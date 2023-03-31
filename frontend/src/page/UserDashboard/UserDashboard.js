@@ -1,6 +1,5 @@
 import "./UserDashboard.css"
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
@@ -8,6 +7,7 @@ import { useDispatch , useSelector , } from "react-redux";
 import { productadd,deleteProduct } from "../../productredux/productaction";
 import Loader from "../../Components/Loader";
 import { useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 import Swal from 'sweetalert2';
@@ -68,7 +68,14 @@ function UserDashboard(){
     const dispatch = useDispatch();
 
  
+ const {
+     loading: loadingUpdate,
+     error: errorUpdate,
+     success: successUpdate,
+   } = useSelector((state) => state.productUpdate) || {};
 
+
+console.log(imageProduct);
 const submitHandlerj = (e) => {
     e.preventDefault();
     dispatch(
@@ -102,7 +109,6 @@ const submitHandlerj = (e) => {
             {error && <div className="alert">{error}</div>}
           {messageSuccess && <div className="alertgreen">{messageSuccess}</div>}
           
-
           {loading && <Loader />}
 
 
@@ -134,6 +140,13 @@ const submitHandlerj = (e) => {
       <div className="searchbar">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABxElEQVRIidWUv27UQBCHv1m7ubsUpCf0EY9wXh/HKyBFugaq0PAEFKmQ8gKIhj9NhHSRDvEKR7y+gheAPtCeghRSIMs7FLeGBBzbR4IQv2bs0fzm2x2vF/53SV3SObcpIjtAoqpbIX0cRVFeluXMWnvyx4DFYnHXe78H9GsNImfAkyRJ5msDQvP9VR858t4fxnH8MTTeLopiIiKpiHhVfWytfdcZ4JzbBN4CfWPM0+Fw+LrO4Jy7DzwSka9FUdwbj8dfmgDmB2k1876IHF3WHMBaewA4Vd2I43inbQfm3LMF8N4ftpmAaYhJZ4Cq3gSoZt6kXq9X1Ww1FnJxB9pWXGm5XNYe70aAiHwOcbvNNBgMqppPnQHGGAdQFMWkzaSqkxBdZ0BZljMRORORNBzFWuV5/oDVxz0VkTdtgAuzzPN8DOyrqgEcMI2i6AOA9/52WHkS3p+PRqNXawEAnHN3RGRPVTcu8Zx676fGmIcAqvoyTdMXnQEA8/n8RviJEuBWSB8DOTCz1p44595X9U2QzsftV1VXxrnUgbX22bUBukKuBOgCuTKgDWLqLesp3LA/Vy3y7Tr6/qYsy3azLNv9K83/mb4D+s23Z1Qya+gAAAAASUVORK5CYII=" />
       </div>
+      
+                {loadingUpdate && <div style={{backgroundColor: 'yellow', padding: '10px', borderRadius: '5px'}}>Loading...</div>}
+{errorUpdate && <div style={{backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px'}}> Please add all fields </div>}
+{successUpdate && <div style={{backgroundColor: 'green', color: 'white', padding: '10px', borderRadius: '5px'}}>Product updated successfully!</div>}
+
+          
+
     </div>
    
     <div
@@ -203,8 +216,8 @@ const submitHandlerj = (e) => {
                                   title: 'Do you want to Delete this Product?',
                                   showDenyButton: true,
                                   showCancelButton: true,
-                                  confirmButtonText: 'Save',
-                                  denyButtonText: `Don't save`,
+                                  confirmButtonText: 'Delete',
+                                  denyButtonText: `Don't Delete`,
                                 }).then((result) => {
                                   if (result.isConfirmed ) {
                                     deleteHandler(i._id);
@@ -219,8 +232,11 @@ const submitHandlerj = (e) => {
           
                  </td>
           <td>
-          <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
-        </tr>
+             <Link to={`/updateProduct/${i._id}`}>
+                <FontAwesomeIcon icon={faEdit} size="xl" />
+            </Link>           
+            </td>
+          </tr>
      )})}
       </table>
     </div>

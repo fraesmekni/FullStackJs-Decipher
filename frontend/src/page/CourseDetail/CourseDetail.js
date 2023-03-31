@@ -1,34 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
+import { useParams,useNavigate, Link } from 'react-router-dom'; 
+import "./CourseDetail.css"
 import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup} from 'react-bootstrap';
+import { useDispatch , useSelector , } from "react-redux";
+import { getCourses } from '../../coursereduc/courseActions';
 
 const CourseDetail= () => {
+
+  const userLogin = useSelector(state => state.userLogin)
+    const {userInfo } = userLogin
+  const navigate = useNavigate();
+    const dispatch = useDispatch();
+      const { id } = useParams();
+      const [qty,setQty]= useState(1);
+      const [lessonIndex,setLessonIndex]=useState(0);
+      const courses = useSelector((state) => state.courseDisplay.courses);
+      console.log(courses);
+
+      useEffect(() => {
+        dispatch(getCourses());
+      }, [dispatch ]);
+      console.log("ena el products" + Array.isArray(courses) );
+      const coursse = courses.find((p) => p._id === id);
+      console.log(id);
+  
         const [isExpanded, setIsExpanded] = useState(true);
       
         const toggleExpand = () => {
           setIsExpanded(!isExpanded);
         };
-  return (
+        console.log('///////////////////'+coursse);
+     
+
+  return ( 
+    
     <Container style={{marginTop:"100px"}}>
-      <Row>
+     
+      {coursse ? (
+     <>
+        
+    <Row >
         <Col md={8}>
+        {coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
+<>
           <iframe
             width="100%"
             height="415"
-            src="https://www.youtube.com/embed/Z54bL6kjyOI"
+            src={coursse.lessons[lessonIndex].contentLesson}
             title="YouTube video player"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-          ></iframe>
+          ></iframe> <h4>{coursse.lessons[lessonIndex].titleLesson}</h4> </>):(<Card className="description-card">
+          <Card.Body>
+            <Card.Text> <h4>{coursse.lessons[lessonIndex].titleLesson}</h4>
+            {coursse.lessons[lessonIndex].contentLesson}         </Card.Text>
+          </Card.Body>
+        </Card>)} </Col>
+        <Col md={4}>
+
+        <Card className="lessons">
+            <Card.Header onClick={toggleExpand} style={{ cursor: 'pointer' }}>
+              Lessons
+            </Card.Header>
+            {isExpanded && coursse && coursse.lessons.map((lesson,index) =>  (
+              
+                <div  key={lesson._id}>
+                  <Card.Body >
+                    <ListGroup variant="flush">
+                      <ListGroup.Item>
+                        <div className="d-flex justify-content-between align-items-center">
+                        <Link onClick={() => setLessonIndex(index)}>Lesson {index+1} </Link>
+                          <div>
+                            <i className="far fa-check-circle text-success mr-2"></i>
+                            <span className="text-muted">{lesson.typeLesson}</span>
+                          </div>
+                        </div>
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Card.Body>
+                </div>
+              ))}
+          </Card>
+          <Button variant="primary">Enroll Now</Button> 
+          </Col>
+        </Row>
+          <br />
            <div className="mt-2">
-            <h4>Description</h4><Row md={2}>
-            <Card className="description-card">
+            <Row md={2}>
+            {/* <Card className="description-card">
               <Card.Body>
                 <Card.Text>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod massa id erat congue, euismod maximus enim laoreet. Fusce quis scelerisque sapien, vel egestas sapien. Fusce vel magna sit amet nibh tempor lobortis.
-                </Card.Text>
+                  ken pdf
+             </Card.Text>
               </Card.Body>
-            </Card></Row>
+            </Card> */}
+            
+            </Row>
+
             <h4 className="mt-5">What you'll learn</h4>
             <ListGroup className="learning-list">
               <ListGroup.Item>
@@ -37,136 +105,14 @@ const CourseDetail= () => {
                     <i className="far fa-check-circle"></i>
                   </div>
                   <div>
-                    <h5>Lorem ipsum dolor sit amet</h5>
+                    <h5>In This Lesson You will learn : </h5>
                     <p>
-                      Consectetur adipiscing elit. Sed euismod massa id erat congue, euismod maximus enim laoreet.
-                    </p>
+                    {coursse.lessons[lessonIndex].descriptionLesson}                  </p>
                   </div>
                 </div>
               </ListGroup.Item>
-              <ListGroup.Item>
-                <div className="d-flex align-items-center">
-                  <div className="learning-icon">
-                    <i className="far fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h5>Consectetur adipiscing elit</h5>
-                    <p>
-                      Sed euismod massa id erat congue, euismod maximus enim laoreet. Fusce quis scelerisque sapien, vel egestas sapien. Fusce vel magna sit amet nibh tempor lobortis.
-                    </p>
-                  </div>
-                </div>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <div className="d-flex align-items-center">
-                  <div className="learning-icon">
-                    <i className="far fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h5>Sed euismod massa id erat congue</h5>
-                    <p>
-                      Fusce quis scelerisque sapien, vel egestas sapien. Fusce vel magna sit amet nibh tempor lobortis.
-                    </p>
-                  </div>
-                </div>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <div className="d-flex align-items-center">
-                  <div className="learning-icon">
-                    <i className="far fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h5>Fusce quis scelerisque sapien</h5>
-                    <p>
-                      Vel egestas sapien. Fusce vel magna sit amet nibh tempor lobortis. Lorem ipsum dolor sit amet.
-                    </p>
-                  </div>
-                </div>
-              </ListGroup.Item> <ListGroup.Item>
-                <div className="d-flex align-items-center">
-                  <div className="learning-icon">
-                    <i className="far fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h5>Fusce quis scelerisque sapien</h5>
-                    <p>
-                      Vel egestas sapien. Fusce vel magna sit amet nibh tempor lobortis. Lorem ipsum dolor sit amet.
-                    </p>
-                  </div>
-                </div>
-              </ListGroup.Item></ListGroup> </div>
-        </Col>
-        <Col md={4}>
-        <Card>
-            <Card.Header onClick={toggleExpand} style={{ cursor: 'pointer' }}>
-              Lessons
-            </Card.Header>
-            {isExpanded && (
-              <Card.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 1
-                      <div>
-                        <i className="far fa-check-circle text-success mr-2"></i>
-                        <span className="text-muted">12 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 2
-                      <div>
-                        <i className="far fa-play-circle mr-2"></i>
-                        <span className="text-muted">7 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 3
-                      <div>
-                        <i className="far fa-play-circle mr-2"></i>
-                        <span className="text-muted">9 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 2
-                      <div>
-                        <i className="far fa-play-circle mr-2"></i>
-                        <span className="text-muted">7 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item> <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 2
-                      <div>
-                        <i className="far fa-play-circle mr-2"></i>
-                        <span className="text-muted">7 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item> <ListGroup.Item>
-                    <div className="d-flex justify-content-between align-items-center">
-                      Lesson 2
-                      <div>
-                        <i className="far fa-play-circle mr-2"></i>
-                        <span className="text-muted">7 min</span>
-                      </div>
-                    </div>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card.Body>
-            )}
-          </Card>
-          <Button variant="primary">Enroll Now</Button> 
-          <br />
-          <Card> <Card.Header>Take this Course's Quiz
-            </Card.Header>
-            <Card.Body>yooooooooo</Card.Body>
-            </Card>
-          </Col>
+             </ListGroup> </div>
+      
           <div className="mt-4">
             <h4>Related Courses</h4>
             <CardGroup>
@@ -204,9 +150,9 @@ const CourseDetail= () => {
 
        
 
-      </Row>
-      
-    </Container>
+
+      </>):(<p> no Course found </p>)}
+    </Container> 
   );
 };
 
