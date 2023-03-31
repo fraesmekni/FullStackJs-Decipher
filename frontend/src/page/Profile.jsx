@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
 import { toast,ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import backg from "./olive.png";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
@@ -81,10 +82,10 @@ const GotoCoachDashboard=()=>{
   return (
     <div>
 
-    {loading && <Loader></Loader>}
-      <Parallax small filter image="/images/handmade.jpg" />
-      <div style={{backgroundColor: "#FCFFE7",backgroundImage:"url('./olive.png')"}} className={classNames(classes.main, classes.mainRaised)}>
-        <div> <div></div>
+    {loading && <Loader></Loader>} 
+      <Parallax small filter image="/images/handmade.jpg" />       
+
+      <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
             <GridContainer  justify="center">
               <GridItem xs={12} sm={12} md={6}>
@@ -97,15 +98,17 @@ const GotoCoachDashboard=()=>{
                     />
                   </div>
                   {userInfo.certified ? (
-  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop} size="2x" />
-) : (
-  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={userInfo.role.name === "coach" ? faChalkboardTeacher : faShopLock} size="2x" />
+  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="2x" />
+) : ( userInfo.role.name === "coach" ? 
+  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="2x" /> : 
+  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faShop}   color="#FCFFE7" size="2x" />
+
 )}
 
              
                   <div className={classes.name +"py-3"}>
-                    <h3 style={{ color: "#93643b"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
-                     <h6>{userInfo.role.name}</h6> 
+                    <h3 style={{ color: "#FCFFE7"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
+                     <h6 style={{ color: "#FCFFE7"}}> {userInfo.role.name}</h6> 
                     <Button justIcon link className={classes.margin5}>
                       <i className={"fab fa-twitter"} />
                     </Button>

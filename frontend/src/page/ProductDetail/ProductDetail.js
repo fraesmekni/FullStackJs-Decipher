@@ -7,6 +7,8 @@ import { Form , Row ,Col, ListGroup, Button} from "react-bootstrap";
 import { createProductReview } from '../../productredux/productaction';
 import {CREATE_REVIEW_RESET} from '../../productredux/productconstant';
 import Rating from "../../Components/Rating/Rating.js"
+import backg from "./backg.jpg";
+
 const ProductDetail=()=>{
   const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -53,7 +55,8 @@ const submitHandler = (e)=>{
 
 }
     return (
-        <>
+        <>    <body style={{backgroundImage:`url(${backg})`}}>
+
          {product ? (<body className="bodydetail">
         <div class="containerdetail">
   <div class="images">
@@ -140,7 +143,7 @@ const submitHandler = (e)=>{
 
 </body>  ) : (
         <p>No product found</p>
-      )} </>
+      )} </body> </>
     )
 }
 export default ProductDetail;

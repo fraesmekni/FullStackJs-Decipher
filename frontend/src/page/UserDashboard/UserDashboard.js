@@ -148,11 +148,15 @@ const submitHandlerj = (e) => {
           
 
     </div>
-   
+    
     <div
         id="create"
         className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
-      >     <h3 className="library_trending_title">Create your product </h3>
+      > 
+       <div class="video-containerproductadd">
+        <iframe width="500" height="340" src="https://www.youtube.com/embed/ie5NdWCXK3A" title="YouTube video player" frameborder="0" allowfullscreen loop mute ></iframe>
+      </div>     
+       <h3 className="library_trending_title">Create your product    &  get inspired with our video on Making products </h3>
 
           <input type="text" placeholder="Product name" id="name"   value={productName}
                 onChange={(e) => setName(e.target.value)}></input>

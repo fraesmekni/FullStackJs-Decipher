@@ -8,6 +8,7 @@ import "./Cart.css"
 import { CART_LOAD_ITEMS, CART_SET_ITEMS } from '../../cartredux/cartconstant';
 import { useNavigate } from 'react-router-dom';
 import {createOrder} from '../../orderRedux/orderActions'
+import backg from "./backg.jpg";
 
 
 const Cart= () => {
@@ -89,7 +90,8 @@ const checkoutHandler = () => {
   navigate('/shipping')
 }
 
-    return (<div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
+    return (
+    <div style={{marginTop:"200px",marginLeft:"500px"}} classname="shoppingcart">
     <Row >
         <Col  md={8}>
           <h1 style={{marginLeft:"-120px"}}> Your Shopping Cart</h1>
