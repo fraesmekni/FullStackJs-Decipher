@@ -39,5 +39,6 @@ app.use('/course',require('./routes/courseRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute) ;
 app.use('/api/orders', orderRoutes)
+app.get('/api/config/paypal' , (req ,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
 // npm run dev
 app.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))

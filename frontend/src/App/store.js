@@ -8,7 +8,7 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 import { addCourseReducer, addLessonReducer } from '../coursereduc/courseReducers';
-import {orderCreateReducer,orderDetailsReducer} from '../orderRedux/orderReducers'
+import {orderCreateReducer,orderDetailsReducer,orderPayReducer} from '../orderRedux/orderReducers'
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
@@ -29,7 +29,8 @@ const reducer = combineReducers({
        addCourse: addCourseReducer,
        addLesson: addLessonReducer,
        orderCreate : orderCreateReducer,
-       orderDetails :orderDetailsReducer
+       orderDetails :orderDetailsReducer,
+       orderPay : orderPayReducer
 
 
 })

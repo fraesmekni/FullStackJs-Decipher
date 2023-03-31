@@ -33,6 +33,7 @@
     "react-html-parser": "^2.0.2",
     "react-icons": "^4.8.0",
     "react-paginate": "^8.1.4",
+    "react-paypal-button-v2": "^2.6.3",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
