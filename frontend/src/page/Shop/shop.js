@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 import { Carousel, Image } from "react-bootstrap";
 import backg from "./backg.jpg";
 
+
 function Shop()
-{
+{ 
 
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productGetReducer.products);
@@ -46,7 +47,7 @@ function Shop()
 
           </Product>
         ))}
-
+        
         </div>
         </body>  </>
     )
