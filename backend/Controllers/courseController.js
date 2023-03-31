@@ -127,34 +127,31 @@ const updateLesson = asynHandler(async (req, res) => {
   const {
     titleLesson,
     descriptionLesson,
-     contentLesson,typeLesson,course } = req.body
+     contentLesson,typeLesson } = req.body
      const lesson = await Lesson.findById(req.params.id)
      
-     if (!titleLesson || !descriptionLesson || !contentLesson || !typeLesson || !course) {
-      res.status(400).json({ message: 'Missing required fields' })
-    } else {
+
   if (lesson) {
     lesson.titleLesson = titleLesson
     lesson.descriptionLesson = descriptionLesson
     lesson.contentLesson = contentLesson
     lesson.typeLesson = typeLesson
-    lesson.course = course
+   
     const updateLesson = await lesson.save()
     res.status(201).json({
       _id: lesson.id,
       titleLesson: lesson.titleLesson,
-      user : lesson.user,
       descriptionLesson: lesson.descriptionLesson,
       contentLesson: lesson.contentLesson,
       typeLesson: lesson.typeLesson,
-      course: lesson.course 
+   
 
   })
   } else {
     res.status(404)
     throw new Error('Lesson not found')
   }
-}})
+})
 // search course 
 const SearchCourse = asynHandler( async (req, res) => {
   const key = req.params.key;

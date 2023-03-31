@@ -92,7 +92,6 @@ export const addLesson = ({ titleLesson,
                   payload : data
               })
            
-             // localStorage.setItem('userInfo', JSON.stringify(data))
       
              } catch(error){
 
@@ -107,7 +106,7 @@ export const addLesson = ({ titleLesson,
         }
       }
       
-      export const updateLesson = ({titleLesson, descriptionLesson,contentLesson,typeLesson,course,id}) => async (dispatch)=>{
+      export const updateLesson = ({titleLesson, descriptionLesson,contentLesson,typeLesson,id}) => async (dispatch)=>{
         try {
               dispatch({
                   type:UPDATE_LESSON_REQUEST
@@ -120,7 +119,7 @@ export const addLesson = ({ titleLesson,
       
               const { data } = await axios.put(
                 `http://localhost:5000/course/updateLesson/${id}`,
-                  {titleLesson, descriptionLesson,contentLesson,typeLesson,course},
+                  {titleLesson, descriptionLesson,contentLesson,typeLesson},
                   config
                 );
       
@@ -129,18 +128,11 @@ export const addLesson = ({ titleLesson,
                   payload : data
               })
            
-             // localStorage.setItem('userInfo', JSON.stringify(data))
       
              } catch(error){
 
-                dispatch({
-                    type: UPDATE_COURSE_FAIL,
-                    payload: error.response && error.response.data.message
-                        ? error.response.data.data.message
-                        : error.message
-                });
             
-            console.log(error.response.data.message);
+            console.log(error);
         }
       }
       

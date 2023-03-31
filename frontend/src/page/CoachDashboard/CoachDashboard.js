@@ -174,7 +174,10 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
     let path =`/updatecourses/${id}`
           navigate(path)
    };
-
+   const updateLesson=( id )=>{
+    let path =`/updatelessons/${id}`
+          navigate(path)
+   };
 
     return(
 
@@ -384,7 +387,7 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           
                  </td>
           <td>
-          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateCourses( i._id)} />          </td>
+          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateLesson( i._id)} />          </td>
         </tr>
      )})}
       </table>

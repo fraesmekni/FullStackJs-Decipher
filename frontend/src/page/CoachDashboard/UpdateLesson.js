@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {updateCourse} from "../../coursereduc/courseActions"
+import {updateLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -14,60 +14,52 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function UpdateCourses(){
+function UpdateLesson(){
+
     const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo } = userLogin
-    const [ titleCourse, setTitleCourse] = useState(""); 
-    const [ descriptionCourse, setDescriptionCourse] = useState(""); 
-    const [ category, setCategory] = useState(""); 
+   const [ titleLesson, setTitleLesson] = useState(""); 
+    const [descriptionLesson, setDescriptionLesson] = useState(""); 
+    const [contentLesson, setContentLesson] = useState("");
 
-    const [thumbnailCourse, setThumbnailCourse] = useState(""); 
+    const [typeLesson, setTypeLesson] = useState(""); 
     /////////////////////
-    const [course_id, setcourse_id] = useState(null);
-    const [step, setStep] = useState(1);
-    const [lessonQty, setLessonQty] = useState(3);
+
 
     const { id } = useParams();
-    const [course, setCourse] = useState(null);
+    const [lesson, setLesson] = useState(null);
 useEffect(() => {
-  axios.get(`http://localhost:5000/course/${id}`).then((response) => {
-    setCourse(response.data);
+  axios.get(`http://localhost:5000/course/lesson/${id}`).then((response) => {
+    setLesson(response.data);
+
   });
 }, [id]);
-console.log(course);
-
+ console.log(lesson);
+  
 
 
     const dispatch = useDispatch();
 
-console.log(thumbnailCourse);
-
-
-    const submitHandler=async(e)=>{
+    const submitHandlerLesson=async(e)=>{
       e.preventDefault();
 
 
-const coach=userInfo._id
 
       dispatch(
-        updateCourse(
-         { titleCourse ,
-          descriptionCourse , 
-          category , 
-          coach ,
-          thumbnailCourse,
-          id
+        updateLesson(
+         { titleLesson, 
+            descriptionLesson,
+            contentLesson,
+            typeLesson,
+            id
          }
         )
       );
       navigate("/coachdashboard");
 
-    
 
     };
-
-
 
     
   const handleCreateClick = () => {
@@ -78,8 +70,6 @@ const coach=userInfo._id
     navigate("/coachdashboard");
   };
  
-//console.log(course?.lessons?.titleLesson)
-  console.log(lessonQty)
     return(
 
         <><body  className="coach">
@@ -119,18 +109,19 @@ const coach=userInfo._id
         className={ " library_trending_coach_create" }
       >   
 
-        <h3 align="center" className="library_trending_title">Update A Course </h3>
-        {step === 1 && ( <>
  
- <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
-<input type="text"  defaultValue={course?.titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
- <input type="text" defaultValue={course?.category}  onChange={(e) => setCategory(e.target.value)} ></input>
-                
-<input type="text"  defaultValue={course?.descriptionCourse} onChange={(e) => setDescriptionCourse(e.target.value)}></input>
-                <input type="file" defaultValue={course?.thumbnailCourse} name="thumbnailCourse" 
-                onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
-                <SpecialButton name="Update" onClick={submitHandler} type="submit"/> 
-                </> )}
+ <h3 align="center" className="library_trending_title">Step 2 : Update A Lesson ! </h3>
+
+<input type="text"  defaultValue={lesson?.titleLesson}  onChange={(e) => setTitleLesson(e.target.value)}  ></input>
+<input type="text"  defaultValue={lesson?.typeLesson} onChange={(e) => setTypeLesson(e.target.value)}></input>                
+<input type="text"  defaultValue={lesson?.contentLesson} onChange={(e) => setContentLesson(e.target.value)}></input>
+<input type="text" defaultValue={lesson?.descriptionLesson}  onChange={(e) => setDescriptionLesson(e.target.value)} ></input>
+
+
+
+                <SpecialButton name="Update" onClick={submitHandlerLesson} type="submit"/> 
+               
+
 
                 
  </div>
@@ -146,4 +137,4 @@ const coach=userInfo._id
         </>
     )
 }
-export default UpdateCourses;
+export default UpdateLesson;
