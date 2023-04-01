@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseActions"
+import {addCourse, addLesson, deleteCourse, deleteLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
 import Swal from 'sweetalert2';
@@ -49,6 +49,15 @@ const { loading: loadingDelete, error: errorDelete, success: successDelete } = c
       dispatch(deleteCourse(id));
   
 };
+
+//Lesson delete
+     const lessonDelete = useSelector((state) => state.deleteLesson);
+
+     const lessondeleteHandler = (idCourse , idLesson) => {
+      dispatch(deleteLesson(idCourse, idLesson));
+  
+};
+
     //=Course=
     const [course , setCourse]= useState([])
     const getCourse = async () => {
@@ -386,9 +395,10 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
                                   denyButtonText: `Don't save`,
                                 }).then((result) => {
                                   if (result.isConfirmed ) {
-                                   
-                                    handleRefresh();
-                                    Swal.fire('Product Deleted!', '', 'success');
+
+                                   lessondeleteHandler(coursse._id , i._id); // Pass i._id as an argument
+
+                                      Swal.fire('Product Deleted!', '', 'success');
                                   } else if (result.isDenied) {
                                     Swal.fire('Product is not Deleted', '', 'info');
                                   }
