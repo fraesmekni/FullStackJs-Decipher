@@ -89,17 +89,31 @@ const deleteCourse = asynHandler(async (req, res) => {
 
 
 //delete lesson
-const deleteLesson = asynHandler(async (req, res) => {
-  const lesson = await Lesson.findById(req.params.id)
-  if (lesson) {
-    await lesson.remove()
-    res.json("Lesson removed")
-  } else {
-    res.status(404)
-    throw new Error('Lesson not found')
-  }
-})
+const deleteLessonFromCourse = async (req, res) => {
+  const courseId = req.params.courseId;
+  const lessonId = req.params.lessonId;
 
+  try {
+    // find the course to which the lesson belongs
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      res.status(404).json({ message: 'Course not found' });
+      return;
+    }
+
+    // remove the lesson from the course's lessons array
+    course.lessons.pull(lessonId);
+
+    // save the course to the database
+    await course.save();
+
+    res.status(200).json({ message: 'Lesson deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 //update course
 
 
@@ -238,6 +252,6 @@ module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,
   deleteCourse,updateCourse,SearchCourse,getCourseById,
-  getCoursesById,updateLesson, getLessonById, deleteLesson
+  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse
 
 }
