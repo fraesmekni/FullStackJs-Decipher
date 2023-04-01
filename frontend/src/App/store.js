@@ -4,10 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {userLoginReducer, userReducers, userRegisterReducer,
   forgetPassword,resetPassword,
   sponsorReducer,coachReducer} from '../userredux/userreducer'
-import { productAddReducer, productDetailReducer, productGetReducer, productDeleteReducer ,productReviewReducer} from '../productredux/productreducer';
+import { productAddReducer, productDetailReducer, productGetReducer, productDeleteReducer ,
+  productReviewReducer, productUpdateReducer} from '../productredux/productreducer';
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
-import { addCourseReducer, addLessonReducer, courseReducers } from '../coursereduc/courseReducers';
+import { addCourseReducer, addLessonReducer, courseDeleteReducer, courseReducers } from '../coursereduc/courseReducers';
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 import {orderCreateReducer,orderDetailsReducer} from '../orderRedux/orderReducers';
 
@@ -30,7 +31,9 @@ const reducer = combineReducers({
        courseDisplay: courseReducers,
        addLesson: addLessonReducer,
        orderCreate : orderCreateReducer,
-       orderDetails :orderDetailsReducer
+       orderDetails :orderDetailsReducer,
+       productUpdate : productUpdateReducer,
+       courseDelete : courseDeleteReducer
 
 
 })

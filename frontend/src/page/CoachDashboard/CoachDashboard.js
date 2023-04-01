@@ -5,20 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {addCourse, addLesson} from "../../coursereduc/courseActions"
+import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
 import Swal from 'sweetalert2';
-
-import { useNavigate } from 'react-router-dom';
-
 import Loader from "../../Components/Loader";
 import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
 
 
-
 function CoachDashboard(){
-    const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin)
     const addCourses = useSelector(state => state.addCourse)
     const { loading, error,messageSuccess } = addCourses;
@@ -43,12 +38,17 @@ function CoachDashboard(){
     const [step, setStep] = useState(1);
     const [lessonQty, setLessonQty] = useState(3);
     const [create,setCreate]= useState(true);
+    const [add,setAdd]= useState(false);
 
     const [details,setDetails]= useState(true);
 
+  const courseDelete = useSelector((state) => state.courseDelete);
+const { loading: loadingDelete, error: errorDelete, success: successDelete } = courseDelete;
 
-
-    
+    const deleteHandler = (id) => {
+      dispatch(deleteCourse(id));
+  
+};
     //=Course=
     const [course , setCourse]= useState([])
     const getCourse = async () => {
@@ -147,15 +147,35 @@ console.log(thumbnailCourse);
     );       setCreate(false);
   };
     
+  const submitHandlerLessonadd = async (e) => {
+    e.preventDefault()
+  dispatch(
+    addLesson({
+      titleLesson,
+      descriptionLesson,
+      contentLesson,
+      typeLesson,
+      course: details,
+    })
+
+  );  setCreate(false);     
+};
+  
   const handleCreateClick = () => {
     setShowCreate(true);
     setShowList(false);
+    setShowDetail(false);
+    setAdd(false);
+
 
   };
 
   const handleListClick = () => {
     setShowCreate(false);
     setShowList(true);
+    setShowDetail(false);
+    setAdd(false);
+
 
   };
  
@@ -307,18 +327,18 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
                               trigger="hover" colors="primary:#ffffff" onClick={() => {
                                 Swal.fire({
-                                  title: 'Do you want to Delete this Product?',
+                                  title: 'Do you want to Delete this Course?',
                                   showDenyButton: true,
                                   showCancelButton: true,
-                                  confirmButtonText: 'Save',
-                                  denyButtonText: `Don't save`,
+                                  confirmButtonText: 'Delete',
+                                  denyButtonText: `Don't Delete`,
                                 }).then((result) => {
                                   if (result.isConfirmed ) {
-                                   
+                                    deleteHandler(i._id);
                                     handleRefresh();
-                                    Swal.fire('Product Deleted!', '', 'success');
+                                    Swal.fire('Course Deleted!', '', 'success');
                                   } else if (result.isDenied) {
-                                    Swal.fire('Product is not Deleted', '', 'info');
+                                    Swal.fire('Course is not Deleted', '', 'info');
                                   }
                                 });
                               }}>                   
@@ -330,21 +350,20 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
         </tr>
      )})}
       </table>
-     
+      
     
     </div>
 
 
 
-    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${!showList && !showCreate ? "show" : "hide"} ${!showList && !showCreate ? "library_trending" : ""}`}
+    <div style={{marginLeft : "100px"}}id="listDetail"        className={`create ${showDetail ? "show" : "hide"} ${showDetail  ? "library_trending" : ""}`}
 >      
-<h3 className="library_trending_title">Lessons <lord-icon
+ <h3 className="library_trending_title">Lessons <lord-icon
     src="https://cdn.lordicon.com/mrdiiocb.json"
     trigger="hover" colors="primary:#ffffff"
-    onClick={addlesson} 
-  /></h3>
+    onClick={() => (setAdd(true),setShowDetail(false))}  /></h3> 
 
-      <table >
+      <table>
       {coursse&& coursse.lessons.map((i , index) => {
            return( 
             <tr key={i._id}>
@@ -393,8 +412,27 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
       </table>
      
     
-    </div>
-      </div>
+      
+    </div>{console.log(showDetail)}
+      </div> <div id="lists"  style={{marginLeft : "100px"}}      className={`create ${add? "show" : "hide"} ${add ?"library_trending" : ""}`}>      
+
+<h3 align="center" className="library_trending_title"> Add A lesson  </h3>
+
+<input type="text" placeholder="Lesson name" id="Lname"   value={titleLesson}
+               onChange={(e) => setTitleLesson(e.target.value)}></input>
+                      <input type="text" placeholder=" Lesson type"  value={typeLesson}
+               onChange={(e) => setTypeLesson(e.target.value)}></input>
+                                      <input type="text" placeholder="Content"  value={contentLesson}
+               onChange={(e) => setContentLesson(e.target.value)}></input>
+     
+         
+         <input type="text" placeholder="What is this course about?"  value={descriptionLesson}
+               onChange={(e) => setDescriptionLesson(e.target.value)}></input>
+               
+               {create ?
+                <SpecialButton name="Create" onClick={submitHandlerLessonadd} type="submit"/>:
+       <SpecialButton name="Add another one" onClick={submitNew} type="submit"/>  }      
+     </div>
 </main> </body>
         </>
     )

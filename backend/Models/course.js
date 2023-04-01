@@ -1,27 +1,6 @@
 const mongoose = require('mongoose');
-const lessonSchema = new mongoose.Schema({
-  titleLesson: {
-    type: String,
-    
-  },
-  descriptionLesson: {
-    type: String,
-  },
-  contentLesson: {
-    type: String,
-  },
-  typeLesson:{
-    type: String,
-  },
-  course: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
-  },
-  isCompleted: {
-    type: Boolean,
-    default: false
-  }
-}, { timestamps: true });
+const Lesson = require('./lesson');
+
 const reviewSchema = mongoose.Schema(
     {
       name: { type: String, required: true },
@@ -56,7 +35,7 @@ const courseSchema = new mongoose.Schema({
     default: Date.now
   },
   reviews: [reviewSchema],
-  lessons: [lessonSchema]
+  lessons: [Lesson.schema]
 
 }, { timestamps: true });
 

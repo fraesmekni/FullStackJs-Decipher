@@ -29,6 +29,8 @@ import Payment from './page/Payment/payment';
 import PlaceOrder from './page/PlaceOrder/PlaceOrder';
 import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
+import UpdateProduct from './page/UpdateProduct/UpdateProduct';
+
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -110,6 +112,8 @@ function App() {
     <Route path="/payment" element={<Payment/>} />
     <Route path="/PlaceOrder" element={<PlaceOrder/>} />
     <Route path="/order/:id" element={<OrderScreen/>} />
+    <Route path="/updateProduct/:id" element={<><div className='yo'><Navbarr /> <UpdateProduct></UpdateProduct></div></> } /> 
+
 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
