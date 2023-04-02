@@ -107,7 +107,7 @@ function App() {
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/coachdashboard" element={<><div className='yo'><Navbarr /> <CoachDashboard/></div></> } /> 
     <Route path="/updatecourses/:id" element={<><div className='yo'><Navbarr /> <UpdateCourses/></div></> } /> 
-    <Route path="/updatelessons/:id" element={<><div className='yo'><Navbarr /> <UpdateLesson/></div></> } /> 
+    <Route path="/updatelessons/:id/:lessonId" element={<><div className='yo'><Navbarr /> <UpdateLesson/></div></> } /> 
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/shipping" element={<Shipping/>} />

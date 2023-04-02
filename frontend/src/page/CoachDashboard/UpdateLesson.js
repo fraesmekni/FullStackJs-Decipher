@@ -27,38 +27,36 @@ function UpdateLesson(){
     /////////////////////
 
 
-    const { id } = useParams();
+    const { id, lessonId } = useParams();
     const [lesson, setLesson] = useState(null);
-useEffect(() => {
-  axios.get(`http://localhost:5000/course/lesson/${id}`).then((response) => {
-    setLesson(response.data);
-
-  });
-}, [id]);
- console.log(lesson);
+    useEffect(() => {
+      axios.get(`http://localhost:5000/course/lesson/${id}/${lessonId}`)
+        .then((response) => {
+          console.log(response.data);
+          const { title, description, content, type } = response.data;
+          setTitleLesson(title);
+          setDescriptionLesson(description);
+          setContentLesson(content);
+          setTypeLesson(type);
+          setLesson(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, [id, lessonId]);
+    console.log(lesson);
   
-
-
     const dispatch = useDispatch();
-
-    const submitHandlerLesson=async(e)=>{
+  
+    const submitHandlerLesson = async (e) => {
       e.preventDefault();
-
-
-
-      dispatch(
-        updateLesson(
-         { titleLesson, 
-            descriptionLesson,
-            contentLesson,
-            typeLesson,
-            id
-         }
-        )
-      );
-      navigate("/coachdashboard");
-
-
+      try {
+        await dispatch(updateLesson({ id, lessonId, titleLesson, descriptionLesson, contentLesson, typeLesson }));
+        navigate("/coachdashboard");
+      } catch (error) {
+        console.error(error);
+        // handle error
+      }
     };
 
     
@@ -106,20 +104,32 @@ useEffect(() => {
    
     <div
         id="create"
-        className={ " library_trending_coach_create" }
-      >   
+        className={ " library_trending_coach_create" } >   
 
  
  <h3 align="center" className="library_trending_title">Step 2 : Update A Lesson ! </h3>
+<>
 
-<input type="text"  defaultValue={lesson?.titleLesson}  onChange={(e) => setTitleLesson(e.target.value)}  ></input>
-<input type="text"  defaultValue={lesson?.typeLesson} onChange={(e) => setTypeLesson(e.target.value)}></input>                
-<input type="text"  defaultValue={lesson?.contentLesson} onChange={(e) => setContentLesson(e.target.value)}></input>
-<input type="text" defaultValue={lesson?.descriptionLesson}  onChange={(e) => setDescriptionLesson(e.target.value)} ></input>
-
-
+<input   type="text"
+  placeholder="Enter title here" name="titleLesson"
+  value={titleLesson}
+  onChange={(e) => setTitleLesson(e.target.value)} ></input>
+<input  type="text"
+  placeholder="Enter type here" name="typeLesson"
+  value={typeLesson}
+  onChange={(e) => setTypeLesson(e.target.value)}></input>                
+<input   type="text"
+  placeholder="Enter content here" name="contentLesson"
+  value={contentLesson}
+  onChange={(e) => setContentLesson(e.target.value)}></input>
+<input   type="text" name="descriptionLesson"
+  placeholder="Enter description here"
+  value={descriptionLesson}
+  onChange={(e) => setDescriptionLesson(e.target.value)} ></input>
 
                 <SpecialButton name="Update" onClick={submitHandlerLesson} type="submit"/> 
+                </>
+                
                
 
 

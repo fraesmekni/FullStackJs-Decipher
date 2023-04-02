@@ -120,7 +120,7 @@ const coach=userInfo._id
       >   
 
         <h3 align="center" className="library_trending_title">Update A Course </h3>
-        {step === 1 && ( <>
+         <>
  
  <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
 <input type="text"  defaultValue={course?.titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
@@ -130,7 +130,7 @@ const coach=userInfo._id
                 <input type="file" defaultValue={course?.thumbnailCourse} name="thumbnailCourse" 
                 onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
                 <SpecialButton name="Update" onClick={submitHandler} type="submit"/> 
-                </> )}
+                </> 
 
                 
  </div>

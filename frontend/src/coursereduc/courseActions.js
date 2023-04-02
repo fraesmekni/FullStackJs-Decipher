@@ -106,7 +106,7 @@ export const addLesson = ({ titleLesson,
         }
       }
       
-      export const updateLesson = ({titleLesson, descriptionLesson,contentLesson,typeLesson,id}) => async (dispatch)=>{
+      export const updateLesson = ({id,lessonId,titleLesson, descriptionLesson,contentLesson,typeLesson}) => async (dispatch)=>{
         try {
               dispatch({
                   type:UPDATE_LESSON_REQUEST
@@ -118,7 +118,7 @@ export const addLesson = ({ titleLesson,
               }
       
               const { data } = await axios.put(
-                `http://localhost:5000/course/updateLesson/${id}`,
+                `http://localhost:5000/course/updateLesson/${id}/${lessonId}`,
                   {titleLesson, descriptionLesson,contentLesson,typeLesson},
                   config
                 );

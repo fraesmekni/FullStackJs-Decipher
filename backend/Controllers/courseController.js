@@ -152,7 +152,46 @@ const updateCourse = asynHandler(async (req, res) => {
   }
 })
 
-const updateLesson = asynHandler(async (req, res) => {
+const updateLesson = asynHandler(async (req, res)  => {
+  const courseId = req.params.courseId;
+  const lessonId = req.params.lessonId;
+
+  const { titleLesson, descriptionLesson, contentLesson, typeLesson } = req.body;
+
+  try {
+    // find the course to which the lesson belongs
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      res.status(404).json({ message: 'Course not found' });
+      return;
+    }
+
+    // find the index of the lesson in the course's lessons array
+    const lessonIndex = course.lessons.findIndex((lesson) => lesson._id.equals(lessonId));
+
+    if (lessonIndex === -1) {
+      res.status(404).json({ message: 'Lesson not found in course' });
+      return;
+    }
+
+    // update the lesson in the course's lessons array
+    course.lessons[lessonIndex].titleLesson = titleLesson;
+    course.lessons[lessonIndex].descriptionLesson = descriptionLesson;
+    course.lessons[lessonIndex].contentLesson = contentLesson;
+    course.lessons[lessonIndex].typeLesson = typeLesson;
+
+    // save the course to the database
+    await course.save();
+
+    res.status(200).json({ message: 'Lesson updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+   });
+
+/* const updateLesson = asynHandler(async (req, res) => {
   const {
     titleLesson,
     descriptionLesson,
@@ -180,7 +219,7 @@ const updateLesson = asynHandler(async (req, res) => {
     res.status(404)
     throw new Error('Lesson not found')
   }
-})
+}) */
 // search course 
 const SearchCourse = asynHandler( async (req, res) => {
   const key = req.params.key;
@@ -209,7 +248,7 @@ const getCourseById = asynHandler(async (req, res) => {
   }
 })
 
-const getLessonById = asynHandler(async (req, res) => {
+/* const getLessonById = asynHandler(async (req, res) => {
   const lesson = await Lesson.findById(req.params.id)
 
   if (lesson) {
@@ -218,7 +257,35 @@ const getLessonById = asynHandler(async (req, res) => {
     res.status(404)
     throw new Error('Lesson not found')
   }
-})
+}) */
+
+const getLessonById = asynHandler(async (req, res) => {
+  const courseId = req.params.courseId;
+  const lessonId = req.params.lessonId;
+
+  try {
+    // find the course to which the lesson belongs
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      res.status(404).json({ message: 'Course not found' });
+      return;
+    }
+
+    // find the lesson inside the course
+    const lesson = course.lessons.find((lesson) => lesson._id == lessonId);
+
+    if (!lesson) {
+      res.status(404).json({ message: 'Lesson not found' });
+      return;
+    }
+
+    res.json(lesson);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
 
 //getCoursesById
 const getCoursesById = asynHandler(  async (req, res) => {
