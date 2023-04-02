@@ -290,7 +290,7 @@ const getLessonById = asynHandler(async (req, res) => {
 //getCoursesById
 const getCoursesById = asynHandler(  async (req, res) => {
   try {
-    const course = await Course.find( { user: req.params.userId } ).populate('coach'); 
+    const course = await Course.find( { coach: req.params.userId } ).populate('coach'); 
     if (!course) {
       return res.status(404).json({ message: 'course not found' });
     }
