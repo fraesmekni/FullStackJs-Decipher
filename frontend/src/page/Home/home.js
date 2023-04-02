@@ -13,8 +13,8 @@ return(
 
 <>
 <HeroSection />
-<div align="center" className="eventbackground">
-<Events/> </div>
+{/* <div align="center" className="eventbackground">
+<Events/> </div> */}
 
 
      <Section1 />

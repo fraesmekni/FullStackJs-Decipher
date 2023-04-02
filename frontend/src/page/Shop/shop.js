@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from "../../productredux/productaction";
 import { Link } from "react-router-dom";
 import { Carousel, Image } from "react-bootstrap";
+import backg from "./backg.jpg";
+
 
 function Shop()
-{
+{ 
 
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productGetReducer.products);
@@ -27,7 +29,7 @@ function Shop()
    };
 
     return (
-        <> 
+        <> <body style={{backgroundImage:`url(${backg})`,height:"1900px"}}>
          {/* <Carousel style={{marginTop:"100px",maxLength:"300px"}} pause='hover' className='bg-light'>
          {Array.isArray(products) && products.map((p) => (
         <Carousel.Item key={p._id}>
@@ -36,16 +38,18 @@ function Shop()
           </Link>
         </Carousel.Item>  
       ))}
-    </Carousel> */}
+    </Carousel> */}  <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">Products</h1>
+            <p style={{color:"white"}} className="paragraph2">our students' hand-made products </p></div> 
+            
         <div className="shopcontainer">
         {Array.isArray(products) && products.map((p) => (
           <Product product={p} >
 
           </Product>
         ))}
-
+        
         </div>
-        </>
+        </body>  </>
     )
 }
 export default Shop;

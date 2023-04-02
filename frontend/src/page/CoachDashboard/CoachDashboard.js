@@ -5,15 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {addCourse, addLesson, deleteCourse} from "../../coursereduc/courseActions"
+import {addCourse, addLesson, deleteCourse, deleteLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import Loader from "../../Components/Loader";
 import { COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS } from "../../coursereduc/courseConstants";
+import { useNavigate } from 'react-router-dom';
+
 
 
 function CoachDashboard(){
+     const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin)
     const addCourses = useSelector(state => state.addCourse)
     const { loading, error,messageSuccess } = addCourses;
@@ -48,6 +51,14 @@ const { loading: loadingDelete, error: errorDelete, success: successDelete } = c
     const deleteHandler = (id) => {
       dispatch(deleteCourse(id));
   
+};
+
+//Lesson delete
+const lessonDelete = useSelector((state) => state.deleteLesson);
+
+const lessondeleteHandler = (idCourse , idLesson) => {
+ dispatch(deleteLesson(idCourse, idLesson));
+
 };
     //=Course=
     const [course , setCourse]= useState([])
@@ -175,6 +186,7 @@ console.log(thumbnailCourse);
     setShowList(true);
     setShowDetail(false);
     setAdd(false);
+    handleRefresh();
 
 
   };
@@ -394,7 +406,7 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
                                   denyButtonText: `Don't save`,
                                 }).then((result) => {
                                   if (result.isConfirmed ) {
-                                   
+                                    lessondeleteHandler(coursse._id , i._id); // Pass i._id as an argument
                                     handleRefresh();
                                     Swal.fire('Product Deleted!', '', 'success');
                                   } else if (result.isDenied) {

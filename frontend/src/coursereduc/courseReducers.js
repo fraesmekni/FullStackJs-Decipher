@@ -1,4 +1,4 @@
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID,COURSE_GET_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_FAIL, UPDATE_LESSON_REQUEST, UPDATE_LESSON_SUCCESS, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_COURSE_FAIL } from "./courseConstants"
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID,COURSE_GET_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_FAIL, UPDATE_LESSON_REQUEST, UPDATE_LESSON_SUCCESS, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_COURSE_FAIL, DELETE_LESSON_REQUEST, DELETE_LESSON_SUCCESS, DELETE_LESSON_FAIL } from "./courseConstants"
 
 
 export const addCourseReducer=(state={},action)=>{
@@ -82,5 +82,19 @@ export const addCourseReducer=(state={},action)=>{
         default:
             return state    
 
+    }
+}
+
+
+ export const lessonDeleteReducer=(state={},action)=>{
+    switch (action.type) {
+        case DELETE_LESSON_REQUEST : 
+            return {loading : true}
+        case DELETE_LESSON_SUCCESS : 
+            return {loading : false ,success : true}
+        case DELETE_LESSON_FAIL :
+            return {loading : false , error: action.payload }          
+        default:
+            return state    
     }
  }

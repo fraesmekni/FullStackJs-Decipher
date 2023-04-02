@@ -6,10 +6,27 @@ body {
 
   
 }
+
+.containerproductadd {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.video-containerproductadd {
+  flex: 1;
+  margin-right: 20px;
+  margin-left: 600px;
+  margin-top: 60px;
+  position: absolute;
+}
+#created {
+  flex: 1;
+}
 .yoo{
     background-size: cover ; 
     background-repeat: repeat ; 
-    background-image: url(https://www.thegreekfoundation.com/wp-content/uploads/2021/12/the-greek-foundation-pilosclayart11-500x750.jpg);
+    background-image: url(pexels-roman-odintsov-8063840.jpg);
 
     
 }
@@ -224,11 +241,11 @@ body {
   padding: 0 20px;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  max-height: 1000px;
+  max-height: 700px;
 }
 
 .library_trending_create {
-    width: 850px;
+    width: 1000px;
     height: 800px;
     padding: 0 20px;
     overflow-y: scroll;
@@ -273,7 +290,7 @@ body {
 
 .library_trending table tr:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(76, 65, 46, 0.2);
 }
 
 .library_trending table tr td {
@@ -321,7 +338,7 @@ background-image: url(../../../public/images/logo.png);
 
 .library_trending table tr .song p {
   font-size: 13px;
-  color: rgb(209, 199, 156);
+  color: #362824;
 }
 
 .library_trending .song_cover {
