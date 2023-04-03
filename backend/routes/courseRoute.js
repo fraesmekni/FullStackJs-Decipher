@@ -43,7 +43,7 @@ router.put('/updateLesson/:id' ,updateLesson),
 router.get('/search/:key',SearchCourse),
 router.get('/:id',getCourseById),
 router.get('/lesson/:id',getLessonById),
-router.get('/courseById/:userId',getCoursesById)
+router.get('/courseById/:id',getCoursesById)
 router.get('/courseByIds/:id',getCoursesByIds)
 
 module.exports = router
