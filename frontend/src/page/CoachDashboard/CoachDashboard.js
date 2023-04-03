@@ -44,6 +44,8 @@ function CoachDashboard(){
     const [add,setAdd]= useState(false);
 
     const [details,setDetails]= useState(true);
+    const [lesson_id,setLesson_id]= useState(0);
+
 
   const courseDelete = useSelector((state) => state.courseDelete);
 const { loading: loadingDelete, error: errorDelete, success: successDelete } = courseDelete;
@@ -418,14 +420,14 @@ console.log("after 1 second");// Refresh after 1 seconds (adjust the number as n
           
                  </td>
           <td>
-          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateLesson( i._id,coursse._id )} />          </td>
+          <FontAwesomeIcon icon={faEdit} size="xl" onClick={() => updateLesson( i._id,coursse._id ,setLesson_id(index))} />          </td>
         </tr>
      )})}
       </table>
      
     
       
-    </div>{console.log(showDetail)}
+    </div>{console.log("enaaaaaa"+showDetail)}
       </div> <div id="lists"  style={{marginLeft : "100px"}}      className={`create ${add? "show" : "hide"} ${add ?"library_trending" : ""}`}>      
 
 <h3 align="center" className="library_trending_title"> Add A lesson  </h3>

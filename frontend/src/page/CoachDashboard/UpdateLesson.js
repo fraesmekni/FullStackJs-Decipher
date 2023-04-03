@@ -33,11 +33,11 @@ function UpdateLesson(){
       axios.get(`http://localhost:5000/course/lesson/${id}/${lessonId}`)
         .then((response) => {
           console.log(response.data);
-          const { title, description, content, type } = response.data;
-          setTitleLesson(title);
-          setDescriptionLesson(description);
-          setContentLesson(content);
-          setTypeLesson(type);
+          const { titleLesson, descriptionLesson, contentLesson, typeLesson } = response.data;
+          setTitleLesson(titleLesson);
+          setDescriptionLesson(descriptionLesson);
+          setContentLesson(contentLesson);
+          setTypeLesson(typeLesson);
           setLesson(response.data);
         })
         .catch((error) => {
@@ -47,18 +47,18 @@ function UpdateLesson(){
     console.log(lesson);
   
     const dispatch = useDispatch();
-  
+    console.log(contentLesson);
+
     const submitHandlerLesson = async (e) => {
       e.preventDefault();
-      try {
-        await dispatch(updateLesson({ id, lessonId, titleLesson, descriptionLesson, contentLesson, typeLesson }));
+      try { console.log(lessonId,id,titleLesson)
+        dispatch(updateLesson({ id, lessonId, titleLesson, descriptionLesson, contentLesson, typeLesson }));
         navigate("/coachdashboard");
       } catch (error) {
         console.error(error);
         // handle error
       }
     };
-
     
   const handleCreateClick = () => {
     navigate("/coachdashboard");
