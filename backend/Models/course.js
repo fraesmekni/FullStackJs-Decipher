@@ -26,7 +26,7 @@ const courseSchema = new mongoose.Schema({
   descriptionCourse: {
     type: String,
   },
-  coach: {
+  coach: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },

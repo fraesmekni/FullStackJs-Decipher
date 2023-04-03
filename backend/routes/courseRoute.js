@@ -39,11 +39,12 @@ router.post('/createlesson',createLesson),
 router.delete('/delete/:id' ,deleteCourse),
 router.delete('/deleteLesson/:courseId/:lessonId' ,deleteLessonFromCourse),
 router.put('/updateCourse/:id' ,upload.single('thumbnailCourse'),updateCourse),
-router.put('/updateLesson/:id' ,updateLesson),
+router.put('/updateLesson/:courseId/:lessonId' ,updateLesson),
 router.get('/search/:key',SearchCourse),
 router.get('/:id',getCourseById),
 router.get('/lesson/:id',getLessonById),
-router.get('/courseById/:id',getCoursesById)
+router.get('/lesson/:courseId/:lessonId',getLessonById),
+router.get('/courseById/:userId',getCoursesById)
 router.get('/courseByIds/:id',getCoursesByIds)
 
 module.exports = router

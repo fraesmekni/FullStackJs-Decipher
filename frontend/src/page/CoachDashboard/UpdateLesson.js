@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import {updateCourse} from "../../coursereduc/courseActions"
+import {updateLesson} from "../../coursereduc/courseActions"
 import { ArrowWrapperLeft, ArrowWrapperRight } from "../../Components/Arrows/Arrows";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -14,60 +14,50 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function UpdateCourses(){
+function UpdateLesson(){
+
     const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo } = userLogin
-    const [ titleCourse, setTitleCourse] = useState(""); 
-    const [ descriptionCourse, setDescriptionCourse] = useState(""); 
-    const [ category, setCategory] = useState(""); 
+   const [ titleLesson, setTitleLesson] = useState(""); 
+    const [descriptionLesson, setDescriptionLesson] = useState(""); 
+    const [contentLesson, setContentLesson] = useState("");
 
-    const [thumbnailCourse, setThumbnailCourse] = useState(""); 
+    const [typeLesson, setTypeLesson] = useState(""); 
     /////////////////////
-    const [course_id, setcourse_id] = useState(null);
-    const [step, setStep] = useState(1);
-    const [lessonQty, setLessonQty] = useState(3);
-
-    const { id } = useParams();
-    const [course, setCourse] = useState(null);
-useEffect(() => {
-  axios.get(`http://localhost:5000/course/${id}`).then((response) => {
-    setCourse(response.data);
-  });
-}, [id]);
-console.log(course);
 
 
-
+    const { id, lessonId } = useParams();
+    const [lesson, setLesson] = useState(null);
+    useEffect(() => {
+      axios.get(`http://localhost:5000/course/lesson/${id}/${lessonId}`)
+        .then((response) => {
+          console.log(response.data);
+          const { title, description, content, type } = response.data;
+          setTitleLesson(title);
+          setDescriptionLesson(description);
+          setContentLesson(content);
+          setTypeLesson(type);
+          setLesson(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, [id, lessonId]);
+    console.log(lesson);
+  
     const dispatch = useDispatch();
-
-console.log(thumbnailCourse);
-
-
-    const submitHandler=async(e)=>{
+  
+    const submitHandlerLesson = async (e) => {
       e.preventDefault();
-
-
-const coach=userInfo._id
-
-      dispatch(
-        updateCourse(
-         { titleCourse ,
-          descriptionCourse , 
-          category , 
-          coach ,
-          thumbnailCourse,
-          id
-         }
-        )
-      );
-      navigate("/coachdashboard");
-
-    
-
+      try {
+        await dispatch(updateLesson({ id, lessonId, titleLesson, descriptionLesson, contentLesson, typeLesson }));
+        navigate("/coachdashboard");
+      } catch (error) {
+        console.error(error);
+        // handle error
+      }
     };
-
-
 
     
   const handleCreateClick = () => {
@@ -78,8 +68,6 @@ const coach=userInfo._id
     navigate("/coachdashboard");
   };
  
-//console.log(course?.lessons?.titleLesson)
-  console.log(lessonQty)
     return(
 
         <><body  className="coach">
@@ -116,21 +104,34 @@ const coach=userInfo._id
    
     <div
         id="create"
-        className={ " library_trending_coach_create" }
-      >   
+        className={ " library_trending_coach_create" } >   
 
-        <h3 align="center" className="library_trending_title">Update A Course </h3>
-         <>
  
- <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
-<input type="text"  defaultValue={course?.titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
- <input type="text" defaultValue={course?.category}  onChange={(e) => setCategory(e.target.value)} ></input>
+ <h3 align="center" className="library_trending_title">Step 2 : Update A Lesson ! </h3>
+<>
+
+<input   type="text"
+  placeholder="Enter title here" name="titleLesson"
+  value={titleLesson}
+  onChange={(e) => setTitleLesson(e.target.value)} ></input>
+<input  type="text"
+  placeholder="Enter type here" name="typeLesson"
+  value={typeLesson}
+  onChange={(e) => setTypeLesson(e.target.value)}></input>                
+<input   type="text"
+  placeholder="Enter content here" name="contentLesson"
+  value={contentLesson}
+  onChange={(e) => setContentLesson(e.target.value)}></input>
+<input   type="text" name="descriptionLesson"
+  placeholder="Enter description here"
+  value={descriptionLesson}
+  onChange={(e) => setDescriptionLesson(e.target.value)} ></input>
+
+                <SpecialButton name="Update" onClick={submitHandlerLesson} type="submit"/> 
+                </>
                 
-<input type="text"  defaultValue={course?.descriptionCourse} onChange={(e) => setDescriptionCourse(e.target.value)}></input>
-                <input type="file" defaultValue={course?.thumbnailCourse} name="thumbnailCourse" 
-                onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
-                <SpecialButton name="Update" onClick={submitHandler} type="submit"/> 
-                </> 
+               
+
 
                 
  </div>
@@ -146,4 +147,4 @@ const coach=userInfo._id
         </>
     )
 }
-export default UpdateCourses;
+export default UpdateLesson;
