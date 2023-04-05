@@ -8,7 +8,10 @@ import {
     ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
-    ORDER_PAY_RESET
+    ORDER_PAY_RESET,
+    GET_ORDER_REQUEST,
+    GET_ORDER_SUCCESS,
+    GET_ORDER_FAIL
 } from './orderConstants.js'
 import { CART_REMOVE_ITEM } from '../cartredux/cartconstant'
 import axios from 'axios'
@@ -137,3 +140,38 @@ export const createOrder = (order) => async (dispatch, getState) => {
       })
     }
   }
+ 
+  export const listOrders = (userId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: GET_ORDER_REQUEST });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      const { data } = await axios.get(`http://localhost:5000/api/orders/getAll/${userId}`, config);
+  
+      dispatch({
+        type: GET_ORDER_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message ? error.response.data.message : error.message;
+  
+      if (message === 'Unauthorized') {
+        dispatch(Logout());
+      }
+  
+      dispatch({
+        type: GET_ORDER_FAIL,
+        payload: message,
+      });
+    }
+  };

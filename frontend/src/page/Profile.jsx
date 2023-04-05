@@ -5,6 +5,10 @@ import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+
+import {listOrders} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -61,17 +65,19 @@ const GotoCoachDashboard=()=>{
       }
     }
     
+const dispatch = useDispatch();
+
+const orderList = useSelector((state) => state.orderList);
+const { loading : loadingList , error : errorList , orders } = orderList;
 
   
     const [show,setShow]=useState(false)
    
-    useEffect(()=>{
-      
- 
-        if(error){
-            toast.error(error)
-        }
-    },[error])
+    useEffect(() => {
+      dispatch(listOrders(userInfo._id));
+    }, [dispatch, userInfo._id]);
+
+
   const classes = useStyles();
   const imageClasses = classNames(
     classes.imgRaised,
@@ -162,6 +168,44 @@ const GotoCoachDashboard=()=>{
                               className={navImageClasses}
                             />
                           </GridItem>
+                        </GridContainer>
+                      )
+                    },
+                    {
+                      tabButton: "Orders",
+                      tabIcon: AssignmentIcon,
+                      tabContent: (
+                        <GridContainer justify="center">
+                           <h1>My Orders</h1>
+                          <Table style={{ borderCollapse: 'collapse' }}>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell style={{ padding: '8px', border: '1px solid #ddd' }} >DATE</TableCell>
+                                <TableCell>TOTAL</TableCell>
+                                <TableCell>PAID</TableCell>
+                                <TableCell>DELIVERED</TableCell>
+                                <TableCell></TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {orders.map((order) => (
+                                <TableRow key={order._id}>
+                                  <TableCell>{order.createdAt.substring(0, 10)}</TableCell>
+                                  <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                                  <TableCell>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
+                                  <TableCell>
+                                    {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button variant="contained"  >
+                                      Details
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                         
                         </GridContainer>
                       )
                     },
