@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
 
 import {listOrders} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
@@ -55,6 +55,9 @@ const GotoCoachDashboard=()=>{
     }
     return setShow(!show)
   }
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
     const [toggle,setToggle]=useState(()=> {return ['a']}) 
     const userLogin = useSelector(state => state.userLogin)
     const {loading , error,userInfo } = userLogin  
@@ -91,7 +94,7 @@ const { loading : loadingList , error : errorList , orders } = orderList;
     {loading && <Loader></Loader>} 
       <Parallax small filter image="/images/handmade.jpg" />       
 
-      <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
+      <div style={{backgroundColor: "#ffffff"}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
             <GridContainer  justify="center">
               <GridItem xs={12} sm={12} md={6}>
@@ -188,7 +191,7 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {orders.map((order) => (
+                            {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
                                 <TableRow key={order._id}>
                                   <TableCell>{order.createdAt.substring(0, 10)}</TableCell>
                                   <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
@@ -206,6 +209,18 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                             </TableBody>
                           </Table>
                          
+                            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]} // optional: allow user to choose how many rows per page to display
+                component="div"
+                count={orders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={(event, newPage) => setPage(newPage)}
+                onChangeRowsPerPage={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setPage(0);
+                }}
+              />
                         </GridContainer>
                       )
                     },
