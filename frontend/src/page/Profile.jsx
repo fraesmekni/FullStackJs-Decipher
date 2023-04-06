@@ -99,9 +99,10 @@ const GotoCoachDashboard=()=>{
                   </div>
                   {userInfo.certified ? (
   <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="2x" />
-) : ( userInfo.role.name === "coach" ? 
+) : (
+   userInfo.role.name === "coach" ? 
   <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="2x" /> : 
-  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faShop}   color="#FCFFE7" size="2x" />
+  <FontAwesomeIcon style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="2x" />
 
 )}
 
