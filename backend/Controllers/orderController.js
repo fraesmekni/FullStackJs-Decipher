@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const Order = require('../Models/order.js')
+const User = require('../Models/user.js')
 
 
 // @desc    Create new order
@@ -80,6 +81,30 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     throw new Error('Order not found')
   }
 })
+
+      // get all orders
+   const getOrders = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findOne({ _id: userId, token: req.headers.authorization });
+  
+    if (!user) {
+      res.status(401);
+      throw new Error('Unauthorized');
+    }
+  
+    // Find all orders for the authenticated user
+    const orders = await Order.find({ user: userId }).populate('user', 'name email');
+      if (!orders) {
+        res.status(401);
+        throw new Error('Order not found for this user');
+      }
+    res.json(orders);
+  });
+  
+    
+
   module.exports = {
-    addOrderItems,getOrderById,updateOrderToPaid
+    addOrderItems,getOrderById,updateOrderToPaid,
+    getOrders
+  
   }

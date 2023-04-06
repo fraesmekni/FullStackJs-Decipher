@@ -5,6 +5,10 @@ import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
+
+import {listOrders} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,6 +55,9 @@ const GotoCoachDashboard=()=>{
     }
     return setShow(!show)
   }
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
     const [toggle,setToggle]=useState(()=> {return ['a']}) 
     const userLogin = useSelector(state => state.userLogin)
     const {loading , error,userInfo } = userLogin  
@@ -61,17 +68,19 @@ const GotoCoachDashboard=()=>{
       }
     }
     
+const dispatch = useDispatch();
+
+const orderList = useSelector((state) => state.orderList);
+const { loading : loadingList , error : errorList , orders } = orderList;
 
   
     const [show,setShow]=useState(false)
    
-    useEffect(()=>{
-      
- 
-        if(error){
-            toast.error(error)
-        }
-    },[error])
+    useEffect(() => {
+      dispatch(listOrders(userInfo._id));
+    }, [dispatch, userInfo._id]);
+
+
   const classes = useStyles();
   const imageClasses = classNames(
     classes.imgRaised,
@@ -85,7 +94,7 @@ const GotoCoachDashboard=()=>{
     {loading && <Loader></Loader>} 
       <Parallax small filter image="/images/handmade.jpg" />       
 
-      <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
+      <div style={{backgroundColor: "#ffffff"}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
             <GridContainer  justify="center">
               <GridItem xs={12} sm={12} md={6}>
@@ -163,6 +172,56 @@ const GotoCoachDashboard=()=>{
                               className={navImageClasses}
                             />
                           </GridItem>
+                        </GridContainer>
+                      )
+                    },
+                    {
+                      tabButton: "Orders",
+                      tabIcon: AssignmentIcon,
+                      tabContent: (
+                        <GridContainer justify="center">
+                           <h1>My Orders</h1>
+                          <Table style={{ borderCollapse: 'collapse' }}>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell style={{ padding: '8px', border: '1px solid #ddd' }} >DATE</TableCell>
+                                <TableCell>TOTAL</TableCell>
+                                <TableCell>PAID</TableCell>
+                                <TableCell>DELIVERED</TableCell>
+                                <TableCell></TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                            {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
+                                <TableRow key={order._id}>
+                                  <TableCell>{order.createdAt.substring(0, 10)}</TableCell>
+                                  <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                                  <TableCell>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
+                                  <TableCell>
+                                    {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button variant="contained"  >
+                                      Details
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                         
+                            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]} // optional: allow user to choose how many rows per page to display
+                component="div"
+                count={orders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={(event, newPage) => setPage(newPage)}
+                onChangeRowsPerPage={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setPage(0);
+                }}
+              />
                         </GridContainer>
                       )
                     },
