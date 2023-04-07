@@ -5,7 +5,9 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,ORDER_PAY_REQUEST,
-    ORDER_PAY_FAIL,ORDER_PAY_SUCCESS,ORDER_PAY_RESET, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAIL
+    ORDER_PAY_FAIL,ORDER_PAY_SUCCESS,ORDER_PAY_RESET,
+     GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAIL,ORDER_DELIVER_REQUEST, 
+    ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET
 } from './orderConstants.js'
 
 export const orderCreateReducer = (state= {}, action)=>{
@@ -102,6 +104,28 @@ export const orderDetailsReducer = (
   }
 
   
+  export const orderDeliverReducer = (state = {}, action) => {
+    switch (action.type) {
+      case ORDER_DELIVER_REQUEST:
+        return {
+          loading: true,
+        }
+      case ORDER_DELIVER_SUCCESS:
+        return {
+          loading: false,
+          success: true,
+        }
+      case ORDER_DELIVER_FAIL:
+        return {
+          loading: false,
+          error: action.payload,
+        }
+      case ORDER_DELIVER_RESET:
+        return {}
+      default:
+        return state
+    }
+  }
   
   
   
