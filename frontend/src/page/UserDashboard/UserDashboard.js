@@ -5,9 +5,12 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
 import { productadd,deleteProduct } from "../../productredux/productaction";
+import {getOrderByIdAndUserId} from '../../orderRedux/orderActions';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Loader from "../../Components/Loader";
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
+import { TablePagination  } from '@material-ui/core';
 
 
 import Swal from 'sweetalert2';
@@ -19,9 +22,16 @@ function UserDashboard(){
     const { loading, error,messageSuccess } = productAdd;
 
     const [showCreate, setShowCreate] = useState(false);
+    const [showOrders, setShowOrders] = useState(false);
 
     const [product, setProduct] = useState([]);
     
+  const orderList = useSelector((state) => state.orderdashboard);
+  const { loading : loadingList , error : errorList , orders } = orderList;
+  
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
     const productDelete = useSelector((state) => state.productDelete);
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete;
     const navigate = useNavigate();
@@ -94,13 +104,23 @@ const submitHandlerj = (e) => {
     navigate("/userdashboard");
   };
 
+  
   const handleCreateClick = () => {
     setShowCreate(true);
+    setShowOrders(false);
   };
 
   const handleListClick = () => {
     setShowCreate(false);
+    setShowOrders(false);
   };
+
+  const ListOrder = () => {
+    setShowOrders(true);
+    setShowCreate(false);
+    dispatch(getOrderByIdAndUserId(userInfo._id));
+  }
+
     return(
 
         <><body className="yoo">
@@ -129,6 +149,11 @@ const submitHandlerj = (e) => {
     trigger="hover" colors="primary:#ffffff"
     onClick={handleCreateClick} 
   />
+  <lord-icon
+                src="https://cdn.lordicon.com/mrdiiocb.json"
+                trigger="hover" colors="primary:#ffffff"
+                onClick={ListOrder}
+              />
       {/* <img onClick={handleCreateClick} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAQElEQVRIiWNgGAXUBIcPHz5y+PDhI6ToYaKVY0YtGLWAeoARmUNqGscFbG1tbWBsmvuAJDCak0ctGKYWjAKCAAB8yhBUbF/pJwAAAABJRU5ErkJggg==" /> */}
     </div>
     <div className="sidebar_logout">
@@ -173,15 +198,95 @@ const submitHandlerj = (e) => {
 <SpecialButton name="Create" onClick={submitHandlerj}  type="submit"/>
 
  </div>
+{
+ <div
+            id="create"
+            className={`create ${showOrders ? "show" : "hide"} ${showOrders ? "library_trending" : ""}`}
+          >
+
+            <div className="library_album">
+              <h1>Welcome {userInfo.firstName} to Your User Dashboard!</h1>
 
 
 
-    <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
->  <div className="library_album">
+
+              <h4 className="library_trending_title">Review Your Orders</h4>
+            </div>
+           
+                  <table style={{ marginTop : '40px'}}>
+              {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
+                return (
+                  <tr key={order.id}>
+                    <td>
+                      <p>{index + 1}</p>
+                    </td>
+                    <td className="song"> 
+                      <h4>DATE </h4>
+                      <p > {order.createdAt.substring(0, 10)}</p>
+                    </td>
+                    <td style={{ marginRight : '50px'}}>
+                      <h4 className="song"> TOTAL </h4>
+                      <p style={{color : 'black'}}>${order.totalPrice.toFixed(2)}</p>
+                    </td>
+                    <td>
+                      <h4  className="song"> PAID</h4>
+                      <p style={{color : 'black'}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</p>
+                    </td>
+                    <td>
+                      <h4 className="song">DELIVERED</h4>
+                      <p style={{color : 'black'}}> {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</p>
+                    </td>
+                    <td>
+                      <h4 className="song">Status</h4>
+                      <p style={{color : 'black'}}> {order.status ? 'Approved' : 'Not approved'}</p>
+                    </td>
+                    <td>
+                    <DropdownButton title="Actions">
+                    <Dropdown.Item href="" >
+                            {order.status ? (
+                                <>
+                                    <i className="bx bx-check me-1"></i> Not Approved
+                                </>
+                            ) : (
+                                <>
+                                    <i className="bx bx-trash me-1"></i>Approve
+                                </>
+                            )}
+                        </Dropdown.Item>
+                    </DropdownButton>
+                    </td>
+                    
+                  </tr>
+                )
+              })}
+            </table>
+                           {  <TablePagination
+                rowsPerPageOptions={[5, 10, 25]} 
+                component="div"
+                count={orders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={(event, newPage) => setPage(newPage)}
+                onChangeRowsPerPage={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setPage(0);
+                }}
+              /> }
+
+          </div>
+
+ }
+
+          <div id="list" className={`create ${!showOrders ? "show" : "hide"}  ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""} ${!showOrders ? "library_trending" : ""}`}
+          >  <div className="library_album">
       <h1>Welcome {userInfo.firstName} to Your User Dashboard!</h1>
 
 
       
+
+      {loadingList && <div className="alertgreen"> && <p>Loading...</p> </div>}
+
+{errorList && <div className="alertgreen"> && <p>{errorList}</p> </div>}   
 
  {loadingDelete && <div className="alertgreen"> && <p>Loading...</p> </div>} 
 

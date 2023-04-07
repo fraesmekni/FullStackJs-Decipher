@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler")
 const Order = require('../Models/order.js')
-const User = require('../Models/user.js')
+const User = require('../Models/user.js') 
+const Product = require('../Models/product.js') 
+
 
 
 // @desc    Create new order
@@ -44,18 +46,54 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id).populate(
-      'user',
-      'name email'
-    )
-  
-    if (order) {
-      res.json(order)
-    } else {
-      res.status(404)
-      throw new Error('Order not found')
+ 
+  try {
+    const order = await Order.findById(req.params.id).populate('orderItems.product');
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json(order.orderItems);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+
+
+
+const getProductUsersIdByOrderId = asyncHandler(async (req, res) => {
+  const order = await Order.findById( req.params.id )
+  .populate({
+    path: 'orderItems.product',
+    populate: {
+      path: 'user',
+      model: 'User'
     }
   })
+  .populate('user', 'name email');
+const userIds = order.orderItems.map((item) => item.product.user._id.toString());
+console.log(userIds);
+res.status(201).json(userIds);
+  });
+ 
+
+  const getProductUsersIdByUserId = asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+
+    const products = await Product.find({ user: userId }).select('_id');
+  
+    const productIds = products.map(product => product._id.toString());
+  
+    const orders = await Order.find({ 'orderItems.product': { $in: productIds } }).populate('user', 'name email');
+  
+    res.status(200).json(orders);
+  });
+  
+
+
+
+
 // @desc    Update order to paid
 // @route   PUT /api/orders/:id/pay
 // @access  Private
@@ -124,6 +162,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 
   module.exports = {
     addOrderItems,getOrderById,updateOrderToPaid,
-    getOrders,updateOrderToDelivered
+    getOrders,updateOrderToDelivered,
+    getProductUsersIdByOrderId,
+    getProductUsersIdByUserId
   
   }

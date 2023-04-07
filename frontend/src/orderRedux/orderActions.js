@@ -219,3 +219,24 @@ export const createOrder = (order) => async (dispatch, getState) => {
       });
     }
   };
+
+  export const getOrderByIdAndUserId = ( idUser) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: 'GET_ORDER_DASHBOARD_REQUEST' });
+  
+      const { data } = await axios.get(`http://localhost:5000/api/orders/getOrderbyIdUser/${idUser}`);
+  
+      dispatch({
+        type: 'GET_ORDER_DASHBOARD_SUCCESS',
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'GET_ORDER_DASHBOARD_FAIL',
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
