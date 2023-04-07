@@ -30,7 +30,8 @@ import PlaceOrder from './page/PlaceOrder/PlaceOrder';
 import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
 import UpdateProduct from './page/UpdateProduct/UpdateProduct';
-
+import ReactGA from 'react-ga';
+ReactGA.initialize('G-Y1V026ZHPY');
 
 
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
@@ -59,7 +60,10 @@ function App() {
 		getUser();
     console.log(getUser())
 	}, []);
-
+useEffect(()=>
+{
+  ReactGA.pageview(window.location.pathname + window.location.search);
+})
 
   return (
     <Suspense fallback={<Loader />}>
