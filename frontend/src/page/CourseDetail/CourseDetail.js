@@ -7,39 +7,35 @@ import { getCourses } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
 import SpecialButton from '../../Components/Button/button';
 import confetti from "https://esm.run/canvas-confetti@1";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../../Components/Loader';
 const CourseDetail= () => {
 
-  const userLogin = useSelector(state => state.userLogin)
-    const {userInfo } = userLogin
   const navigate = useNavigate();
     const dispatch = useDispatch();
+
       const { id } = useParams();
       const [qty,setQty]= useState(1);
       const [test,setTest]= useState({});
       const [validTest,setValidTest]= useState(false);
       const [showLessons,setShowLessons]= useState(true);
+
       const [lessonIndex,setLessonIndex]=useState(0);
-      const courses = useSelector((state) => state.courseDisplay.courses);
-      console.log(courses);
 
-      
-    
+    useEffect(() => {
+      dispatch(getCourses());
+    }, [id]);
+      console.log("///////courses");
+      const courses = useSelector(state => state.courseDisplay.courses);
+      const coursse = courses && courses.find((p) => p._id === id);
 
-
-      useEffect(() => {
-        dispatch(getCourses());
-      }, [dispatch ]);
-      console.log("ena el products" + Array.isArray(courses) );
-      const coursse = courses.find((p) => p._id === id);
-      console.log(id);
-  
         const [isExpanded, setIsExpanded] = useState(true);
       
         const toggleExpand = () => {
           setIsExpanded(!isExpanded);
         };
-        console.log('///////////////////'+coursse);
-     
+
         const gettest = async () => {
           try {    if (!coursse) return; // check if coursse is null or undefined
       
@@ -49,10 +45,7 @@ const CourseDetail= () => {
               { method: "GET" }
             );
             const data = await response.json();
-      console.log(data);
             setTest(data);
-            console.log("////////////// test fi west el function ")
-            console.log(test);
           } catch (error) {
             console.error(error);
           }
@@ -72,36 +65,34 @@ const CourseDetail= () => {
             test.existingTest.questions[questionIndex].options[optionIndex];
         };
        
-        const submittedtest = (e) => {
-          e.preventDefault();
+        const submittedtest = () => {
+
           const correctAnswersCount = selectedAnswers.reduce((count, answer, index) => {
             if (isAnswerCorrect(index, answer)) {
               return count + 1;
             }
             return count;
           }, 0);
-          if (correctAnswersCount >= selectedAnswers.length / 2) {
+          if (selectedAnswers.length > 0 && correctAnswersCount >= selectedAnswers.length / 2) {
+            console.log("confetti");
             confetti({
               particleCount: 200,
               spread: 100
             });
-
-          }
-          confetti({
-            particleCount: 200,
-            spread: 100
-          });
-        };
+            toast("Congrats for passing this course! Check your e-mail!");
+          } else {
+            toast.error("Oops... You can redo this test by reloading the page !", {
+              hideProgressBar: true});
+          }}
         
-        console.log(coursse);
-        console.log(test);
         useEffect(() => {
           gettest();
-          console.log("////////////////");
-      
-          console.log(test.existingTest );
-      
         }, [coursse]);
+
+        if (!courses || courses.length === 0) {
+          return <Loader/>;
+        }
+        
   return ( 
     
     <body style={{backgroundImage:`url(${backg})`,color:"white",height:"1900px"}}>
@@ -118,7 +109,8 @@ const CourseDetail= () => {
 
       {coursse ? (
      <>
-              
+                      < ToastContainer style={{marginRight: "400px"}}/>
+
     <Row >
         <Col md={8}>
         { showLessons === true && coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
@@ -150,11 +142,10 @@ const CourseDetail= () => {
                 <Card
                     onClick={() => handleOptionClick(i, j)}
                     style={{
-                      background:
+                      border: "1px solid #000000",
+                       background:
                         selectedAnswers[i] === j
-                          ? isAnswerCorrect(i, j)
-                            ? "#c3e6cb"
-                            : "#f8d7da"
+                          ? "rgb(173, 148, 111) "
                           : "rgba(255, 255, 255, 0.58)",
                       backdropFilter: "blur(60px)",
                       height: "80px",
@@ -171,7 +162,6 @@ const CourseDetail= () => {
   </div> 
 ))}             <SpecialButton name="Submit" onClick={() => {
  submittedtest()
-
 }}> </SpecialButton>
           
             </Card.Text> }

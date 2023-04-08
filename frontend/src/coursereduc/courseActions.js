@@ -190,7 +190,6 @@ export const addLesson = ({ titleLesson,
           });
       
           const data = await response.json();
-  
           dispatch({ type: COURSE_GET_SUCCESS, payload: data });
         } catch (error) {
           console.log(error);

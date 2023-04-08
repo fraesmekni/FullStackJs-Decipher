@@ -57,12 +57,12 @@ const submitHandler = (e)=>{
     return (
         <>    <body style={{backgroundImage:`url(${backg})`}}>
 
-         {product ? (<body className="bodydetail">
-        <div class="containerdetail">
-  <div class="images">
+         {product ? ( 
+        <div className="containerdetail">
+  <div className="images">
   <img className="imgdetail" src={`${process.env.PUBLIC_URL}/images/${product.imageProduct}`} />
   </div>
-  <div class="product1"> 
+  <div className="product1"> 
   
     <p className="pdetail"> {product.category}- by {product?.user?.firstName} {product?.user?.lastName}</p>
     <h1 className="h1detail">{product.productName}</h1>
@@ -141,7 +141,7 @@ const submitHandler = (e)=>{
       
 </div>
 
-</body>  ) : (
+) : (
         <p>No product found</p>
       )} </body> </>
     )
