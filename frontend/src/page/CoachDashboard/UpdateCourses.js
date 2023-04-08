@@ -32,6 +32,11 @@ function UpdateCourses(){
     const [course, setCourse] = useState(null);
 useEffect(() => {
   axios.get(`http://localhost:5000/course/${id}`).then((response) => {
+    const { titleCourse, descriptionCourse, category, thumbnailCourse } = response.data;
+    setTitleCourse(titleCourse);
+    setDescriptionCourse(descriptionCourse);
+    setCategory(category);
+    setThumbnailCourse(thumbnailCourse);
     setCourse(response.data);
   });
 }, [id]);
@@ -123,11 +128,11 @@ const coach=userInfo._id
          <>
  
  <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
-<input type="text"  defaultValue={course?.titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
- <input type="text" defaultValue={course?.category}  onChange={(e) => setCategory(e.target.value)} ></input>
+<input type="text" placeholder="Course name"  value={titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
+ <input type="text" placeholder=" Category" value={category}  onChange={(e) => setCategory(e.target.value)} ></input>
                 
-<input type="text"  defaultValue={course?.descriptionCourse} onChange={(e) => setDescriptionCourse(e.target.value)}></input>
-                <input type="file" defaultValue={course?.thumbnailCourse} name="thumbnailCourse" 
+<input type="text" placeholder="What is this course about?"  value={descriptionCourse}   onChange={(e) => setDescriptionCourse(e.target.value)}></input>
+                <input type="file"  name="thumbnailCourse" 
                 onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
                 <SpecialButton name="Update" onClick={submitHandler} type="submit"/> 
                 </> 
