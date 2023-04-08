@@ -5,7 +5,8 @@ import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup} fro
 import { useDispatch , useSelector , } from "react-redux";
 import { getCourses } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
-
+import SpecialButton from '../../Components/Button/button';
+import confetti from "https://esm.run/canvas-confetti@1";
 const CourseDetail= () => {
 
   const userLogin = useSelector(state => state.userLogin)
@@ -14,9 +15,16 @@ const CourseDetail= () => {
     const dispatch = useDispatch();
       const { id } = useParams();
       const [qty,setQty]= useState(1);
+      const [test,setTest]= useState({});
+      const [validTest,setValidTest]= useState(false);
+      const [showLessons,setShowLessons]= useState(true);
       const [lessonIndex,setLessonIndex]=useState(0);
       const courses = useSelector((state) => state.courseDisplay.courses);
       console.log(courses);
+
+      
+    
+
 
       useEffect(() => {
         dispatch(getCourses());
@@ -32,7 +40,68 @@ const CourseDetail= () => {
         };
         console.log('///////////////////'+coursse);
      
+        const gettest = async () => {
+          try {    if (!coursse) return; // check if coursse is null or undefined
+      
+            const response = await fetch(
+      
+              `http://localhost:5000/course/getTest/${coursse._id}`,
+              { method: "GET" }
+            );
+            const data = await response.json();
+      console.log(data);
+            setTest(data);
+            console.log("////////////// test fi west el function ")
+            console.log(test);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+       
+          //test handeling 
+        const [selectedAnswers, setSelectedAnswers] = useState([]);
 
+        const handleOptionClick = (questionIndex, optionIndex) => {
+          const newSelectedAnswers = [...selectedAnswers];
+          newSelectedAnswers[questionIndex] = optionIndex;
+          setSelectedAnswers(newSelectedAnswers);
+        };
+      
+        const isAnswerCorrect = (questionIndex, optionIndex) => {
+          return test.existingTest.questions[questionIndex].answer ===
+            test.existingTest.questions[questionIndex].options[optionIndex];
+        };
+       
+        const submittedtest = (e) => {
+          e.preventDefault();
+          const correctAnswersCount = selectedAnswers.reduce((count, answer, index) => {
+            if (isAnswerCorrect(index, answer)) {
+              return count + 1;
+            }
+            return count;
+          }, 0);
+          if (correctAnswersCount >= selectedAnswers.length / 2) {
+            confetti({
+              particleCount: 200,
+              spread: 100
+            });
+
+          }
+          confetti({
+            particleCount: 200,
+            spread: 100
+          });
+        };
+        
+        console.log(coursse);
+        console.log(test);
+        useEffect(() => {
+          gettest();
+          console.log("////////////////");
+      
+          console.log(test.existingTest );
+      
+        }, [coursse]);
   return ( 
     
     <body style={{backgroundImage:`url(${backg})`,color:"white",height:"1900px"}}>
@@ -52,7 +121,7 @@ const CourseDetail= () => {
               
     <Row >
         <Col md={8}>
-        {coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
+        { showLessons === true && coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
 <>
           <iframe
             width="100%"
@@ -66,9 +135,50 @@ const CourseDetail= () => {
             height:"410px",
             backdropFilter: "blur(60px)",
       }}className="lessons description-card">
-          <Card.Body >
+          <Card.Body > {validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
+           Test </h4>
+           
+           
+           {test.existingTest && test.existingTest.questions.map((question,i) => (
+  <div key={question._id}>
+        <br />
+
+    <h5 style={{color:"white"}}>Question {i+1}: {question.text}</h5>
+    <div className="row">
+      {question.options.map((option, j) => (
+                <div key={j} className="col-sm-4 mb-3">
+                <Card
+                    onClick={() => handleOptionClick(i, j)}
+                    style={{
+                      background:
+                        selectedAnswers[i] === j
+                          ? isAnswerCorrect(i, j)
+                            ? "#c3e6cb"
+                            : "#f8d7da"
+                          : "rgba(255, 255, 255, 0.58)",
+                      backdropFilter: "blur(60px)",
+                      height: "80px",
+                    }}
+                  >
+            <Card.Body >
+              <Card.Text>{option}</Card.Text>
+            </Card.Body>
+          </Card>
+
+        </div>
+      ))} 
+    </div>
+  </div> 
+))}             <SpecialButton name="Submit" onClick={() => {
+ submittedtest()
+
+}}> </SpecialButton>
+          
+            </Card.Text> }
+            { validTest===false && showLessons===true &&
             <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>{coursse.lessons[lessonIndex].titleLesson}</h4>
             {coursse.lessons[lessonIndex].contentLesson}         </Card.Text>
+}
           </Card.Body>
         </Card>)} </Col>
         <Col md={4}>
@@ -94,7 +204,12 @@ const CourseDetail= () => {
         background: "transparent",padding:"-20px"
       }}>
                         <div className="d-flex justify-content-between align-items-center">
-                        <Link style={{color: "white"}}onClick={() => setLessonIndex(index)}>Lesson {index+1} </Link>
+                        <Link style={{color: "white"}}onClick={() => {
+  setLessonIndex(index);
+  setShowLessons(true);
+  setValidTest(false);
+
+}}>Lesson {index+1} </Link>
                           <div>
                             <i className="far fa-check-circle text-success mr-2"></i>
                             <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
@@ -105,6 +220,32 @@ const CourseDetail= () => {
                   </Card.Body>
                 </div>
               ))}
+              <div >
+                  <Card.Body  style={{
+        background: "transparent",
+      }}>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item style={{
+        background: "transparent",padding:"-20px"
+      }}>
+                        <div className="d-flex justify-content-between align-items-center">
+                        <Link style={{color: "white"}} onClick={() => {
+  setValidTest(true);
+  setShowLessons(false);
+}}>Test</Link>
+                          <div>
+                            <i className="far fa-check-circle text-success mr-2"></i>
+                            <span style={{color: "#362824"}}className="text-muted">Test</span>
+                          </div>
+                        </div>
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Card.Body>
+                </div>
+
+
+
+
           </Card>
           {/* <Button variant="primary">Enroll Now</Button>  */}
           </Col>
@@ -141,6 +282,7 @@ const CourseDetail= () => {
                   </div>
                 </div>
               </ListGroup.Item>
+              
              </ListGroup> </div>
       <br />       <br />
 
