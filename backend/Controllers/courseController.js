@@ -1,5 +1,7 @@
 const Course = require('../models/course');
 const Lesson = require('../models/lesson');
+const Test = require('../models/test')
+const Question = require ('../models/test')
 const asynHandler = require("express-async-handler")
 const createCourse= asynHandler(async (req, res) => {
     const {  
@@ -31,6 +33,53 @@ const createCourse= asynHandler(async (req, res) => {
     res.json({"message":"Server Error"}).status(400)
     throw new Error('Server Error')  }
 })
+
+findTestByCourse = asynHandler(async (req, res) => {
+  const course = await Course.findOne({ _id: req.params.course })
+  if (!course) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+  const existingTest = await Test.findOne({ course });
+  if (existingTest) {
+    return res.status(200).json({ existingTest });
+  }
+  return res.status(404).json({ error: 'Test not found' });
+});
+
+
+
+
+
+
+const createTest= asynHandler(async (req, res) => {
+  const {  
+      course ,
+      questions, 
+    } = req.body;
+
+   
+try {  
+  const existingTest = await Test.findOne({ course });
+  if (existingTest) {
+    return res.status(403).json({ message: "A test already exists for this course" });
+  }
+  // create a new course
+  const test = new Test({
+     course: course,
+     questions: questions
+  });
+  
+  // save the course to the database
+  await test.save();
+
+  res.status(201).json({ test });
+} catch (err) {
+  console.error(err);
+  res.json({"message":"Server Error"}).status(400)
+  throw new Error('Server Error')  }
+})
+
+
 
 const createLesson = async(req,res)=>{
     const { titleLesson,
@@ -301,6 +350,7 @@ const getCoursesById = asynHandler(  async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 const getCoursesByIds = asynHandler(  async (req, res) => {
   const course = await Course.findById(req.params.id)
 
@@ -317,6 +367,6 @@ module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,
   deleteCourse,updateCourse,SearchCourse,getCourseById,
-  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse
+  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,createTest
 
 }

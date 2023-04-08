@@ -1,4 +1,4 @@
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID,COURSE_GET_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_FAIL, UPDATE_LESSON_REQUEST, UPDATE_LESSON_SUCCESS, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_COURSE_FAIL, DELETE_LESSON_REQUEST, DELETE_LESSON_SUCCESS, DELETE_LESSON_FAIL } from "./courseConstants"
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, LESSON_ADD_FAIL, LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID,COURSE_GET_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_FAIL, UPDATE_LESSON_REQUEST, UPDATE_LESSON_SUCCESS, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_COURSE_FAIL, DELETE_LESSON_REQUEST, DELETE_LESSON_SUCCESS, DELETE_LESSON_FAIL, TEST_ADD_SUCCESS, TEST_ADD_REQUEST, TEST_ADD_FAIL } from "./courseConstants"
 
 
 export const addCourseReducer=(state={},action)=>{
@@ -23,6 +23,22 @@ export const addCourseReducer=(state={},action)=>{
         case LESSON_ADD_SUCCESS : 
             return {loading : false ,messageSuccess : "Lesson Added!"}
         case LESSON_ADD_FAIL :
+            return {loading : false , error: action.payload }        
+
+        default:
+            return state    
+
+    }
+ }
+
+ export const addTestReducer=(state={},action)=>{
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case TEST_ADD_REQUEST: 
+            return {loading : true}
+        case TEST_ADD_SUCCESS : 
+            return {loading : false ,messageSuccess : "Test Added!"}
+        case TEST_ADD_FAIL :
             return {loading : false , error: action.payload }        
 
         default:

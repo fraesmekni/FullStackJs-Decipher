@@ -10,6 +10,11 @@ export const UPDATE_COURSE_FAIL = 'UPDATE_COURSE_FAIL'
 export const LESSON_ADD_REQUEST = 'LESSON_ADD_REQUEST'
 export const LESSON_ADD_SUCCESS = 'LESSON_ADD_SUCCESS'
 export const LESSON_ADD_FAIL = 'LESSON_ADD_FAIL'
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+export const TEST_ADD_REQUEST = 'LESSON_ADD_REQUEST'
+export const TEST_ADD_SUCCESS = 'LESSON_ADD_SUCCESS'
+export const TEST_ADD_FAIL = 'LESSON_ADD_FAIL'
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 export const UPDATE_LESSON_REQUEST = 'UPDATE_LESSON_REQUEST'
 export const UPDATE_LESSON_SUCCESS = 'UPDATE_LESSON_SUCCESS'
 export const UPDATE_LESSON_FAIL = 'UPDATE_LESSON_FAIL'

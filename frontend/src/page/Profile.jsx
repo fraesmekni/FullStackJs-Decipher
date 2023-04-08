@@ -94,7 +94,7 @@ const { loading : loadingList , error : errorList , orders } = orderList;
     {loading && <Loader></Loader>} 
       <Parallax small filter image="/images/handmade.jpg" />       
 
-      <div style={{backgroundColor: "#ffffff"}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
+      <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
             <GridContainer  justify="center">
               <GridItem xs={12} sm={12} md={6}>
@@ -191,13 +191,13 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                                 <TableCell></TableCell>
                               </TableRow>
                             </TableHead>
-                            <TableBody>
+                            <TableBody style={{color:"#fff"}} >
                             {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
                                 <TableRow key={order._id}>
-                                  <TableCell>{order.createdAt.substring(0, 10)}</TableCell>
-                                  <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
-                                  <TableCell>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
-                                  <TableCell>
+                                  <TableCell style={{color:"#fff"}}>{order.createdAt.substring(0, 10)}</TableCell>
+                                  <TableCell style={{color:"#fff"}}>${order.totalPrice.toFixed(2)}</TableCell>
+                                  <TableCell style={{color:"#fff"}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
+                                  <TableCell style={{color:"#fff"}}>
                                     {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}
                                   </TableCell>
                                   <TableCell>

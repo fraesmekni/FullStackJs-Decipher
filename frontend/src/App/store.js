@@ -9,7 +9,7 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 
-import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer } from '../coursereduc/courseReducers';
+import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer } from '../coursereduc/courseReducers';
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer} from '../orderRedux/orderReducers';
 
 
@@ -34,6 +34,7 @@ const reducer = combineReducers({
        addCourse: addCourseReducer,
        courseDisplay: courseReducers,
        addLesson: addLessonReducer,
+       addTest: addTestReducer,
        orderCreate : orderCreateReducer,
        orderDetails :orderDetailsReducer,
        orderList :orderListReducer,
