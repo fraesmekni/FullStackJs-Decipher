@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const Order = require('../Models/order.js')
 const User = require('../Models/user.js') 
 const Product = require('../Models/product.js') 
+const order = require("../Models/order.js")
 
 
 
@@ -45,17 +46,33 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
 // @access  Private
-const getOrderById = asyncHandler(async (req, res) => {
+// const getOrderById = asyncHandler(async (req, res) => {
  
-  try {
-    const order = await Order.findById(req.params.id).populate('orderItems.product');
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    res.json(order.orderItems);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server error' });
+//   try {
+//     const order = await Order.findById(req.params.id).populate('orderItems.product');
+//     if (!order) {
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+//     res.json(order.orderItems);
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// })
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private
+const getOrderById = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name email'
+  )
+
+  if (order) {
+    res.json(order)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
   }
 })
 
@@ -91,6 +108,52 @@ res.status(201).json(userIds);
   });
   
 
+  const OrderApprove = asyncHandler(async (req, res) => {
+    const orderId = req.params.id;
+  
+    const order = await Order.findById(orderId);
+    console.log(order.statusOrder);
+    
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+  
+    if (order.statusOrder == false) {
+      order.statusOrder = true;
+      await order.save();
+      res.json("Order Approved");
+      console.log("order is approved");
+    } else {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+  });
+  
+  
+  
+  const OrderNotApprove = asyncHandler(async (req, res) => {
+    const orderId = req.params.id;
+  
+    const order = await Order.findById(orderId);
+    console.log(order.statusOrder);
+    
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+  
+    if (order.statusOrder == true) {
+      order.statusOrder = false;
+      await order.save();
+      res.json("Order NOT Approved");
+      console.log("order is NOT approved");
+    } else {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+  });
+  
 
 
 
@@ -164,6 +227,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     addOrderItems,getOrderById,updateOrderToPaid,
     getOrders,updateOrderToDelivered,
     getProductUsersIdByOrderId,
-    getProductUsersIdByUserId
-  
+    getProductUsersIdByUserId,
+    OrderApprove
+  ,
+  OrderNotApprove
   }

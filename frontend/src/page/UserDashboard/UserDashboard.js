@@ -238,12 +238,12 @@ const submitHandlerj = (e) => {
                     </td>
                     <td>
                       <h4 className="song">Status</h4>
-                      <p style={{color : 'black'}}> {order.status ? 'Approved' : 'Not approved'}</p>
+                      <p style={{color : 'black'}}> {order.statusOrder ? 'Approved' : 'Not approved'}</p>
                     </td>
                     <td>
                     <DropdownButton title="Actions">
                     <Dropdown.Item href="" >
-                            {order.status ? (
+                            {order.statusOrder ? (
                                 <>
                                     <i className="bx bx-check me-1"></i> Not Approved
                                 </>
@@ -255,6 +255,7 @@ const submitHandlerj = (e) => {
                         </Dropdown.Item>
                     </DropdownButton>
                     </td>
+                    {/* <td> add mark as deliver button</td> */}
                     
                   </tr>
                 )
