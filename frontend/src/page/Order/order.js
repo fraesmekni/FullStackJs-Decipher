@@ -10,7 +10,6 @@ import Message from '../../Components/Message'
 import Loader from '../../Components/Loader'
 import {
   getOrderDetails, payOrder, deliverOrder
- 
 } from '../../orderRedux/orderActions'
 import { ORDER_PAY_RESET ,ORDER_DELIVER_RESET } from '../../orderRedux/orderConstants';
 
