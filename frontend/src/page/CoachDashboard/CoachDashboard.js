@@ -55,6 +55,7 @@ function CoachDashboard() {
   const [questionText, setQuestionText] = useState("");
   const [questionOptions, setQuestionOptions] = useState("");
   const [questionAnswer, setQuestionAnswer] = useState("");
+  const [test, setTest] = useState({});
 
   /////////////////////
   const [course_id, setcourse_id] = useState(null);
@@ -65,6 +66,15 @@ function CoachDashboard() {
 
   const [details, setDetails] = useState(true);
   const [lesson_id, setLesson_id] = useState(0);
+
+
+const [validOptions,setValidOptions]= useState(false);
+const [validAnswer,setValidAnswer]= useState(false);
+const ANSWER_REGEX = /^(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b(o[0-9]*\b|[a-zA-Z]+\b))[\s\S]*$/
+const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
+
+
+
 
   const courseDelete = useSelector((state) => state.courseDelete);
   const {
@@ -83,7 +93,6 @@ function CoachDashboard() {
   const lessondeleteHandler = (idCourse, idLesson) => {
     dispatch(deleteLesson(idCourse, idLesson));
   };
-  const [test, setTest] = useState({});
 
   
 
@@ -94,12 +103,23 @@ function CoachDashboard() {
       options: questionOptions.split(",").map((option) => option.trim()),
       answer: questionAnswer,
     };
+  ;
+
     console.table(questions);
     setQuestions([...questions, newQuestion]);
     setQuestionText("");
     setQuestionOptions("");
     setQuestionAnswer("");
   };
+  useEffect(() => {
+    const result1 = OPTION_REGEX.test(questionOptions);
+    if (questionOptions.includes(questionAnswer)) {
+      setValidAnswer(true);
+    } else {
+      setValidAnswer(false);
+    }
+    setValidOptions(result1);
+  }, [questionOptions, questionAnswer]);
 
   //=Course=
   const [course, setCourse] = useState([]);
@@ -132,6 +152,7 @@ function CoachDashboard() {
       const data = await response.json();
 console.log(data);
       setTest(data);
+      console.log("////////////// test fi west el function ")
       console.log(test);
     } catch (error) {
       console.error(error);
@@ -286,9 +307,11 @@ console.log(data);
   };
   useEffect(() => {
     gettest();
-    console.log(test);
+    console.log("////////////////");
 
-  }, []);
+    console.log(test.existingTest );
+
+  }, [details]);
   return (
     <>
       <body className="coach">
@@ -537,14 +560,7 @@ console.log(data);
                   colors="primary:#ffffff"
                   onClick={() => (setAdd(true), setShowDetail(false))}
                 />{" "}
-                <lord-icon
-                  src="https://cdn.lordicon.com/mrdiiocb.json"
-                  trigger="hover"
-                  colors="primary:#ffffff"
-                  onClick={() => (
-                    setShowTestAdd(true), setAdd(false), setShowDetail(false)
-                  )}
-                />
+                
               </h3>
 
               <table>
@@ -612,15 +628,26 @@ console.log(data);
                     );
                   })}
                    </table> 
-                   <h3> The test </h3>
-                   <table>
-             {test.questions && test.questions.map((question) => (
+                   <h3 className="library_trending_title">
+                The Test : Questions <lord-icon
+                  src="https://cdn.lordicon.com/mrdiiocb.json"
+                  trigger="hover"
+                  colors="primary:#ffffff"
+                  onClick={() => (
+                    setShowTestAdd(true), setAdd(false), setShowDetail(false)
+                  )}
+                /></h3>
+                             <table>
+            {test.existingTest && test.existingTest.questions.map((question,i) => (
   <tr key={question._id}>
-    <td>{question.text}</td>
+     <td>
+                          <p>{i+ 1}</p>
+                        </td>
+    <td> Question {i+ 1}: {question.text}</td>
     <td>
       <ul>
         {question.options.map((option, index) => (
-          <li key={index}>{option}</li>
+          <li key={index}> Possible Options: {option}</li>
         ))}
       </ul>
     </td>
@@ -629,6 +656,7 @@ console.log(data);
 ))}
              </table>
             </div>
+           
             {console.log("enaaaaaa" + showDetail)}
           </div>{" "}
           <div
@@ -722,12 +750,22 @@ console.log(data);
               type="text"
               value={questionOptions}
               onChange={(e) => setQuestionOptions(e.target.value)}
-            />
+            /> <p
+            id="options" style={{color: "white"}}
+            className={questionOptions && !validOptions ? "none" : "hide"}
+          >
+            Enter 3 options separated by a comma{" "}
+          </p>
             <input
               type="text"
               value={questionAnswer}
               onChange={(e) => setQuestionAnswer(e.target.value)}
-            />
+            /><p
+            id="answers" style={{color: "white"}}
+            className={questionAnswer && !validAnswer? "none" : "hide"}
+          >
+           the answer needs to be one of the options{" "}
+          </p>
             <button type="submit" onClick={(e) => handleAddQuestion(e)}>
               Add Question
             </button>
