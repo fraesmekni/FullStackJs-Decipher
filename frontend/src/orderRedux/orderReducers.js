@@ -7,8 +7,13 @@ import {
     ORDER_DETAILS_FAIL,ORDER_PAY_REQUEST,
     ORDER_PAY_FAIL,ORDER_PAY_SUCCESS,ORDER_PAY_RESET,
      GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAIL,ORDER_DELIVER_REQUEST, 
-    ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET, GET_ORDER_DASHBOARD_REQUEST, GET_ORDER_DASHBOARD_SUCCESS, GET_ORDER_DASHBOARD_FAIL
-} from './orderConstants.js'
+     ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET, GET_ORDER_DASHBOARD_REQUEST, GET_ORDER_DASHBOARD_SUCCESS, GET_ORDER_DASHBOARD_FAIL,
+     ORDER_APPROVE_REQUEST, 
+     ORDER_APPROVE_SUCCESS, 
+     ORDER_APPROVE_FAIL,
+      ORDER_UNAPPROVE_REQUEST,
+       ORDER_UNAPPROVE_SUCCESS, ORDER_UNAPPROVE_FAIL
+    } from './orderConstants.js'
 
 export const orderCreateReducer = (state= {}, action)=>{
     switch(action.type){
@@ -140,3 +145,30 @@ export const orderDetailsReducer = (
       return state
   }
 }
+
+
+
+export const orderApproveReducer  = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_APPROVE_REQUEST:
+      return { loading: true, orders: [] }
+    case ORDER_APPROVE_SUCCESS:
+      return { loading: false, orders: action.payload }
+    case ORDER_APPROVE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+export const orderUnApproveReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_UNAPPROVE_REQUEST:
+      return { loading: true };
+    case ORDER_UNAPPROVE_SUCCESS:
+      return { loading: false, success: true };
+    case ORDER_UNAPPROVE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};

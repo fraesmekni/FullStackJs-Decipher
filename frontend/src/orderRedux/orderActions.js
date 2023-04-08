@@ -12,7 +12,13 @@ import {
     GET_ORDER_REQUEST,
     GET_ORDER_SUCCESS,
     GET_ORDER_FAIL,ORDER_DELIVER_REQUEST, 
-    ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET
+    ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET,
+    ORDER_APPROVE_REQUEST,
+     ORDER_APPROVE_SUCCESS, 
+     ORDER_APPROVE_FAIL,
+     ORDER_UNAPPROVE_REQUEST, 
+     ORDER_UNAPPROVE_SUCCESS, 
+     ORDER_UNAPPROVE_FAIL
 } from './orderConstants.js'
 import { CART_REMOVE_ITEM } from '../cartredux/cartconstant'
 import axios from 'axios'
@@ -240,3 +246,65 @@ export const createOrder = (order) => async (dispatch, getState) => {
       });
     }
   };
+
+  
+export const approveOrder = (orderId) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_APPROVE_REQUEST })
+    const response = await fetch(      `http://localhost:5000/api/orders/approveOrder/${orderId}`,
+
+    {
+      method: 'PUT',
+      headers: {
+        accept: 'multipart/form-data',
+      }
+    })
+    const data = await response.json()
+    if (response.ok) {
+      dispatch({
+        type: ORDER_APPROVE_SUCCESS,
+        payload: data
+      })
+    } else {
+      dispatch({
+        type: ORDER_APPROVE_FAIL,
+        payload: data.message
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: ORDER_APPROVE_FAIL,
+      payload: error.message
+    })
+  }
+}
+export const UnapproveOrder = (orderId) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_UNAPPROVE_REQUEST })
+    const response = await fetch(      `http://localhost:5000/api/orders/NotapproveOrder/${orderId}`,
+
+    {
+      method: 'DELETE',
+      headers: {
+        accept: 'multipart/form-data',
+      }
+    })
+    const data = await response.json()
+    if (response.ok) {
+      dispatch({
+        type: ORDER_UNAPPROVE_SUCCESS,
+        payload: data
+      })
+    } else {
+      dispatch({
+        type: ORDER_UNAPPROVE_FAIL,
+        payload: data.message
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: ORDER_UNAPPROVE_FAIL,
+      payload: error.message
+    })
+  }
+}
