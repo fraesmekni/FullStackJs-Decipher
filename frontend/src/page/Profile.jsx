@@ -8,7 +8,7 @@ import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
-
+import backg from "./backg.jpg";
 import {listOrders} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
@@ -29,7 +29,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
 import { toast,ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import backg from "./olive.png";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";

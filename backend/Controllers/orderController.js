@@ -76,7 +76,19 @@ const getOrderById = asyncHandler(async (req, res) => {
   }
 })
 
+ const getProductsOrderByIdOrder = asyncHandler(async (req, res) => {
 
+    try {
+       const order = await Order.findById(req.params.id).populate('orderItems.product');
+       if (!order) {
+         return res.status(404).json({ message: 'Order not found' });
+       }
+       res.json(order.orderItems);
+     } catch (error) {
+       console.error(error.message);
+       res.status(500).json({ message: 'Server error' });
+     }
+   })
 
 
 const getProductUsersIdByOrderId = asyncHandler(async (req, res) => {
@@ -236,5 +248,6 @@ module.exports = {
   getProductUsersIdByUserId,
   OrderApprove
   ,
-  OrderNotApprove
+  OrderNotApprove,
+  getProductsOrderByIdOrder
 }
