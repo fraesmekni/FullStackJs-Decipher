@@ -109,48 +109,31 @@ res.status(201).json(userIds);
   
 
   const OrderApprove = asyncHandler(async (req, res) => {
-    const orderId = req.params.id;
-  
-    const order = await Order.findById(orderId);
-    console.log(order.statusOrder);
-    
-    if (!order) {
-      res.status(404);
-      throw new Error('Order not found');
-    }
-  
-    if (order.statusOrder == false) {
-      order.statusOrder = true;
-      await order.save();
-      res.json("Order Approved");
-      console.log("order is approved");
-    } else {
-      res.status(404);
-      throw new Error('Order not found');
-    }
+
+    const order = await Order.findById(req.params.id)
+
+  if (order) {
+    order.statusOrder = true
+    const updatedOrder = await order.save()
+    res.json(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
   });
   
   
   
   const OrderNotApprove = asyncHandler(async (req, res) => {
-    const orderId = req.params.id;
-  
-    const order = await Order.findById(orderId);
-    console.log(order.statusOrder);
-    
-    if (!order) {
-      res.status(404);
-      throw new Error('Order not found');
-    }
-  
-    if (order.statusOrder == true) {
-      order.statusOrder = false;
-      await order.save();
-      res.json("Order NOT Approved");
-      console.log("order is NOT approved");
+    const order = await Order.findById(req.params.id)
+
+    if (order) {
+        console.log('order to delete : ', order)
+       await order.remove();
+      res.json('Order removed succefully ' )
     } else {
-      res.status(404);
-      throw new Error('Order not found');
+      res.status(404)
+      throw new Error('Order not found')
     }
   });
   
