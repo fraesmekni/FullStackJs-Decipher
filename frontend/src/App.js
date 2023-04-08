@@ -3,6 +3,7 @@ import Login from './page/Login'
 import {BrowserRouter as Router,Route,Routes,useNavigate} from 'react-router-dom';
 import Register from './page/Register/register';
 import Dashboard from './page/Dashboard';
+import CoursesDasbord from './page/CoursesDasbord';
 import GetSponsor from './page/GetSponsor ';
 import ProductDashboard from './page/Product/ProductDashboard';
 import GetCoach from './page/GetCoach';
@@ -114,6 +115,7 @@ useEffect(()=>
     <Route path="/updatelessons/:id/:lessonId" element={<><div className='yo'><Navbarr /> <UpdateLesson/></div></> } /> 
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
+    <Route path="/coursedashboard" element={<CoursesDasbord/>} />
     <Route path="/shipping" element={<Shipping/>} />
     <Route path="/payment" element={<Payment/>} />
     <Route path="/PlaceOrder" element={<PlaceOrder/>} />
