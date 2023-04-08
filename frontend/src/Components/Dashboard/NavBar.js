@@ -127,6 +127,18 @@ function NavBar  ()  {
 
 </li>
 
+<li className="menu-item active">
+
+
+{pathname === `/lessondashboard/${id}` && (
+  <Link to={`/lessondashboard/${id}`} className="menu-link active">
+    <i className="menu-icon tf-icons bx bx-book-open"></i>
+    <div data-i18n="Analytics">Lesson</div>
+  </Link>
+)}
+
+</li>
+
 
         
     </ul>

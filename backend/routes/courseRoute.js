@@ -5,7 +5,7 @@ const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
   getLessonById,
   deleteLesson,
-  deleteLessonFromCourse} = require('../Controllers/courseController');
+  deleteLessonFromCourse,GetLessons} = require('../Controllers/courseController');
 
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
@@ -44,7 +44,8 @@ router.get('/search/:key',SearchCourse),
 router.get('/:id',getCourseById),
 router.get('/lesson/:id',getLessonById),
 router.get('/lesson/:courseId/:lessonId',getLessonById),
-router.get('/courseById/:userId',getCoursesById)
-router.get('/courseByIds/:id',getCoursesByIds)
+router.get('/courseById/:userId',getCoursesById),
+router.get('/courseByIds/:id',getCoursesByIds),
+router.get('/:id/lessons',GetLessons)
 
 module.exports = router

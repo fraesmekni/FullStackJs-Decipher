@@ -22,7 +22,6 @@ import { faSync } from '@fortawesome/free-solid-svg-icons'
   const [details,setDetails]= useState(true);
   const dispatch = useDispatch();
   const course = useSelector((state) => state.courseDisplay.courses);
-  const coursse = course.find((p) => p._id=== details);
 /*   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async (key) => {
@@ -65,10 +64,10 @@ const {userInfo} =userLogin
     setCurrentPage(selected);
   };
  
-/*  const detailRole=(role , id )=>{
-  let path =`/${role}/${id}`
+ const Lesson=( id )=>{
+  let path =`/lessondashboard/${id}`
         navigate(path)
- }; */
+ }; 
  
 
     return ( <>
@@ -120,7 +119,7 @@ const {userInfo} =userLogin
                         <th>Course Description</th>
                         <th>Email</th>
                         <th>Image</th>
-                        <th>Actions</th>
+                        <th>Lesson</th>
                       </tr>
                     </thead>
                     <div>
@@ -142,7 +141,16 @@ const {userInfo} =userLogin
                         <td>
                         <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.thumbnailCourse}`} alt="My Image" />
                         </td>
-                        
+                        <td>
+                            <lord-icon
+                                src="https://cdn.lordicon.com/qvbrkejx.json"
+                                trigger="morph"
+                                style={{ width:'50px' , height:'50px' }}
+                                onClick={() => Lesson( i._id)}
+
+                            />
+                          
+                        </td>
                         </tr>
                           )
                         })} 
