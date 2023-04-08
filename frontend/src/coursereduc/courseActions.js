@@ -108,41 +108,44 @@ export const addLesson = ({ titleLesson,
         }}
     
 
-      export const updateCourse = ({titleCourse,descriptionCourse,category,coach,thumbnailCourse,id}) => async (dispatch)=>{
+      export const updateCourse = ({ titleCourse, descriptionCourse, category, coach, thumbnailCourse, id }) => async (dispatch) => {
         try {
-              dispatch({
-                  type:UPDATE_COURSE_REQUEST
-              })
-              const config = {
-                  headers:{
-                      'Content-Type' : 'multipart/form-data'
-                  }
-              }
+          dispatch({
+            type: UPDATE_COURSE_REQUEST
+          })
       
-              const { data } = await axios.put(
-                `http://localhost:5000/course/updateCourse/${id}`,
-                  {titleCourse,descriptionCourse,category,coach,thumbnailCourse},
-                  config
-                );
+          const formData = new FormData()
+          formData.append('thumbnailCourse', thumbnailCourse)
+          formData.append('titleCourse', titleCourse)
+          formData.append('descriptionCourse', descriptionCourse)
+          formData.append('category', category)
+          formData.append('coach', coach)
       
-              dispatch({
-                  type : UPDATE_COURSE_SUCCESS,
-                  payload : data
-              })
-           
+          const config = {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
       
-             } catch(error){
-
-                dispatch({
-                    type: UPDATE_COURSE_FAIL,
-                    payload: error.response && error.response.data.message
-                        ? error.response.data.data.message
-                        : error.message
-                });
-            
-            console.log(error.response.data.message);
+          const { data: { updatedCourse } } = await axios.put(`http://localhost:5000/course/updateCourse/${id}`, formData, config)
+      
+          dispatch({
+            type: UPDATE_COURSE_SUCCESS,
+            payload: updatedCourse
+          })
+        } catch (error) {
+          dispatch({
+            type: UPDATE_COURSE_FAIL,
+            payload: error.response && error.response.data.message
+              ? error.response.data.data.message
+              : error.message
+          })
+      
+          console.log(error.response.data.message)
         }
       }
+      
+      
       
       export const updateLesson = ({id,lessonId,titleLesson, descriptionLesson,contentLesson,typeLesson}) => async (dispatch)=>{
         try {

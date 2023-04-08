@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -32,7 +33,7 @@ import backg from "./olive.png";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaChalkboard, FaChalkboardTeacher } from "react-icons/fa";
 
 const useStyles = makeStyles(styles);
@@ -201,9 +202,11 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                                     {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}
                                   </TableCell>
                                   <TableCell>
-                                    <Button variant="contained"  >
+                                    <Link to={`/order/${order._id}`}>
+                                    <Button variant="light"  >
                                       Details
                                     </Button>
+                                    </Link>
                                   </TableCell>
                                 </TableRow>
                               ))}

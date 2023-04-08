@@ -15,9 +15,9 @@ const orderSchema = new mongoose.Schema(
         price: { type: Number,  },
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          
           ref: 'Product',
-        },
+        }
+       
       },
     ],
     shippingAddress: {
@@ -25,6 +25,11 @@ const orderSchema = new mongoose.Schema(
       city: { type: String  },
       postalCode: { type: String  },
       country: { type: String  },
+    },
+    statusOrder : {
+      type: Boolean,
+      
+      default: false,
     },
     paymentMethod: {
       type: String,

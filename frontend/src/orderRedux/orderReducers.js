@@ -5,7 +5,9 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,ORDER_PAY_REQUEST,
-    ORDER_PAY_FAIL,ORDER_PAY_SUCCESS,ORDER_PAY_RESET, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAIL
+    ORDER_PAY_FAIL,ORDER_PAY_SUCCESS,ORDER_PAY_RESET,
+     GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAIL,ORDER_DELIVER_REQUEST, 
+    ORDER_DELIVER_SUCCESS,ORDER_DELIVER_FAIL,ORDER_DELIVER_RESET, GET_ORDER_DASHBOARD_REQUEST, GET_ORDER_DASHBOARD_SUCCESS, GET_ORDER_DASHBOARD_FAIL
 } from './orderConstants.js'
 
 export const orderCreateReducer = (state= {}, action)=>{
@@ -102,6 +104,39 @@ export const orderDetailsReducer = (
   }
 
   
+  export const orderDeliverReducer = (state = {}, action) => {
+    switch (action.type) {
+      case ORDER_DELIVER_REQUEST:
+        return {
+          loading: true,
+        }
+      case ORDER_DELIVER_SUCCESS:
+        return {
+          loading: false,
+          success: true,
+        }
+      case ORDER_DELIVER_FAIL:
+        return {
+          loading: false,
+          error: action.payload,
+        }
+      case ORDER_DELIVER_RESET:
+        return {}
+      default:
+        return state
+    }
+  }
   
   
-  
+ export const orderDashboardReducer  = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case GET_ORDER_DASHBOARD_REQUEST:
+      return { loading: true, orders: [] }
+    case GET_ORDER_DASHBOARD_SUCCESS:
+      return { loading: false, orders: action.payload }
+    case GET_ORDER_DASHBOARD_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}

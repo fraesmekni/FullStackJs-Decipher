@@ -3,6 +3,7 @@ import Login from './page/Login'
 import {BrowserRouter as Router,Route,Routes,useNavigate} from 'react-router-dom';
 import Register from './page/Register/register';
 import Dashboard from './page/Dashboard';
+import CoursesDasbord from './page/CoursesDasbord';
 import GetSponsor from './page/GetSponsor ';
 import ProductDashboard from './page/Product/ProductDashboard';
 import GetCoach from './page/GetCoach';
@@ -30,7 +31,8 @@ import PlaceOrder from './page/PlaceOrder/PlaceOrder';
 import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
 import UpdateProduct from './page/UpdateProduct/UpdateProduct';
-
+import ReactGA from 'react-ga';
+ReactGA.initialize('G-Y1V026ZHPY');
 
 
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
@@ -59,7 +61,10 @@ function App() {
 		getUser();
     console.log(getUser())
 	}, []);
-
+useEffect(()=>
+{
+  ReactGA.pageview(window.location.pathname + window.location.search);
+})
 
   return (
     <Suspense fallback={<Loader />}>
@@ -110,6 +115,7 @@ function App() {
     <Route path="/updatelessons/:id/:lessonId" element={<><div className='yo'><Navbarr /> <UpdateLesson/></div></> } /> 
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
+    <Route path="/coursedashboard" element={<CoursesDasbord/>} />
     <Route path="/shipping" element={<Shipping/>} />
     <Route path="/payment" element={<Payment/>} />
     <Route path="/PlaceOrder" element={<PlaceOrder/>} />

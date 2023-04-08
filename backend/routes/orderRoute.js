@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router()
-const {addOrderItems,getOrderById,updateOrderToPaid, getOrders} =require ('../Controllers/orderController.js')
-const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
+const {addOrderItems,getOrderById,updateOrderToPaid, getOrders,updateOrderToDelivered, 
+    getProductUsersIdByOrderId, getProductUsersIdByUserId,OrderApprove,OrderNotApprove} 
+    =require ('../Controllers/orderController.js')
+const { protectSimpleUser,validator,isAdmin,isCoach }= require('../Middelware/userMiddelware.js')
 
 
 router.post('/',protectSimpleUser,addOrderItems)
-router.get('/:id',protectSimpleUser,getOrderById)
+router.get('/:id',getOrderById)
 router.put('/:id/pay',protectSimpleUser,updateOrderToPaid)
 router.get('/getAll/:id',protectSimpleUser,getOrders)
+router.put('/approveOrder/:id',protectSimpleUser,OrderApprove)
+router.put('/NotapproveOrder/:id',protectSimpleUser,OrderNotApprove)
+router.get('/getOrderOwner/:id',getProductUsersIdByOrderId)
+router.get('/getOrderbyIdUser/:userId',getProductUsersIdByUserId)
+router.put('/:id/deliver',protectSimpleUser,isCoach,updateOrderToDelivered)
 
 module.exports = router

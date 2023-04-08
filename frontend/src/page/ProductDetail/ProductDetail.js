@@ -39,7 +39,7 @@ const successProductReview = productReviewCreate ? productReviewCreate.success :
     console.table(products)
     const product = products.find((p) => p._id === id);
 console.table(product);
-console.log(product.name);
+// console.log(product.name);
 const addtoCart=()=>{
 
   navigate(`/cart/${id}?qty=${qty}`)
