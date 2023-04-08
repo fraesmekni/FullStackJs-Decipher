@@ -3,9 +3,8 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,
-  deleteLesson,
-  deleteLessonFromCourse,GetLessons} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest} = require('../Controllers/courseController');
+
 
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
@@ -36,6 +35,7 @@ const router = express.Router()
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
 router.get('/getCourses',DisplayLesson),
 router.post('/createlesson',createLesson),
+router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
 router.delete('/deleteLesson/:courseId/:lessonId' ,deleteLessonFromCourse),
 router.put('/updateCourse/:id' ,upload.single('thumbnailCourse'),updateCourse),
@@ -47,5 +47,8 @@ router.get('/lesson/:courseId/:lessonId',getLessonById),
 router.get('/courseById/:userId',getCoursesById),
 router.get('/courseByIds/:id',getCoursesByIds),
 router.get('/:id/lessons',GetLessons)
+router.get('/getTest/:course',findTestByCourse),
+
+
 
 module.exports = router

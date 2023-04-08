@@ -9,8 +9,9 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 
-import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer } from '../coursereduc/courseReducers';
-import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer} from '../orderRedux/orderReducers';
+import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer } from '../coursereduc/courseReducers';
+import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
+orderApproveReducer,orderUnApproveReducer} from '../orderRedux/orderReducers';
 
 
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
@@ -34,12 +35,17 @@ const reducer = combineReducers({
        addCourse: addCourseReducer,
        courseDisplay: courseReducers,
        addLesson: addLessonReducer,
+       addTest: addTestReducer,
        orderCreate : orderCreateReducer,
        orderDetails :orderDetailsReducer,
        orderList :orderListReducer,
         orderdashboard :orderDashboardReducer,
        orderPay : orderPayReducer,
        orderDeliver : orderDeliverReducer,
+
+       orderApprove : orderApproveReducer,
+       orderUnApprove : orderUnApproveReducer,
+
 
        productUpdate : productUpdateReducer,
        courseDelete : courseDeleteReducer,

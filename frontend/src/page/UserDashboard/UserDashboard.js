@@ -5,7 +5,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
 import { productadd,deleteProduct } from "../../productredux/productaction";
-import {getOrderByIdAndUserId} from '../../orderRedux/orderActions';
+import {getOrderByIdAndUserId, approveOrder ,UnapproveOrder} from '../../orderRedux/orderActions';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Loader from "../../Components/Loader";
 import { useNavigate } from 'react-router-dom';
@@ -30,11 +30,25 @@ function UserDashboard(){
   const { loading : loadingList , error : errorList , orders } = orderList;
   
   const [page, setPage] = useState(0);
+  
+  const [pageApproved, setPageApproved] = useState(0);
+  const [pageUnapproved, setPageUnapproved] = useState(0);
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const productDelete = useSelector((state) => state.productDelete);
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete;
     const navigate = useNavigate();
+
+    const orderApprove = useSelector((state) => state.orderApprove);
+    const { loading: loadingOrderApprove, error: errorOrderApprove, success: successOrderApprove } = orderApprove;
+
+    const orderUnApprove = useSelector((state) => state.orderUnApprove);
+    const { loading: loadingOrderUnApprove, error: errorOrderUnApprove, success: successOrderUnApprove } = orderUnApprove;
+    
+    
+    const approvedOrders = orders.filter((order) => order.statusOrder);
+    const unapprovedOrders = orders.filter((order) => !order.statusOrder);
 
 
         const deleteHandler = (id) => {
@@ -49,6 +63,11 @@ function UserDashboard(){
           }, 1000); 
           console.log("after 1 second");// Refresh after 1 seconds (adjust the number as needed)
         };
+        const handleRefreshOrder = () => {
+          dispatch(ListOrder());
+          setPage(page => page); 
+        }
+
 
         const getProduct = async () => {
           try {
@@ -77,7 +96,16 @@ function UserDashboard(){
     const[user,setUser]=useState("");
     const dispatch = useDispatch();
 
- 
+    const handleApprove = (id) => {
+      dispatch(approveOrder(id));
+    };
+    
+  
+    const handleUnapprove = (id) => {
+      dispatch(UnapproveOrder(id));
+    };
+  
+
  const {
      loading: loadingUpdate,
      error: errorUpdate,
@@ -199,7 +227,8 @@ const submitHandlerj = (e) => {
                 onChange={(e) => setImageProduct(e.target.files[0])}></input> 
 <SpecialButton name="Create" onClick={submitHandlerj}  type="submit"/>
 
- </div>
+ 
+</div>
 {
  <div
             id="create"
@@ -212,10 +241,9 @@ const submitHandlerj = (e) => {
 
 
 
-              <h4 className="library_trending_title">Review Your Orders</h4>
             </div>
            
-                  <table style={{ marginTop : '40px'}}>
+                   <table style={{ marginTop : '40px'}}>
               {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
                   <tr key={order.id}>
@@ -243,27 +271,54 @@ const submitHandlerj = (e) => {
                       <p style={{color : 'black'}}> {order.statusOrder ? 'Approved' : 'Not approved'}</p>
                     </td>
                     <td>
-                    <DropdownButton title="Actions">
-                    <Dropdown.Item href="" >
-                            {order.statusOrder ? (
-                                <>
-                                    <i className="bx bx-check me-1"></i> Not Approved
-                                </>
-                            ) : (
-                                <>
-                                    <i className="bx bx-trash me-1"></i>Approve
-                                </>
-                            )}
-                        </Dropdown.Item>
-                    </DropdownButton>
+                    {order.statusOrder === false ? (
+                        <button onClick={() => {
+                          Swal.fire({
+                            title: 'Do you want to Approve this Order?',
+                            showDenyButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: 'Approve',
+                            denyButtonText: `Don't Approve`,
+                          }).then((result) => {
+                            if (result.isConfirmed ) {
+                              handleApprove(order._id);
+                              handleRefreshOrder();
+                              // listOrders();
+                              Swal.fire('Order Approved!', '', 'success');
+                            } else if (result.isDenied) {
+                              Swal.fire('Course is not Approved', '', 'info');
+                            }
+                          });
+                        }}>Approve</button>
+                      ) : (
+                        <button onClick={() => {
+                          Swal.fire({
+                            title: 'Do you want to Not Approve this Order?',
+                            showDenyButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: 'Not Approve',
+                            denyButtonText: `Cancel`,
+                          }).then((result) => {
+                            if (result.isConfirmed ) {
+                              handleUnapprove(order._id);
+                              handleRefreshOrder();
+                              Swal.fire('Order Not Approved!', '', 'success');
+                            } else if (result.isDenied) {
+                              Swal.fire('Cancelled', '', 'info');
+                            }
+                          });
+                        }}>Not Approve</button>
+                      )}
+
+                                
+
                     </td>
-                    {/* <td> add mark as deliver button</td> */}
                     
                   </tr>
                 )
               })}
-            </table>
-                           {  <TablePagination
+            </table> 
+                  {  <TablePagination
                 rowsPerPageOptions={[5, 10, 25]} 
                 component="div"
                 count={orders.length}
@@ -275,6 +330,146 @@ const submitHandlerj = (e) => {
                   setPage(0);
                 }}
               /> }
+
+{/* <div>
+<div className="library_album" >
+    <h3>Approved Orders </h3>
+    </div>
+    <TablePagination
+      rowsPerPageOptions={[5, 10, 25]} 
+      component="div"
+      count={approvedOrders.length}
+      rowsPerPage={rowsPerPage}
+      page={pageApproved}
+      onChangePage={(event, newPage) => setPageApproved(newPage)}
+      onChangeRowsPerPage={(event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPageApproved(0);
+      }}
+    />
+    <table>
+      {approvedOrders.slice(pageApproved * rowsPerPage, pageApproved * rowsPerPage + rowsPerPage).map((order, index) => {
+        return (
+          <tr key={order.id}>
+            <td>
+              <p>{index + 1}</p>
+            </td>
+            <td className="song"> 
+              <h4>DATE </h4>
+              <p>{order.createdAt.substring(0, 10)}</p>
+            </td>
+            <td style={{ marginRight : '50px'}}>
+              <h4 className="song"> TOTAL </h4>
+              <p style={{color : 'black'}}>${order.totalPrice.toFixed(2)}</p>
+            </td>
+            <td>
+              <h4  className="song"> PAID</h4>
+              <p style={{color : 'black'}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</p>
+            </td>
+            <td>
+              <h4 className="song">DELIVERED</h4>
+              <p style={{color : 'black'}}>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</p>
+            </td>
+            <td>
+              <h4 className="song">Status</h4>
+              <p style={{color : 'black'}}>Approved</p>
+            </td>
+            <td>
+              <button onClick={() => {
+                Swal.fire({
+                  title: 'Do you want to Not Approve this Order?',
+                  showDenyButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: 'Not Approve',
+                  denyButtonText: `Cancel`,
+                }).then((result) => {
+                  if (result.isConfirmed ) {
+                    handleUnapprove(order._id);
+                    handleRefreshOrder();
+                    Swal.fire('Order Not Approved!', '', 'success');
+                  } else if (result.isDenied) {
+                    Swal.fire('Cancelled', '', 'info');
+                  }
+                });
+              }}>Not Approve</button>
+            </td>
+          </tr>
+        );
+      })}
+    </table>
+  
+    
+    <hr style={{ border: "1px solid #ddd" }} />
+    
+    <div className="library_album" >
+    <h3>Unapproved Orders </h3>
+    </div>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]} 
+        component="div"
+        count={unapprovedOrders.length}
+        rowsPerPage={rowsPerPage}
+        page={pageUnapproved}
+        onChangePage={(event, newPage) => setPageUnapproved(newPage)}
+        onChangeRowsPerPage={(event) => {
+          setRowsPerPage(parseInt(event.target.value, 10));
+          setPageUnapproved(0);
+        }}
+      />
+    <table>
+      {unapprovedOrders.slice(pageUnapproved * rowsPerPage, pageUnapproved * rowsPerPage + rowsPerPage).map((order, index) => {
+        return (
+          <tr key={order.id}>
+            <td>
+              <p>{index + 1}</p>
+            </td>
+            <td className="song"> 
+              <h4>DATE </h4>
+              <p>{order.createdAt.substring(0, 10)}</p>
+            </td>
+            <td style={{ marginRight : '50px'}}>
+              <h4 className="song"> TOTAL </h4>
+              <p style={{color : 'black'}}>${order.totalPrice.toFixed(2)}</p>
+            </td>
+            <td>
+              <h4  className="song"> PAID</h4>
+              <p style={{color : 'black'}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</p>
+            </td>
+            <td>
+              <h4 className="song">DELIVERED</h4>
+              <p style={{color : 'black'}}>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</p>
+            </td>
+            <td>
+              <h4 className="song">Status</h4>
+              <p style={{color : 'black'}}>Not Approved</p>
+            </td>
+            <td>
+              <button onClick={() => {
+                Swal.fire({
+                  title: 'Do you want to  Approve this Order?',
+                  showDenyButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: ' Approve',
+                  denyButtonText: `Cancel`,
+                }).then((result) => {
+                  if (result.isConfirmed ) {
+                    handleApprove(order._id);
+                    handleRefreshOrder();
+                    Swal.fire('Order  Approved!', '', 'success');
+                  } else if (result.isDenied) {
+                    Swal.fire('Cancelled', '', 'info');
+                  }
+                });
+              }}> Approve</button>
+            </td>
+          </tr>
+        );
+      })}
+    </table>
+    
+  </div> */}
+                     
 
           </div>
 
