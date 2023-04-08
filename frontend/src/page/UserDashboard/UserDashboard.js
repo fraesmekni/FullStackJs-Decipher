@@ -241,7 +241,7 @@ const submitHandlerj = (e) => {
 
             </div>
            
-                  {/* <table style={{ marginTop : '40px'}}>
+                   <table style={{ marginTop : '40px'}}>
               {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
                   <tr key={order.id}>
@@ -327,9 +327,9 @@ const submitHandlerj = (e) => {
                   setRowsPerPage(parseInt(event.target.value, 10));
                   setPage(0);
                 }}
-              /> }*/}
+              /> }
 
-<div>
+{/* <div>
 <div className="library_album" >
     <h3>Approved Orders </h3>
     </div>
@@ -346,7 +346,6 @@ const submitHandlerj = (e) => {
       }}
     />
     <table>
-      {/* display approved orders */}
       {approvedOrders.slice(pageApproved * rowsPerPage, pageApproved * rowsPerPage + rowsPerPage).map((order, index) => {
         return (
           <tr key={order.id}>
@@ -417,7 +416,6 @@ const submitHandlerj = (e) => {
         }}
       />
     <table>
-      {/* display unapproved orders */}
       {unapprovedOrders.slice(pageUnapproved * rowsPerPage, pageUnapproved * rowsPerPage + rowsPerPage).map((order, index) => {
         return (
           <tr key={order.id}>
@@ -468,7 +466,7 @@ const submitHandlerj = (e) => {
       })}
     </table>
     
-  </div>
+  </div> */}
                      
 
           </div>

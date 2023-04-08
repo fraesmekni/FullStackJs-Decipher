@@ -110,7 +110,10 @@ const getProductUsersIdByUserId = asyncHandler(async (req, res) => {
 
 const OrderApprove = asyncHandler(async (req, res) => {
 
-  const order = await Order.findById(req.params.id)
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name email'
+  )
 
   if (order) {
     order.statusOrder = true

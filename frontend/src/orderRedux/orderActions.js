@@ -248,7 +248,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
   };
 
   
-export const approveOrder = (orderId) => async (dispatch) => {
+export const approveOrder = (orderId) => async (dispatch,getState) => {
   try {
     dispatch({ type: ORDER_APPROVE_REQUEST })
     const response = await fetch(      `http://localhost:5000/api/orders/approveOrder/${orderId}`,
@@ -259,6 +259,16 @@ export const approveOrder = (orderId) => async (dispatch) => {
         accept: 'multipart/form-data',
       }
     })
+    
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
     const data = await response.json()
     if (response.ok) {
       dispatch({
@@ -278,7 +288,7 @@ export const approveOrder = (orderId) => async (dispatch) => {
     })
   }
 }
-export const UnapproveOrder = (orderId) => async (dispatch) => {
+export const UnapproveOrder = (orderId) => async (dispatch,getState) => {
   try {
     dispatch({ type: ORDER_UNAPPROVE_REQUEST })
     const response = await fetch(      `http://localhost:5000/api/orders/NotapproveOrder/${orderId}`,
@@ -289,6 +299,15 @@ export const UnapproveOrder = (orderId) => async (dispatch) => {
         accept: 'multipart/form-data',
       }
     })
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
     const data = await response.json()
     if (response.ok) {
       dispatch({
