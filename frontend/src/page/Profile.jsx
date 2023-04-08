@@ -8,7 +8,7 @@ import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
-
+import backg from "./backg.jpg";
 import {listOrders} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
@@ -29,7 +29,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
 import { toast,ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import backg from "./olive.png";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
@@ -181,40 +180,48 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                       tabIcon: AssignmentIcon,
                       tabContent: (
                         <GridContainer justify="center">
-                           <h1>My Orders</h1>
-                          <Table style={{ borderCollapse: 'collapse' }}>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell style={{ padding: '8px', border: '1px solid #ddd' }} >DATE</TableCell>
-                                <TableCell>TOTAL</TableCell>
-                                <TableCell>PAID</TableCell>
-                                <TableCell>DELIVERED</TableCell>
-                                <TableCell></TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody style={{color:"#fff"}} >
-                            {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
-                                <TableRow key={order._id}>
-                                  <TableCell style={{color:"#fff"}}>{order.createdAt.substring(0, 10)}</TableCell>
-                                  <TableCell style={{color:"#fff"}}>${order.totalPrice.toFixed(2)}</TableCell>
-                                  <TableCell style={{color:"#fff"}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
-                                  <TableCell style={{color:"#fff"}}>
-                                    {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Link to={`/order/${order._id}`}>
-                                    <Button variant="light"  >
-                                      Details
-                                    </Button>
-                                    </Link>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                         
-                            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]} // optional: allow user to choose how many rows per page to display
+
+            <table style={{ marginTop : '40px'}}>
+              {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
+                return (
+                  <tr key={order.id}>
+                    <td>
+                      <p style={{  marginRight:'10px' , color:'white'}}>{index + 1}</p>
+                    </td>
+                    <td  style={{ marginRight: '500%'}}> 
+                      <h6 className="song" style={{marginRight:'10px' , color:'white'}}> DATE </h6>
+                      <p style={{color : 'black' , fontSize: 'smaller' , marginRight:'10px', color:'white'}}> {order.createdAt.substring(0, 10)}</p>
+                    </td>
+                    <td>
+                      <h6 className="song" style={{marginRight:'10px' , color:'white'}}> TOTAL </h6>
+                      <p style={{color : 'black' , fontSize: 'smaller' , marginRight:'10px', color:'white'}}>${order.totalPrice.toFixed(2)}</p>
+                    </td>
+                    <td>
+                      <h6 style={{marginRight:'10px', color:'white'}} > PAID</h6>
+                      <p style={{color : 'black' , fontSize: 'smaller', marginRight:'10px', color:'white'}}>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</p>
+                    </td>
+                    <td>
+                      <h6 className="song" style={{marginRight:'10px' , color:'white'}}>DELIVERED</h6>
+                      <p style={{color : 'black' , fontSize: 'smaller', marginRight:'10px' , color:'white'}}> {order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</p>
+                    </td>
+                    <td>
+                      <h6 className="song" style={{marginRight:'10px' , color:'white'}}>Status</h6>
+                      <p style={{color : 'black' , fontSize: 'smaller' , marginRight:'10px', color:'white'}}> {order.statusOrder ? 'Approved' : 'Not approved'}</p>
+                    </td>
+
+                        <td>
+                          <Button  style={{ fontSize: 'smaller' , marginLeft:'10px'}}  >
+                              Details
+                            </Button>     
+
+                    </td>
+                    
+                  </tr>
+                )
+              })}
+            </table> 
+                  {  <TablePagination
+                rowsPerPageOptions={[5, 10, 25]} 
                 component="div"
                 count={orders.length}
                 rowsPerPage={rowsPerPage}
@@ -224,7 +231,7 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                   setRowsPerPage(parseInt(event.target.value, 10));
                   setPage(0);
                 }}
-              />
+              /> }
                         </GridContainer>
                       )
                     },
