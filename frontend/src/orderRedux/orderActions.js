@@ -18,7 +18,10 @@ import {
      ORDER_APPROVE_FAIL,
      ORDER_UNAPPROVE_REQUEST, 
      ORDER_UNAPPROVE_SUCCESS, 
-     ORDER_UNAPPROVE_FAIL
+     ORDER_UNAPPROVE_FAIL,
+     PRODUCTS_ORDER_REQUEST,
+     PRODUCTS_ORDER_SUCCESS,
+     PRODUCTS_ORDER_FAIL
 } from './orderConstants.js'
 import { CART_REMOVE_ITEM } from '../cartredux/cartconstant'
 import axios from 'axios'
@@ -327,3 +330,25 @@ export const UnapproveOrder = (orderId) => async (dispatch,getState) => {
     })
   }
 }
+
+export const getProductsOrderItemsById = (orderId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCTS_ORDER_REQUEST,
+    });
+
+    const { data } = await axios.get(`http://localhost:5000/api/orders/ProductsOrderByIdOrder/${orderId}`);
+
+    dispatch({
+      type: PRODUCTS_ORDER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCTS_ORDER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }}

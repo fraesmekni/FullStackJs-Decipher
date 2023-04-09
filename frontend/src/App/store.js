@@ -9,9 +9,10 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 
-import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, addEnrollReducer, } from '../coursereduc/courseReducers';
+
+import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer } from '../coursereduc/courseReducers';
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
-orderApproveReducer,orderUnApproveReducer} from '../orderRedux/orderReducers';
+orderApproveReducer,orderUnApproveReducer,getProductsOrderItemsByIdReducer} from '../orderRedux/orderReducers';
 
 
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
@@ -46,7 +47,10 @@ const reducer = combineReducers({
        orderApprove : orderApproveReducer,
        orderUnApprove : orderUnApproveReducer,
 
+       ordersItemsProducts : getProductsOrderItemsByIdReducer,
 
+
+        testdelete:testDeleteReducer,
        productUpdate : productUpdateReducer,
        courseDelete : courseDeleteReducer,
        lessonDelete : lessonDeleteReducer,

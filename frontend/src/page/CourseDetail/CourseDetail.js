@@ -5,17 +5,22 @@ import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup} fro
 import { useDispatch , useSelector , } from "react-redux";
 import { getCourses } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
-
-
+import SpecialButton from '../../Components/Button/button';
+import confetti from "https://esm.run/canvas-confetti@1";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../../Components/Loader';
 const CourseDetail= () => {
-
   const userLogin = useSelector(state => state.userLogin)
-    const {userInfo } = userLogin
+  const {userInfo } = userLogin
   const navigate = useNavigate();
     const dispatch = useDispatch();
+
       const { id } = useParams();
       const [qty,setQty]= useState(1);
+      
       const [lessonIndex,setLessonIndex]=useState(0);
+
       const courses = useSelector((state) => state.courseDisplay.courses);
       console.log(courses);
       const [lessonCompletionStatus, setLessonCompletionStatus] = useState([]);
@@ -33,13 +38,17 @@ const CourseDetail= () => {
 
 
 
-      useEffect(() => {
-        dispatch(getCourses());
-      }, [dispatch ]);
-      console.log("ena el products" + Array.isArray(courses) );
-      const coursse = courses.find((p) => p._id === id);
-      console.log(id);
-  
+      const [test,setTest]= useState({});
+      const [validTest,setValidTest]= useState(false);
+      const [showLessons,setShowLessons]= useState(true);
+
+
+    useEffect(() => {
+      dispatch(getCourses());
+    }, [id]);
+      console.log("///////courses");
+      const coursse = courses && courses.find((p) => p._id === id);
+
         const [isExpanded, setIsExpanded] = useState(true);
       
         const toggleExpand = () => {
@@ -49,9 +58,64 @@ const CourseDetail= () => {
             alert('Please complete the previous lesson before accessing this one.');
           }
         };
-        console.log('///////////////////'+coursse);
-     
 
+        const gettest = async () => {
+          try {    if (!coursse) return; // check if coursse is null or undefined
+      
+            const response = await fetch(
+      
+              `http://localhost:5000/course/getTest/${coursse._id}`,
+              { method: "GET" }
+            );
+            const data = await response.json();
+            setTest(data);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+       
+          //test handeling 
+        const [selectedAnswers, setSelectedAnswers] = useState([]);
+
+        const handleOptionClick = (questionIndex, optionIndex) => {
+          const newSelectedAnswers = [...selectedAnswers];
+          newSelectedAnswers[questionIndex] = optionIndex;
+          setSelectedAnswers(newSelectedAnswers);
+        };
+      
+        const isAnswerCorrect = (questionIndex, optionIndex) => {
+          return test.existingTest.questions[questionIndex].answer ===
+            test.existingTest.questions[questionIndex].options[optionIndex];
+        };
+       
+        const submittedtest = () => {
+
+          const correctAnswersCount = selectedAnswers.reduce((count, answer, index) => {
+            if (isAnswerCorrect(index, answer)) {
+              return count + 1;
+            }
+            return count;
+          }, 0);
+          if (selectedAnswers.length > 0 && correctAnswersCount >= selectedAnswers.length / 2) {
+            console.log("confetti");
+            confetti({
+              particleCount: 200,
+              spread: 100
+            });
+            toast("Congrats for passing this course! Check your e-mail!");
+          } else {
+            toast.error("Oops... You can redo this test by reloading the page !", {
+              hideProgressBar: true});
+          }}
+        
+        useEffect(() => {
+          gettest();
+        }, [coursse]);
+
+        if (!courses || courses.length === 0) {
+          return <Loader/>;
+        }
+        
   return ( 
     
     <body style={{backgroundImage:`url(${backg})`,color:"white",height:"1900px"}}>
@@ -68,10 +132,11 @@ const CourseDetail= () => {
 
       {coursse ? (
      <>
-              
+                      < ToastContainer style={{marginRight: "400px"}}/>
+
     <Row >
         <Col md={8}>
-        {coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
+        { showLessons === true && coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
 <>
           <iframe
             width="100%"
@@ -85,9 +150,48 @@ const CourseDetail= () => {
             height:"410px",
             backdropFilter: "blur(60px)",
       }}className="lessons description-card">
-          <Card.Body >
+          <Card.Body > { test.existingTest && validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
+           Test </h4>
+           
+           
+           {test.existingTest && test.existingTest.questions.map((question,i) => (
+  <div key={question._id}>
+        <br />
+
+    <h5 style={{color:"white"}}>Question {i+1}: {question.text}</h5>
+    <div className="row">
+      {question.options.map((option, j) => (
+                <div key={j} className="col-sm-4 mb-3">
+                <Card
+                    onClick={() => handleOptionClick(i, j)}
+                    style={{
+                      border: "1px solid #000000",
+                       background:
+                        selectedAnswers[i] === j
+                          ? "rgb(173, 148, 111) "
+                          : "rgba(255, 255, 255, 0.58)",
+                      backdropFilter: "blur(60px)",
+                      height: "80px",
+                    }}
+                  >
+            <Card.Body >
+              <Card.Text>{option}</Card.Text>
+            </Card.Body>
+          </Card>
+
+        </div>
+      ))} 
+    </div>
+  </div> 
+))}             <SpecialButton name="Submit" onClick={() => {
+ submittedtest()
+}}> </SpecialButton>
+          
+            </Card.Text> }
+            { validTest===false && showLessons===true &&
             <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>{coursse.lessons[lessonIndex].titleLesson}</h4>
             {coursse.lessons[lessonIndex].contentLesson}         </Card.Text>
+}
           </Card.Body>
         </Card>)} </Col>
         <Col md={4}>
@@ -113,8 +217,14 @@ const CourseDetail= () => {
         background: "transparent",padding:"-20px"
       }}>
                         <div className="d-flex justify-content-between align-items-center">
+
                         {index === 0 ? (
-              <Link style={{ color: "white" }} onClick={() => setLessonIndex(index)}>Lesson {index + 1} 
+              <Link style={{ color: "white" }} onClick={() => {
+                setLessonIndex(index);
+                setShowLessons(true);
+                setValidTest(false);
+              
+              }}>Lesson {index + 1} 
 
 
                 </Link>
@@ -122,7 +232,12 @@ const CourseDetail= () => {
                         isLessonCompleted(index - 1) ? (
               <Link
                 style={{ color: "white", cursor: isLessonCompleted(index - 1) ? "pointer" : "not-allowed" }}
-                onClick={() => setLessonIndex(index)}
+                onClick={() => {
+                  setLessonIndex(index);
+                  setShowLessons(true);
+                  setValidTest(false);
+                
+                }}
               >
                 Lesson {index + 1} 
 
@@ -139,6 +254,12 @@ const CourseDetail= () => {
                 <span style={{ color: "#362824" }} className="text-muted">{lesson.typeLesson}</span>
               </div>
             }
+               
+                          <div>
+                            <i className="far fa-check-circle text-success mr-2"></i>
+                            <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
+                          </div>
+
                         </div>
                         
                       </ListGroup.Item>
@@ -152,7 +273,34 @@ const CourseDetail= () => {
                 </div>
                 
               ))}
-              
+
+              {test.existingTest &&
+              <div >
+                  <Card.Body  style={{
+        background: "transparent",
+      }}>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item style={{
+        background: "transparent",padding:"-20px"
+      }}>
+                        <div className="d-flex justify-content-between align-items-center">
+                        <Link style={{color: "white"}} onClick={() => {
+  setValidTest(true);
+  setShowLessons(false);
+}}>Test</Link>
+                          <div>
+                            <i className="far fa-check-circle text-success mr-2"></i>
+                            <span style={{color: "#362824"}}className="text-muted">Test</span>
+                          </div>
+                        </div>
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Card.Body>
+                </div> }
+
+
+
+
           </Card>
           {/* <Button variant="primary">Enroll Now</Button>  */}
           </Col>
@@ -190,6 +338,7 @@ const CourseDetail= () => {
                   </div>
                 </div>
               </ListGroup.Item>
+              
              </ListGroup> </div>
       <br />       <br />
 

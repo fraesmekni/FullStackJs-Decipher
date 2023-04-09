@@ -140,6 +140,17 @@ const deleteCourse = asynHandler(async (req, res) => {
 })
 
 
+const deleteTest = asynHandler(async (req, res) => {
+  const test = await Test.findById(req.params.id)
+  if (test) {
+    await test.remove()
+    res.json("Test removed")
+  } else {
+    res.status(404)
+    throw new Error('Test not found')
+  }
+})
+
 
 //delete lesson
 const deleteLessonFromCourse = async (req, res) => {
@@ -428,8 +439,5 @@ module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,
   deleteCourse,updateCourse,SearchCourse,getCourseById,
-
-  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment
-
-
+  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

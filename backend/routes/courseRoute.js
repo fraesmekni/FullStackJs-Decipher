@@ -3,7 +3,8 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest} = require('../Controllers/courseController');
+
 
 
 const path = require("path")
@@ -39,6 +40,7 @@ router.post('/createlesson',createLesson),
 router.post('/createnroll',createEnroll),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
+router.delete('/deleteTest/:id' ,deleteTest),
 router.delete('/deleteLesson/:courseId/:lessonId' ,deleteLessonFromCourse),
 router.put('/updateCourse/:id' ,upload.single('thumbnailCourse'),updateCourse),
 router.put('/updateLesson/:courseId/:lessonId' ,updateLesson),

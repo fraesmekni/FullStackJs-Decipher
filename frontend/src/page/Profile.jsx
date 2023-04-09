@@ -7,9 +7,8 @@ import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
-
-import {listOrders} from '../orderRedux/orderActions';
+import backg from "./backg.jpg";
+import {listOrders,getProductsOrderItemsById} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,12 +23,18 @@ import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import { Typography } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody ,TablePagination  } from '@material-ui/core';
+
 import styles from "../Components/styles/jss/nextjs-material-kit/pages/profilePage.js";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
 import { toast,ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import backg from "./olive.png";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
@@ -74,7 +79,16 @@ const dispatch = useDispatch();
 const orderList = useSelector((state) => state.orderList);
 const { loading : loadingList , error : errorList , orders } = orderList;
 
-  
+//details 
+
+const [openDialog, setOpenDialog] = React.useState(false);
+    const selectedOrderItems = useSelector((state) => state.ordersItemsProducts.productDetails);
+    const handleOpenDialog = (order) => {
+      dispatch(getProductsOrderItemsById(order._id));
+      setOpenDialog(true);
+    };
+//end details
+
     const [show,setShow]=useState(false)
    
     useEffect(() => {
@@ -211,16 +225,63 @@ const { loading : loadingList , error : errorList , orders } = orderList;
                     </td>
 
                         <td>
-                          <Button  style={{ fontSize: 'smaller' , marginLeft:'10px'}}  >
-                              Details
-                            </Button>     
+                        <Button style={{ fontSize: 'smaller', marginLeft:'10px' }} onClick={() => handleOpenDialog(order)}>
+                                    Details
+                                  </Button>
+ 
 
                     </td>
                     
                   </tr>
+                  
                 )
               })}
-            </table> 
+              </table>
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle style={{ backgroundColor: '#b3b3b3' ,fontWeight: 'bold', fontSize: '1.2rem', paddingBottom: '0.5rem' }}>
+            <Typography variant="h6" style={{ color: '#fff' }}>Order Items</Typography>
+                  </DialogTitle>
+
+  <DialogContent>
+  <Table>
+  <TableHead style={{  }}>
+    <TableRow>
+      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' }}> 
+      </TableCell>
+      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' ,backgroundColor: '#d9d9d9', color: '#fff'}}>
+        <Typography  style={{ color: '#fff' }}>Product Name</Typography>
+      </TableCell>
+      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' ,backgroundColor: '#d9d9d9', color: '#fff' }}>
+        <Typography  style={{ color: '#fff' }}>Category</Typography>
+      </TableCell>
+      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' ,backgroundColor: '#d9d9d9', color: '#fff' }}>
+        <Typography  style={{ color: '#fff' }}>Quantity</Typography>
+      </TableCell>
+    </TableRow>
+  </TableHead>
+
+  <TableBody>
+    {selectedOrderItems &&
+      selectedOrderItems.map((orderItem) => (
+        <TableRow key={orderItem._id}>
+          <TableCell>
+            <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${orderItem.imageProduct}`} alt="My Image" className="song_cover" />
+          </TableCell>
+          <TableCell>{orderItem.productName}</TableCell>
+          <TableCell>{orderItem.category}</TableCell>
+          <TableCell>{orderItem.qty}</TableCell>
+        </TableRow>
+      ))}
+  </TableBody>
+</Table>
+
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setOpenDialog(false)}>Close</Button>
+  </DialogActions>
+</Dialog>
+
+
                   {  <TablePagination
                 rowsPerPageOptions={[5, 10, 25]} 
                 component="div"
