@@ -127,7 +127,7 @@ const CourseDetail= () => {
             height:"410px",
             backdropFilter: "blur(60px)",
       }}className="lessons description-card">
-          <Card.Body > {validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
+          <Card.Body > { test.existingTest && validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
            Test </h4>
            
            
@@ -210,6 +210,7 @@ const CourseDetail= () => {
                   </Card.Body>
                 </div>
               ))}
+              {test.existingTest &&
               <div >
                   <Card.Body  style={{
         background: "transparent",
@@ -231,7 +232,7 @@ const CourseDetail= () => {
                       </ListGroup.Item>
                     </ListGroup>
                   </Card.Body>
-                </div>
+                </div> }
 
 
 

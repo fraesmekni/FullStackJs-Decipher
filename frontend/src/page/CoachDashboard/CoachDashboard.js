@@ -11,6 +11,7 @@ import {
   addTest,
   deleteCourse,
   deleteLesson,
+  deleteTest,
 } from "../../coursereduc/courseActions";
 import {
   ArrowWrapperLeft,
@@ -25,7 +26,8 @@ import {
 } from "../../coursereduc/courseConstants";
 import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function CoachDashboard() {
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
@@ -85,6 +87,10 @@ const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
 
   const deleteHandler = (id) => {
     dispatch(deleteCourse(id));
+  };
+
+  const TestdeleteHandler = (id) => {
+    dispatch(deleteTest(id));
   };
 
   //Lesson delete
@@ -636,7 +642,35 @@ console.log(data);
                   onClick={() => (
                     setShowTestAdd(true), setAdd(false), setShowDetail(false)
                   )}
-                /></h3>
+                />
+                 <lord-icon
+                            src="https://cdn.lordicon.com/jmkrnisz.json"
+                            trigger="hover"
+                            colors="primary:#ffffff"
+                            onClick={() => {
+                              Swal.fire({
+                                title: "Do you want to Delete this Test?",
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: "Yes",
+                                denyButtonText: `Cancel`,
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                 TestdeleteHandler(test.existingTest._id); // Pass i._id as an argument
+                                  handleRefresh();
+                                  Swal.fire("Test Deleted!", "", "success");
+                                } else if (result.isDenied) {
+                                  Swal.fire(
+                                    "Product is not Deleted",
+                                    "",
+                                    "info"
+                                  );
+                                }
+                              });
+                            }}
+                          ></lord-icon>
+                
+                </h3>
                              <table>
             {test.existingTest && test.existingTest.questions.map((question,i) => (
   <tr key={question._id}>
@@ -719,14 +753,14 @@ console.log(data);
             className={`create ${showTestAdd ? "show" : "hide"} ${
               showTestAdd ? "library_trending" : ""
             }`}
-          >
-            {error && <div className="alert">{error}</div>}
+          > <ToastContainer/>
+            {error && toast.error("There is already a test for this course")}
             {messageSuccess && (
-              <div className="alertgreen">{messageSuccess}</div>
+              toast.success("Test added!")
             )}
 
             {loading && <Loader />}
-            <h3 className="library_trending_title">Test </h3>
+            <h3 className="library_trending_title">Test </h3> 
             {questions &&
               questions.map((question, index) => (
                 <div key={index}>
@@ -743,11 +777,15 @@ console.log(data);
               ))}
             <input
               type="text"
+              placeholder="the question Exp: What is lye? "
+
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
             />
             <input
               type="text"
+              placeholder="Three options separated each by a comma "
+
               value={questionOptions}
               onChange={(e) => setQuestionOptions(e.target.value)}
             /> <p
@@ -759,6 +797,7 @@ console.log(data);
             <input
               type="text"
               value={questionAnswer}
+              placeholder="the answer  "
               onChange={(e) => setQuestionAnswer(e.target.value)}
             /><p
             id="answers" style={{color: "white"}}
