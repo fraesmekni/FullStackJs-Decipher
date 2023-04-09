@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment} = require('../Controllers/courseController');
 
 
 const path = require("path")
@@ -34,7 +34,9 @@ const router = express.Router()
   let upload = multer({ storage, fileFilter});
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
 router.get('/getCourses',DisplayLesson),
+router.get('/getEnroll',DisplayEnrollment),
 router.post('/createlesson',createLesson),
+router.post('/createnroll',createEnroll),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
 router.delete('/deleteLesson/:courseId/:lessonId' ,deleteLessonFromCourse),

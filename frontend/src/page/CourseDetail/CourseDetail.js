@@ -6,6 +6,7 @@ import { useDispatch , useSelector , } from "react-redux";
 import { getCourses } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
 
+
 const CourseDetail= () => {
 
   const userLogin = useSelector(state => state.userLogin)
@@ -17,6 +18,20 @@ const CourseDetail= () => {
       const [lessonIndex,setLessonIndex]=useState(0);
       const courses = useSelector((state) => state.courseDisplay.courses);
       console.log(courses);
+      const [lessonCompletionStatus, setLessonCompletionStatus] = useState([]);
+
+
+      const isLessonCompleted = (index) => {
+        return lessonCompletionStatus[index];
+      };
+      
+      const completeLesson = (index) => {
+        const newLessonCompletionStatus = [...lessonCompletionStatus];
+        newLessonCompletionStatus[index] = true;
+        setLessonCompletionStatus(newLessonCompletionStatus);
+      };
+
+
 
       useEffect(() => {
         dispatch(getCourses());
@@ -28,7 +43,11 @@ const CourseDetail= () => {
         const [isExpanded, setIsExpanded] = useState(true);
       
         const toggleExpand = () => {
-          setIsExpanded(!isExpanded);
+          if (lessonIndex === 0 || isLessonCompleted(lessonIndex - 1)) {
+            setIsExpanded(!isExpanded);
+          } else {
+            alert('Please complete the previous lesson before accessing this one.');
+          }
         };
         console.log('///////////////////'+coursse);
      
@@ -36,7 +55,7 @@ const CourseDetail= () => {
   return ( 
     
     <body style={{backgroundImage:`url(${backg})`,color:"white",height:"1900px"}}>
-     <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">{coursse.titleCourse}</h1>
+     <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">{coursse?.titleCourse}</h1>
             <p style={{color:"white"}} className="paragraph2">learn this amazing skill with us </p></div> 
             
     <Container style={{marginTop:"160px",
@@ -94,23 +113,53 @@ const CourseDetail= () => {
         background: "transparent",padding:"-20px"
       }}>
                         <div className="d-flex justify-content-between align-items-center">
-                        <Link style={{color: "white"}}onClick={() => setLessonIndex(index)}>Lesson {index+1} </Link>
-                          <div>
-                            <i className="far fa-check-circle text-success mr-2"></i>
-                            <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
-                          </div>
+                        {index === 0 ? (
+              <Link style={{ color: "white" }} onClick={() => setLessonIndex(index)}>Lesson {index + 1} 
+
+
+                </Link>
+            ) : (
+                        isLessonCompleted(index - 1) ? (
+              <Link
+                style={{ color: "white", cursor: isLessonCompleted(index - 1) ? "pointer" : "not-allowed" }}
+                onClick={() => setLessonIndex(index)}
+              >
+                Lesson {index + 1} 
+
+              </Link>
+            ) : (
+              <span style={{ color: "grey", cursor: "not-allowed" }}>
+                Lesson {index + 1}
+              </span>
+            )
+            )}      
+            {isLessonCompleted(index) &&
+              <div>
+                <i className="far fa-check-circle text-success mr-2"></i>
+                <span style={{ color: "#362824" }} className="text-muted">{lesson.typeLesson}</span>
+              </div>
+            }
                         </div>
+                        
                       </ListGroup.Item>
+                      {!isLessonCompleted(index) && (
+                      <Button onClick={() => completeLesson(index)}  style={{ fontSize: '12px', padding: '5px 10px' }} >Complete Lesson</Button>
+                      )}
                     </ListGroup>
+
                   </Card.Body>
+
                 </div>
+                
               ))}
+              
           </Card>
           {/* <Button variant="primary">Enroll Now</Button>  */}
           </Col>
         </Row>
           <br />
            <div className="mt-2">
+            
             <Row md={2}>
             {/* <Card className="description-card">
               <Card.Body>
@@ -119,7 +168,7 @@ const CourseDetail= () => {
              </Card.Text>
               </Card.Body>
             </Card> */}
-            
+
             </Row>
 
             <h4 className="mt-5" style={{color: "white"}}>What you'll learn</h4>

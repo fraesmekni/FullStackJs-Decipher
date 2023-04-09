@@ -1,8 +1,12 @@
 const Course = require('../models/course');
 const Lesson = require('../models/lesson');
-const Test = require('../models/test')
-const Question = require ('../models/test')
+const Test = require('../models/test');
+const Question = require ('../models/test');
+const Enrollment = require ('../models/enrollement.js');
+
 const asynHandler = require("express-async-handler")
+
+
 const createCourse= asynHandler(async (req, res) => {
     const {  
         titleCourse ,
@@ -376,13 +380,56 @@ const GetLessons = asynHandler(  async (req, res) => {
   }
 });
 
+const createEnroll = asynHandler( async (req, res) => {
+  try {
+    // Get the learner and course IDs from the request body
+    const { learner, course ,completionStatus} = req.body;
+
+    // Check if an enrollment document with the same learner and course IDs already exists in the database
+    const existingEnrollment = await Enrollment.findOne({ learner: learner , course: course });
+
+    if (existingEnrollment) {
+      // If an enrollment document already exists, return an error message to the client
+      return res.status(400).json({ error: 'Enrollment already exists' });
+    }
+
+    // Create a new Enrollment document with the learner and course IDs
+    const enrollment = new Enrollment({
+      learner: learner,
+      course: course,
+      completionStatus:completionStatus
+    });
+
+    // Save the new Enrollment document to the database
+    await enrollment.save();
+
+    // Return a success message to the client
+    res.status(201).json({ message: 'Enrollment created successfully' });
+  } catch (error) {
+    // Handle any errors that occur
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+const DisplayEnrollment= asynHandler(async(req,res)=>{
+       
+  const enrollmentes = await Enrollment.find( {});
+  if (!enrollmentes) {
+      res.Error(404)
+      throw new Error(" enrollmentes Not Found !!")
+  }
+  res.json(enrollmentes)
+
+})
+
 
 module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,
   deleteCourse,updateCourse,SearchCourse,getCourseById,
 
-  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest
+  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment
 
 
 }
