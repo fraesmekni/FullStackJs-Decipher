@@ -12,7 +12,8 @@ import {
      ORDER_APPROVE_SUCCESS, 
      ORDER_APPROVE_FAIL,
       ORDER_UNAPPROVE_REQUEST,
-       ORDER_UNAPPROVE_SUCCESS, ORDER_UNAPPROVE_FAIL
+       ORDER_UNAPPROVE_SUCCESS, ORDER_UNAPPROVE_FAIL,
+       PRODUCTS_ORDER_REQUEST,PRODUCTS_ORDER_SUCCESS,PRODUCTS_ORDER_FAIL
     } from './orderConstants.js'
 
 export const orderCreateReducer = (state= {}, action)=>{
@@ -167,6 +168,19 @@ export const orderUnApproveReducer = (state = {}, action) => {
     case ORDER_UNAPPROVE_SUCCESS:
       return { loading: false, success: true };
     case ORDER_UNAPPROVE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const getProductsOrderItemsByIdReducer = (state = { loading: true }, action) => {
+  switch (action.type) {
+    case PRODUCTS_ORDER_REQUEST:
+      return { loading: true };
+    case PRODUCTS_ORDER_SUCCESS:
+      return { loading: false, productDetails: action.payload };
+    case PRODUCTS_ORDER_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -38,5 +38,10 @@ export const DELETE_COURSE_FAIL = 'DELETE_COURSE_FAIL';
 export const DELETE_LESSON_SUCCESS = 'DELETE_LESSON_SUCCESS';
 export const DELETE_LESSON_REQUEST = 'DELETE_LESSON_REQUEST';
 export const DELETE_LESSON_FAIL = 'DELETE_LESSON_FAIL';
+//********************************************************** */
+export const ENROLL_ADD_REQUEST = 'ENROLL_ADD_REQUEST'
+export const ENROLL_ADD_SUCCESS = 'ENROLL_ADD_SUCCESS'
+export const ENROLL_ADD_FAIL = 'ENROLL_ADD_FAIL'
+
 
 

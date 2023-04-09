@@ -28,7 +28,7 @@ function Courses() {
             
  {Array.isArray(courses) && courses.map((c) => (
           
-          <Event course={c} key={c._id} >
+          <Event coursee={c} key={c._id} >
 
           </Event>
         ))}
