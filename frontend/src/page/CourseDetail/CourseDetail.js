@@ -68,6 +68,7 @@ const CourseDetail= () => {
         const submittedtest = () => {
 
           const correctAnswersCount = selectedAnswers.reduce((count, answer, index) => {
+
             if (isAnswerCorrect(index, answer)) {
               return count + 1;
             }
@@ -80,9 +81,13 @@ const CourseDetail= () => {
               spread: 100
             });
             toast("Congrats for passing this course! Check your e-mail!");
+            document.getElementById("testbutton").disabled = true;
+
           } else {
             toast.error("Oops... You can redo this test by reloading the page !", {
               hideProgressBar: true});
+                          document.getElementById("testbutton").disabled = true;
+
           }}
         
         useEffect(() => {
@@ -160,9 +165,9 @@ const CourseDetail= () => {
       ))} 
     </div>
   </div> 
-))}             <SpecialButton name="Submit" onClick={() => {
+))}             <button id="testbutton" name="Submit" onClick={() => {
  submittedtest()
-}}> </SpecialButton>
+}}> Submit</button>
           
             </Card.Text> }
             { validTest===false && showLessons===true &&
