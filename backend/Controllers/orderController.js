@@ -76,21 +76,6 @@ const getOrderById = asyncHandler(async (req, res) => {
   }
 })
 
- const getProductsOrderByIdOrder = asyncHandler(async (req, res) => {
-
-    try {
-       const order = await Order.findById(req.params.id).populate('orderItems.product');
-       if (!order) {
-         return res.status(404).json({ message: 'Order not found' });
-       }
-       res.json(order.orderItems);
-     } catch (error) {
-       console.error(error.message);
-       res.status(500).json({ message: 'Server error' });
-     }
-   })
-
-
 const getProductUsersIdByOrderId = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
     .populate({
@@ -239,7 +224,32 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   }
 })
 
+// orders in profile
+const getProductsOrderByIdOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate({
+    path: 'orderItems',
+    populate: {
+      path: 'product',
+      model: 'Product',
+      select: 'productName imageProduct countInStock category',
+    },
+  });
 
+  if (order) {
+    const productDetails = order.orderItems.map((item) => ({
+      productName: item.product.productName,
+      imageProduct: item.product.imageProduct,
+      countInStock: item.product.countInStock,
+      category: item.product.category,
+      qty: item.qty,
+    }));
+    res.json(productDetails);
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+ })
 
 module.exports = {
   addOrderItems, getOrderById, updateOrderToPaid,
