@@ -46,11 +46,14 @@ const registerUser = asynHandler( async ( req , res )=> {
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
+
     const test = generatorOTP()
 
-/*     const [otp, expirationStr] = test.split('|');
-     expiration = new Date(expirationStr);
- */
+
+    const otp = generatorOTP()
+     //expiration = new Date(expirationStr);
+
+
 
     //create user
 
@@ -122,26 +125,25 @@ const registerUser = asynHandler( async ( req , res )=> {
        <html>
          <head>
            <style>
-             /* Define your CSS styles here */
              h1 {
-               color: #FFFFFF; /* Set header text color to blue */
+               color: #FFFFFF; 
                text-align: center;
              }
              p {
-               color: #444444; /* Set paragraph text color to dark gray */
+               color: #444444;
                font-size: 16px;
                text-align: justify;
              }
              a {
-               color: #ffffff; /* Set link text color to white */
-               background-color: #AB7F42; /* Set link background color to the desired color */
+               color: #ffffff; 
+               background-color: #AB7F42; 
                padding: 12px 24px;
                display: inline-block;
                text-decoration: none;
                border-radius: 4px;
              }
              a:hover {
-               background-color: #007bff; /* Set link background color to darker blue on hover */
+               background-color: #007bff; 
              }
            </style>
          </head>
@@ -229,26 +231,14 @@ const  verifyEmail = asynHandler( async (req,res) => {
   // if false = email token is defined
   console.log("emailToken is undefined:", !emailToken);
 
-const user = await User.findOne({ emailToken });
+const user = await User.findOne({emailToken});
   if (!emailToken.trim()) {
     // email is incorrect
          console.log("Invalid emailToken :", emailToken);
          res.status(400);
          throw new Error("Invalid request");
 
-  } else if (expiration < Date.now()) {
-    if (user) {
-      user.emailToken= null;
-    
-      await user.save(); 
-    // OTP has expired
-        console.log(" the token is expired:", expiration);
-      res.status(400);
-      throw new Error("Invalid request");
-
-    }
   } else {
-    // OTP is valid
 
                 if (!user) {
                   res.status(404);
@@ -267,6 +257,7 @@ const user = await User.findOne({ emailToken });
                 if (user) {
                 user.emailToken= null;
                 user.verify=true;
+                console.log(user.email);
               
                 await user.save(); 
                     mailTransport().sendMail({
@@ -286,10 +277,12 @@ const user = await User.findOne({ emailToken });
                         </td>
                       `
                       
-                    });
+                    }); 
+                    
 
                  
-              
+                    res.json(user)
+
   }
   
 }
