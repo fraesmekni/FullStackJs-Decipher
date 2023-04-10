@@ -3,7 +3,7 @@ const Lesson = require('../models/lesson');
 const Test = require('../models/test');
 const Question = require ('../models/test');
 const Enrollment = require ('../models/enrollement.js');
-
+const User = require ('../Models/user.js');
 const asynHandler = require("express-async-handler")
 
 
@@ -413,7 +413,10 @@ const createEnroll = asynHandler( async (req, res) => {
 
     // Save the new Enrollment document to the database
     await enrollment.save();
-
+    await User.findByIdAndUpdate(
+      { _id: learner._id },
+      { enrollment: enrollment._id }
+    );
     // Return a success message to the client
     res.status(201).json({ message: 'Enrollment created successfully' });
   } catch (error) {
@@ -422,6 +425,25 @@ const createEnroll = asynHandler( async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+const updateCompletionStatus = async (req, res) => {
+  const { enrollment, status } = req.params;
+
+  try {
+    const theEnrollement = await Enrollment.findByIdAndUpdate(
+      enrollment,
+      { completionStatus: status },
+      { new: true }
+    );
+    res.json(theEnrollement);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 const DisplayEnrollment= asynHandler(async(req,res)=>{
        
@@ -433,11 +455,50 @@ const DisplayEnrollment= asynHandler(async(req,res)=>{
   res.json(enrollmentes)
 
 })
+const countEnroll = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+const countCompletedEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'Completed' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+const countinProgressEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'In progress' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 
-
+const countNotStartedEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'Not started' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 module.exports={
 
-  createCourse,createLesson,DisplayLesson,getCoursesByIds,
-  deleteCourse,updateCourse,SearchCourse,getCourseById,
+  createCourse,createLesson,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
+  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,
   getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

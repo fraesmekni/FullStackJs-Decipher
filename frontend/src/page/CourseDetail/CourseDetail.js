@@ -259,11 +259,6 @@ const CourseDetail= () => {
                 <span style={{ color: "#362824" }} className="text-muted">{lesson.typeLesson}</span>
               </div>
             }
-               
-                          <div>
-                            <i className="far fa-check-circle text-success mr-2"></i>
-                            <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
-                          </div>
 
                         </div>
                         

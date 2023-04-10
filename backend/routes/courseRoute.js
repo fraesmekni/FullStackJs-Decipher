@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments} = require('../Controllers/courseController');
 
 
 
@@ -52,6 +52,13 @@ router.get('/courseById/:userId',getCoursesById),
 router.get('/courseByIds/:id',getCoursesByIds),
 router.get('/:id/lessons',GetLessons)
 router.get('/getTest/:course',findTestByCourse),
+router.put('/updatestatus/:enrollment/:status',updateCompletionStatus)
+router.get('/countComp/:course',countCompletedEnrollments)
+router.get('/countNot/:course',countinProgressEnrollments)
+router.get('/countINP/:course',countNotStartedEnrollments)
+
+router.get('/countEnroll/:course',countEnroll),
+
 
 
 

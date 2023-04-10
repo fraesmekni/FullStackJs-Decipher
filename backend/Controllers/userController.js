@@ -305,6 +305,7 @@ const logIn = asynHandler( async (req,res)=>{
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
                 certified : user.certified,
+                enrollement : user.enrollment,
                 coach: coach,
                 sponsor: sponsor
             })
