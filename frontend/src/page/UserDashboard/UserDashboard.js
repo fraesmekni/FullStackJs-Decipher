@@ -241,7 +241,7 @@ const submitHandlerj = (e) => {
 
 
             </div>
-           
+            {orders && orders.length > 0 ? (
                    <table style={{ marginTop : '40px'}}>
               {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
@@ -317,6 +317,9 @@ const submitHandlerj = (e) => {
                 )
               })}
             </table> 
+            ) : (
+              <p>You have no orders.</p>
+            )}
                   {  <TablePagination
                 rowsPerPageOptions={[5, 10, 25]} 
                 component="div"
