@@ -48,9 +48,9 @@ const registerUser = asynHandler( async ( req , res )=> {
     const headPassword = await bcrypt.hash(password,salt)
     const test = generatorOTP()
 
-    const [otp, expirationStr] = test.split('|');
+/*     const [otp, expirationStr] = test.split('|');
      expiration = new Date(expirationStr);
-
+ */
 
     //create user
 

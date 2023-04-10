@@ -6,6 +6,8 @@ import { useDispatch,useSelector } from 'react-redux'
 import CheckoutSteps from '../../Components/CheckoutSteps/CheckoutSteps'
 import { createOrder } from '../../orderRedux/orderActions'
 import { useNavigate } from 'react-router-dom';
+import {  removeFromCart} from '../../cartredux/cartaction';
+
 
 
 const PlaceOrder = () => {
@@ -35,6 +37,23 @@ const PlaceOrder = () => {
       Number(cart.shippingPrice) +
       Number(cart.taxPrice)
     ).toFixed(2)
+
+    const updateItemStock = async (itemId, newCountInStock) => {
+      try {
+        const response = await fetch(`http://localhost:5000/product/updateStock/${itemId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ countInStock: newCountInStock })
+        });
+        const data = await response.json();
+    
+        return data;
+      } catch (error) {
+        throw error;
+      }
+    };
       
     const placeOrderHandler=()=>{
         dispatch(createOrder({
@@ -47,7 +66,17 @@ const PlaceOrder = () => {
           totalPrice : cart.totalPrice
         }
         ))
+
+        cart.cartItems.forEach((item) => {
+         
+          const newCountInStock = item.countInStock - item.qty;
+             updateItemStock(item.product, newCountInStock);
+             dispatch(removeFromCart(item.product));
+        });
+
+
       }
+     
   return (
     
     <>
@@ -89,6 +118,7 @@ const PlaceOrder = () => {
                         <Col>
                           <Link to={`/productDetail/${item.product}`}>
                             {item.productName}
+                            
                           </Link>
                         </Col>
                         <Col md={4}>
