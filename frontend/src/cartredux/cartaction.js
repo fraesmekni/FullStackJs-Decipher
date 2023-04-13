@@ -10,6 +10,8 @@ import { CART_ADD_ITEM, CART_SET_ITEMS, CART_REMOVE_ITEM,CART_SAVE_SHIPPING_ADDR
     if (existingItemIndex !== -1) {
       // If the item already exists in the cart, update the quantity of the item
       cartItems[existingItemIndex].qty = qty;
+      const { data: updatedProduct } = await axios.get(`http://localhost:5000/product/${cartItems[existingItemIndex].product}`);
+      cartItems[existingItemIndex].countInStock = updatedProduct.countInStock;
     } else {
       // If the item does not exist in the cart, add it to the cart
       cartItems.push({

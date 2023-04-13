@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {addEnroll} from "../../coursereduc/courseActions"
+import Swal from 'sweetalert2';
+
 
 
 
@@ -60,7 +62,24 @@ function Event({coursee}){
               <li><a href="#0"><i className="fa fa-user"></i> {coursee?.coach?.firstName}</a></li>
               <li><a href="#0"><i className="fa fa-facebook-square"></i> Share</a></li>
                    {userInfo && !isEnrolled && (
-                      <button onClick={() => handleEnroll()}>Enroll</button>
+                      <button 
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Are you sure you want to Enroll to this Course?',
+                          showDenyButton: true,
+                          showCancelButton: true,
+                          confirmButtonText: 'Enroll',
+                          denyButtonText: `Don't Enroll`,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            handleEnroll()
+                            Swal.fire('You are now Enrolled to this Course ', '', 'success');
+                          } else if (result.isDenied) {
+                            Swal.fire('Not Enrolled', '', 'info');
+                          }
+                        });
+                      }}
+                      >Enroll</button>
                     )}
             </ul>
           </div>

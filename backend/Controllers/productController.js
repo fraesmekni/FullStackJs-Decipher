@@ -1,6 +1,7 @@
 const asynHandler = require("express-async-handler")
 const Product = require('../Models/product.js')
 const path = require("path");
+const { mailTransport} = require('./utils/mail.js')
 
 const createProduct = asynHandler(async (req, res) => {
  
@@ -214,6 +215,115 @@ const createReview = asynHandler(async (req, res) => {
   }
 })
 
+const updateStock = asynHandler(async (req, res) => {
+  
+  const {
+    countInStock
+  } = req.body
+
+
+  const product = await Product.findById(req.params.id)
+
+  if (product) {
+
+    product.countInStock = countInStock
+
+
+    const updateStock = await product.save()
+
+   
+      if (updateStock.countInStock === 0 ) {
+         sendOutOfStockEmail(req, res);
+      };
+    
+    if (updateStock){
+      res.status(201).json({
+        _id: product.id,
+        productName: product.productName,
+        user : product.user,
+        price: product.price,
+        category: product.category,
+        countInStock: product.countInStock,
+        description: product.description,
+        imageProduct: product.imageProduct
+      })
+    }
+  } else {
+    res.status(404)
+    throw new Error('Product not found')
+  }
+})
+
+const sendOutOfStockEmail = asynHandler(async  (req, res) => {
+ 
+ const product = await Product.findById(req.params.id).populate('user');
+  mailTransport().sendMail({
+    from:"zainebhamdi2013@gmail.com",
+    to: product.user.email, 
+    subject: `Product out of stock: ${product.productName}`,
+    html: `
+    <html>
+      <head>
+        <style>
+          /* Define your CSS styles here */
+          h1 {
+            color: #FFFFFF; /* Set header text color to blue */
+            text-align: center;
+          }
+          p {
+            color: #444444; /* Set paragraph text color to dark gray */
+            font-size: 16px;
+            text-align: justify;
+          }
+          a {
+            color: #ffffff; /* Set link text color to white */
+            background-color: #AB7F42; /* Set link background color to the desired color */
+            padding: 12px 24px;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 4px;
+          }
+          a:hover {
+            background-color: #007bff; /* Set link background color to darker blue on hover */
+          }
+        </style>
+      </head>
+      <body>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center">
+              <img src="cid:logo" alt="Logo" style="max-width: 200px;">
+              <h3 style="color: #444444; font-size: 16px; text-align: justify;">Dear ${product.user.firstName},</p>
+              <p style="color: #444444; font-size: 16px; text-align: justify;">This Product: ${product.productName} is out of stock .</p>
+              <p style="color: #444444; font-size: 16px; text-align: justify;">Please check your shop and see last updates:</p>
+                  <div style="text-align: center;">
+                      <a href=""  style="color: #FFFFFF; background-color: #F8C471; padding: 12px 24px; display: inline-block; text-decoration: none; border-radius: 4px;">Check Your Shop</a>
+                  </div>
+              <p style="color: #444444; font-size: 16px; text-align: justify;">Thank you for choosing our services.</p>
+              <p style="color: #444444; font-size: 16px; text-align: justify;">Sincerely,</p>
+              <h3 style="color: #444444; font-size: 16px; text-align: justify;">The CARTHAGE CARES Team</p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `,
+  attachments: [{
+    filename: 'logo.png',
+    path: path.join(__dirname, '../../public/logo.png'),
+    cid: 'logo'
+  }]
+
+  });
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Email sent to ${product.user.email}: ${mailOptions.subject}`);
+  } catch (error) {
+    console.error(`Error sending email to ${product.user.email}: ${error}`);
+  }
+});
+
+
 
 module.exports = { 
    createProduct,
@@ -224,7 +334,9 @@ module.exports = {
    GetProductsById,
    getProductById,
    createReview,
-   getProductByIdProduct
+   getProductByIdProduct,
+   updateStock,
+   sendOutOfStockEmail
 
 }
   

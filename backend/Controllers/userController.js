@@ -46,8 +46,13 @@ const registerUser = asynHandler( async ( req , res )=> {
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
+
+    const test = generatorOTP()
+
+
     const otp = generatorOTP()
      //expiration = new Date(expirationStr);
+
 
 
     //create user

@@ -231,8 +231,8 @@ const CourseDetail= () => {
               
               }}>Lesson {index + 1} 
 
-
                 </Link>
+
             ) : (
                         isLessonCompleted(index - 1) ? (
               <Link
@@ -252,21 +252,35 @@ const CourseDetail= () => {
                 Lesson {index + 1}
               </span>
             )
-            )}      
+            )}  
+                 {!isLessonCompleted(index) && (
+                        <lord-icon
+                  src="https://cdn.lordicon.com/hrqqslfe.json"
+                  trigger="hover"
+                  colors="primary:#ffffff,secondary:#16c72e"
+                  scale="65"
+                  onClick={() => completeLesson(index)}
+                 >
+              </lord-icon>
+                )}   
             {isLessonCompleted(index) &&
               <div>
                 <i className="far fa-check-circle text-success mr-2"></i>
                 <span style={{ color: "#362824" }} className="text-muted">{lesson.typeLesson}</span>
               </div>
             }
+               
+                          <div>
+                            <i className="far fa-check-circle text-success mr-2"></i>
+                            <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
+                          </div>
 
                         </div>
-                        
+
                       </ListGroup.Item>
-                      {!isLessonCompleted(index) && (
-                      <Button onClick={() => completeLesson(index)}  style={{ fontSize: '12px', padding: '5px 10px' }} >Complete Lesson</Button>
-                      )}
+
                     </ListGroup>
+
 
                   </Card.Body>
 
