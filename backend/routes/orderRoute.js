@@ -10,7 +10,7 @@ const { protectSimpleUser,validator,isAdmin,isCoach }= require('../Middelware/us
 router.post('/',protectSimpleUser,addOrderItems)
 router.get('/:id',getOrderById)
 router.put('/:id/pay',protectSimpleUser,updateOrderToPaid)
-router.get('/getAll/:id',protectSimpleUser,getOrders)
+router.get('/getAll/:id',getOrders)
 router.put('/approveOrder/:id',OrderApprove)
 router.get('/ProductsOrderByIdOrder/:id',getProductsOrderByIdOrder)
 router.delete('/NotapproveOrder/:id',OrderNotApprove)

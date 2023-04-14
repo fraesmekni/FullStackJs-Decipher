@@ -283,18 +283,23 @@ const [openDialog, setOpenDialog] = React.useState(false);
 </Dialog>
 
 
-                  {  <TablePagination
-                rowsPerPageOptions={[5, 10, 25]} 
-                component="div"
-                count={orders.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={(event, newPage) => setPage(newPage)}
-                onChangeRowsPerPage={(event) => {
-                  setRowsPerPage(parseInt(event.target.value, 10));
-                  setPage(0);
-                }}
-              /> }
+              {orders && orders.length > 0 ? (
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]} 
+                  component="div"
+                  count={orders.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={(event, newPage) => setPage(newPage)}
+                  onChangeRowsPerPage={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                />
+              ) : (
+                <p>There are currently no orders to display.</p>
+              )}
+
                         </GridContainer>
                       )
                     },
