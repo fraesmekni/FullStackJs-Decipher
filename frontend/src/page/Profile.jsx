@@ -22,6 +22,7 @@ import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
+import WorkIcon from "@material-ui/icons/Work";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -338,7 +339,16 @@ const [openDialog, setOpenDialog] = React.useState(false);
                             />
                           </GridItem>
                         </GridContainer>
-                      )
+                      ),
+                    },
+                    {
+                      tabButton: "Projects",
+                      tabIcon: WorkIcon,
+                      tabContent: (
+                        <GridContainer justify="center">
+                         
+                        </GridContainer>
+                      ),
                     },
                     {
                       tabButton: "Favorite",

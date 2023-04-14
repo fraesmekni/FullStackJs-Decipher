@@ -38,9 +38,9 @@ const Login = (props) => {
         e.preventDefault()
 
         dispatch(login(email, password))
-
-         
         ;
+
+        navigate('/')
 
     }
     const isAdmin = userInfo?.role?.name === "adminRole";

@@ -32,6 +32,23 @@ import PlaceOrder from './page/PlaceOrder/PlaceOrder';
 import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
 import UpdateProduct from './page/UpdateProduct/UpdateProduct';
+
+import {client} from './apollo.js'
+import { ApolloProvider } from '@apollo/client';
+import Project from './Components/Project/Project';
+import Getallprojects from './Components/Project/Getallprojects';
+import Addproject from './Components/Project/Addproject';
+import Updateproject from './Components/Project/Updateproject';
+import Getallevents from './Components/Eve/Getallevents';
+import Event from './Components/Eve/Event';
+import Updateevent from './Components/Eve/Updateevent';
+import Addevent from './Components/Eve/Addevent';
+import Calendar from './Components/FullCalendar/Calendar';
+
+import Video from './page/Video/Video'
+import HomePage from './page/Video/HomePage'
+
+
 import ReactGA from 'react-ga';
 ReactGA.initialize('G-Y1V026ZHPY');
 
@@ -68,6 +85,7 @@ useEffect(()=>
 })
 
   return (
+    <ApolloProvider client={client}>
     <Suspense fallback={<Loader />}>
     <Router>
     {isAdmin ? (
@@ -125,11 +143,37 @@ useEffect(()=>
     <Route path="/updateProduct/:id" element={<><div className='yo'><Navbarr /> <UpdateProduct></UpdateProduct></div></> } /> 
    
 
+
+
+   
+    <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
+    <Route path="/projects" element={<>    <Navbarr /> <Getallprojects/>  </> } />
+    <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
+    <Route path="/updateproject/:id" element={<>   <Navbarr /> <Updateproject/>  </> } />
+
+
+
+    <Route path="/events" element={<>  <Navbarr />  <Getallevents/>  </> } />
+    <Route path="/event" element={<>   <Navbarr /> <Event/>  </> } />
+    <Route path="/addevent" element={<> <Navbarr />   <Addevent/>  </> } />
+    <Route path="/updateevent/:id" element={<> <Navbarr />   <Updateevent/>  </> } />
+
+		<Route path="/video/:url" element={<><Navbarr /> <Video /></>} />
+		<Route path="/meet" element={<><Navbarr /> <HomePage /></>} />
+
+
+    <Route path="/calendar" element={<>  <Navbarr />  <Calendar/>  </> } />
+
+
+
+
+
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>
     
     </Suspense>
+    </ApolloProvider>
     
   );
 }
