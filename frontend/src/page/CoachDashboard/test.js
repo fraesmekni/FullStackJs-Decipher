@@ -10,7 +10,7 @@ import {
 
 function TEST() {
   const [popularCourseData, setPopularCourseData] = useState([]);
-  const colorScale = ['#c43a31', '#ff9933', '#669999', '#666699', '#993366', '#663399'];
+  const colorScale = ["#8B5A2B", "#CD853F", "#A0522D", "#8B4513", "#D2691E", "#A5673F", "#6B4423", "#654321", "#D2B48C", "#DEB887"];
 
   useEffect(() => {
     axios.get('http://localhost:5000/course/getPopularCat')
@@ -26,7 +26,7 @@ function TEST() {
 
   return (
     <div>
-        <h3> Popular Course Categories</h3>
+        <h4 style={{color : "white"}}> Popular Course Categories</h4>
     {popularCourseData.length > 0 ? (
         
   <VictoryPie  animate={{
@@ -39,7 +39,7 @@ function TEST() {
   x="label"
   y="value"
   labelRadius={70}
-  height={400}
+  height={350}
 />
     ) : (
       <p>Loading...</p>

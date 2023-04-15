@@ -236,7 +236,9 @@ left:50%}
 .tabledetails{
   max-height:"100px"
 }
-
+.scroll{
+width: 100%;
+}
 .library_trending_coach_create {
   width: 1150px;
   height: auto;

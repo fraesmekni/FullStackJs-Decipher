@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CoursesChart from "./CoursesChart";
 function CoachDashboard() {
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
@@ -488,19 +489,9 @@ console.log(data);
               }`}
             >
             
-            <VictoryChart domainPadding={20}>
-    <VictoryAxis
-      tickFormat={category => category.substring(0, 10)}
-      style={{ tickLabels: { fontSize: 10, angle: -45 } }}
-    />
-    <VictoryAxis dependentAxis />
-    <VictoryBar
-      data={popularCourseData}
-      x="category" // Use a different property for the x-value
-      y="count"
-      style={{ data: { fill: "#c43a31" } }}
-    />
-  </VictoryChart>              <h3 className="library_trending_title">Your Courses</h3>
+                        <h3 className="library_trending_title">Your Statistics </h3>
+<div className="scroll"><CoursesChart /> </div>
+<h3 className="library_trending_title">Your Courses </h3>
 
               <table>
                 {course &&

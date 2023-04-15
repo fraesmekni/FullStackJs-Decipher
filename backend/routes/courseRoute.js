@@ -55,9 +55,9 @@ router.get('/courseByIds/:id',getCoursesByIds),
 router.get('/:id/lessons',GetLessons)
 router.get('/getTest/:course',findTestByCourse),
 router.put('/updatestatus/:enrollment/:status',updateCompletionStatus),
-router.get('/countComp/:course',countCompletedEnrollments),
-router.get('/countNot/:course',countinProgressEnrollments),
-router.get('/countINP/:course',countNotStartedEnrollments),
+router.get('/countCompletedEnrollments/:course',countCompletedEnrollments),
+router.get('/countInProgressEnrollments/:course',countinProgressEnrollments),
+router.get('/countNotStartedEnrollments/:course',countNotStartedEnrollments),
 router.get('/countEnroll/:course',countEnroll),
 
 
