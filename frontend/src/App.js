@@ -33,6 +33,7 @@ import Courses from './page/Courses/courses';
 import OrderScreen from './page/Order/order';
 import UpdateProduct from './page/UpdateProduct/UpdateProduct';
 import ReactGA from 'react-ga';
+import TEST from './page/CoachDashboard/test';
 ReactGA.initialize('G-Y1V026ZHPY');
 
 
@@ -117,6 +118,8 @@ useEffect(()=>
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/coursedashboard" element={<CoursesDasbord/>} />
+    <Route path="/test" element={<TEST/>} />
+
     <Route path="/lessondashboard/:id" element={<LessonDashboard/>} />
     <Route path="/shipping" element={<Shipping/>} />
     <Route path="/payment" element={<Payment/>} />

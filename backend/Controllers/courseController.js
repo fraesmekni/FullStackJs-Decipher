@@ -486,6 +486,33 @@ const countinProgressEnrollments = async (req, res) => {
   }
 };
 
+const popularCategory = async (req, res) => {
+  try {
+    const courses = await Course.find();
+    const categories = {};
+
+    courses.forEach((course) => {
+      if (!categories[course.category]) {
+        categories[course.category] = 1;
+      } else {
+        categories[course.category]++;
+      }
+    });
+
+    const categoryCount = Object.keys(categories).map((category) => ({
+      category: category,
+      count: categories[category],
+    }));
+
+    categoryCount.sort((a, b) => b.count - a.count);
+
+    res.status(200).json(categoryCount);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 const countNotStartedEnrollments = async (req, res) => {
   const { course } = req.params;
   try {
@@ -499,6 +526,6 @@ const countNotStartedEnrollments = async (req, res) => {
 module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
-  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,
+  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,
   getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

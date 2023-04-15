@@ -122,16 +122,18 @@ const [openDialog, setOpenDialog] = React.useState(false);
                     />
                   </div>
                   {userInfo.certified ? (
-  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="2x" />
-) : (  <FontAwesomeIcon style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="2x" />
+   <><FontAwesomeIcon className="iconn"style={{marginTop:"-300px",marginRight:"30px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="3x" />
+
+  </>
+
+) : (  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="3x" />
 )}
  { userInfo.role.name === "coach" ? 
-  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="2x" /> : 
+  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
 
-(  <FontAwesomeIcon style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="2x" />
+(  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="3x" />
 )}
 
-             
                   <div className={classes.name +"py-3"}>
                     <h3 style={{ color: "#FCFFE7"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
                      <h6 style={{ color: "#FCFFE7"}}> {userInfo.role.name}</h6> 

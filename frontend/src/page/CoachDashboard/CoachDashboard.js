@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch, useSelector } from "react-redux";
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
+
 import {
   addCourse,
   addLesson,
@@ -74,6 +76,7 @@ const [validOptions,setValidOptions]= useState(false);
 const [validAnswer,setValidAnswer]= useState(false);
 const ANSWER_REGEX = /^(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b(o[0-9]*\b|[a-zA-Z]+\b))[\s\S]*$/
 const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
+const [popularCourseData, setPopularCourseData] = useState([]);
 
 
 
@@ -117,6 +120,17 @@ const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
     setQuestionOptions("");
     setQuestionAnswer("");
   };
+  useEffect(() => {
+    axios.get('http://localhost:5000/course/getPopularCat')
+      .then(res => {
+        // Convert count property to numeric value
+        const data = res.data.map(item => ({ ...item, count: Number(item.count) }));
+        setPopularCourseData(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
   useEffect(() => {
     const result1 = OPTION_REGEX.test(questionOptions);
     if (questionOptions.includes(questionAnswer)) {
@@ -473,7 +487,20 @@ console.log(data);
                 showList ? "library_trending" : ""
               }`}
             >
-              <h3 className="library_trending_title">Your Courses</h3>
+            
+            <VictoryChart domainPadding={20}>
+    <VictoryAxis
+      tickFormat={category => category.substring(0, 10)}
+      style={{ tickLabels: { fontSize: 10, angle: -45 } }}
+    />
+    <VictoryAxis dependentAxis />
+    <VictoryBar
+      data={popularCourseData}
+      x="category" // Use a different property for the x-value
+      y="count"
+      style={{ data: { fill: "#c43a31" } }}
+    />
+  </VictoryChart>              <h3 className="library_trending_title">Your Courses</h3>
 
               <table>
                 {course &&

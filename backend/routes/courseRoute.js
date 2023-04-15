@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory} = require('../Controllers/courseController');
 
 
 
@@ -36,6 +36,8 @@ const router = express.Router()
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
 router.get('/getCourses',DisplayLesson),
 router.get('/getEnroll',DisplayEnrollment),
+router.get('/getPopularCat',popularCategory),
+
 router.post('/createlesson',createLesson),
 router.post('/createnroll',createEnroll),
 router.post('/createTest',createTest),
@@ -52,11 +54,10 @@ router.get('/courseById/:userId',getCoursesById),
 router.get('/courseByIds/:id',getCoursesByIds),
 router.get('/:id/lessons',GetLessons)
 router.get('/getTest/:course',findTestByCourse),
-router.put('/updatestatus/:enrollment/:status',updateCompletionStatus)
-router.get('/countComp/:course',countCompletedEnrollments)
-router.get('/countNot/:course',countinProgressEnrollments)
-router.get('/countINP/:course',countNotStartedEnrollments)
-
+router.put('/updatestatus/:enrollment/:status',updateCompletionStatus),
+router.get('/countComp/:course',countCompletedEnrollments),
+router.get('/countNot/:course',countinProgressEnrollments),
+router.get('/countINP/:course',countNotStartedEnrollments),
 router.get('/countEnroll/:course',countEnroll),
 
 

@@ -258,7 +258,6 @@ const CourseDetail= () => {
                   src="https://cdn.lordicon.com/hrqqslfe.json"
                   trigger="hover"
                   colors="primary:#ffffff,secondary:#16c72e"
-                  scale="65"
                   onClick={() => completeLesson(index)}
                  >
               </lord-icon>
@@ -270,10 +269,7 @@ const CourseDetail= () => {
               </div>
             }
                
-                          <div>
-                            <i className="far fa-check-circle text-success mr-2"></i>
-                            <span style={{color: "#362824"}}className="text-muted">{lesson.typeLesson}</span>
-                          </div>
+
 
                         </div>
 
