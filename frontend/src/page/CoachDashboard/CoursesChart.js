@@ -65,6 +65,7 @@ const CoursesChart = () => {
           labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
           colorScale: ["#EFDC8D", "#F0904B", "#EFBE49"],
           labelRadius: 10,
+       
         };
       }));
       setData(newData);
@@ -78,17 +79,22 @@ const CoursesChart = () => {
       {data.map((d, index) => {
         return (
           <div key={index}>
-                        <h4 style={{color: "white"}}>{d.x}</h4>
+                        <h4 style={{color: "white", marginBottom : "-30px"}}>{d.x}</h4>
 
-            <VictoryPie 
+            <VictoryPie  
               data={d.y.map((y, i) => ({ x: d.labels[i], y }))}
               colorScale={d.colorScale}
               labelRadius={d.labelRadius}
-              style={{ marginTop : "-400px",
-                labels: { fontSize: 7 ,color: "white"}
+              style={{ marginTop : "-500px",
+                labels: { fontSize: 12 ,color: "white"}
               }}
-              height={250}
-              width={250}
+              height={300}
+              width={300}  
+               animate={{
+                duration: 1000,
+                easing: "bounce",
+                onLoad: { duration: 500 }
+              }}
             /> 
           </div>
         );
