@@ -131,7 +131,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
  { userInfo.role.name === "coach" ? 
   <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
 
-(  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="3x" />
+( <></>
 )}
 
                   <div className={classes.name +"py-3"}>

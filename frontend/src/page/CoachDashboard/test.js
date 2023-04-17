@@ -37,7 +37,7 @@ function TEST() {
   data={popularCourseData}          colorScale={colorScale}
   animate={animation}
   style={{
-  labels: { fontSize: 10 ,color: "#fff"}
+  labels: { fontSize: 10 , fontWeight: "bold", fill: "white" }
 }}
   x="label"
   y="value"

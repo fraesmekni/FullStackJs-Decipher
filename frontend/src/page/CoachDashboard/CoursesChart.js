@@ -3,6 +3,7 @@ import axios from "axios";
 import { VictoryPie } from "victory";
 import { useDispatch, useSelector } from "react-redux";
 import TEST from "./test";
+import EnrollChart from "./MostEnrolled";
 
 const CoursesChart = () => {
   const [data, setData] = useState([]);
@@ -74,7 +75,7 @@ const CoursesChart = () => {
   }, [userInfo._id]);
 
   return (
-    <div style={{display:"flex"}}> <TEST></TEST>
+    <div style={{display:"flex"}}> <TEST></TEST> 
         {data ? (<>
       {data.map((d, index) => {
         return (
@@ -86,7 +87,7 @@ const CoursesChart = () => {
               colorScale={d.colorScale}
               labelRadius={d.labelRadius}
               style={{ marginTop : "-500px",
-                labels: { fontSize: 12 ,color: "white"}
+                labels: { fontSize: 12 , fontWeight: "bold", fill: "white" }
               }}
               height={300}
               width={300}  
