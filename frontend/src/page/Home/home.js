@@ -4,7 +4,7 @@ import Events from '../../Components/events/events';
 import Section1 from '../../Components/section1/section1';
 import Partenairec from '../../Components/partenairescarousel/partenairec';
 import Products from '../../Components/Products/products';
-import Crowdfunding from "../../Components/crowdfunding/crowdfunding";
+import Crowdfunding from "../../Components/crowdfunding/Crowdfunding";
 function Home(){
 
 
@@ -19,8 +19,8 @@ return(
 
      <Section1 />
      <Products/>
-     <div align="center">
-     <Crowdfunding /></div>
+     
+     <Crowdfunding />
 <br />
 
      <Partenairec />

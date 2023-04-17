@@ -22,6 +22,7 @@ import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
+import WorkIcon from "@material-ui/icons/Work";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -285,18 +286,23 @@ const [openDialog, setOpenDialog] = React.useState(false);
 </Dialog>
 
 
-                  {  <TablePagination
-                rowsPerPageOptions={[5, 10, 25]} 
-                component="div"
-                count={orders.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={(event, newPage) => setPage(newPage)}
-                onChangeRowsPerPage={(event) => {
-                  setRowsPerPage(parseInt(event.target.value, 10));
-                  setPage(0);
-                }}
-              /> }
+              {orders && orders.length > 0 ? (
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]} 
+                  component="div"
+                  count={orders.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={(event, newPage) => setPage(newPage)}
+                  onChangeRowsPerPage={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                />
+              ) : (
+                <p>There are currently no orders to display.</p>
+              )}
+
                         </GridContainer>
                       )
                     },
@@ -335,7 +341,16 @@ const [openDialog, setOpenDialog] = React.useState(false);
                             />
                           </GridItem>
                         </GridContainer>
-                      )
+                      ),
+                    },
+                    {
+                      tabButton: "Projects",
+                      tabIcon: WorkIcon,
+                      tabContent: (
+                        <GridContainer justify="center">
+                         
+                        </GridContainer>
+                      ),
                     },
                     {
                       tabButton: "Favorite",
