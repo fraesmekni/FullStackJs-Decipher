@@ -193,14 +193,6 @@ export const productadd = ({
         dispatch({
             type:PRODUCT_UPDATE_REQUEST
         })
-
-        const formData = new FormData()
-        formData.append('productName', productName)
-        formData.append('price', price)
-        formData.append('category', category)
-        formData.append('countInStock', countInStock)
-        formData.append('description', description)
-
         const config = {
             headers:{
                'Content-Type' : 'multipart/form-data'
