@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup} fro
 import { useDispatch , useSelector , } from "react-redux";
 import { getCourses } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
+import axios from 'axios'
 import SpecialButton from '../../Components/Button/button';
 import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,7 +19,7 @@ const CourseDetail= () => {
 
       const { id } = useParams();
       const [qty,setQty]= useState(1);
-      
+      const [enrollId,setEnrollId]= useState(userInfo.enrollement._id);
       const [lessonIndex,setLessonIndex]=useState(0);
 
       const courses = useSelector((state) => state.courseDisplay.courses);
@@ -46,7 +47,9 @@ const CourseDetail= () => {
     useEffect(() => {
       dispatch(getCourses());
     }, [id]);
-      console.log("///////courses");
+      console.log("///////enrollllllllllllllllll");
+      console.log(enrollId)
+
       const coursse = courses && courses.find((p) => p._id === id);
 
         const [isExpanded, setIsExpanded] = useState(true);
@@ -76,7 +79,25 @@ const CourseDetail= () => {
        
           //test handeling 
         const [selectedAnswers, setSelectedAnswers] = useState([]);
+const TestPassed=(enrollId) => {
+  axios.post(`http://localhost:5000/course/TestPassed/${enrollId}`)
+  .then(response => {
+    console.log(response.data); // log the updated enrollment object
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
 
+const TestFailed=(enrollId) => {
+  axios.post(`http://localhost:5000/course/TestFailed/${enrollId}`)
+  .then(response => {
+    console.log(response.data); // log the updated enrollment object
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
         const handleOptionClick = (questionIndex, optionIndex) => {
           const newSelectedAnswers = [...selectedAnswers];
           newSelectedAnswers[questionIndex] = optionIndex;
@@ -103,10 +124,13 @@ const CourseDetail= () => {
               particleCount: 200,
               spread: 100
             });
+            TestPassed(enrollId);
             toast("Congrats for passing this course! Check your e-mail!");
             document.getElementById("testbutton").disabled = true;
 
           } else {
+            TestFailed(enrollId);
+
             toast.error("Oops... You can redo this test by reloading the page !", {
               hideProgressBar: true});
                           document.getElementById("testbutton").disabled = true;

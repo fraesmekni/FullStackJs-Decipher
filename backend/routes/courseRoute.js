@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate} = require('../Controllers/courseController');
 
 
 
@@ -59,6 +59,9 @@ router.get('/countCompletedEnrollments/:course',countCompletedEnrollments),
 router.get('/countInProgressEnrollments/:course',countinProgressEnrollments),
 router.get('/countNotStartedEnrollments/:course',countNotStartedEnrollments),
 router.get('/countEnroll/:course',countEnroll),
+router.post('/TestPassed/:enrollid',setTestPassed),
+router.post('/TestFailed/:enrollid',setTestFailed),
+router.get('/SuccessRate/:courseId',calculateSuccessRate)
 
 
 

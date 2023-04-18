@@ -4,12 +4,18 @@ import { VictoryPie } from "victory";
 import { useDispatch, useSelector } from "react-redux";
 import TEST from "./test";
 import EnrollChart from "./MostEnrolled";
+import { useSpring, animated } from '@react-spring/web'
+import Loader from "../../Components/Loader";
 
 const CoursesChart = () => {
   const [data, setData] = useState([]);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
+  const props = useSpring({
+    from: { transform: 'translateY(-100%)' },
+    to: { transform: 'translateY(0%)' },
+    config: { tension: 200, friction: 20 },
+  });
   const getCourse = async () => {
     try {
       const response = await fetch(
@@ -75,6 +81,8 @@ const CoursesChart = () => {
   }, [userInfo._id]);
 
   return (
+    <animated.div style={props}>
+
     <div style={{display:"flex"}}> <TEST></TEST> 
         {data ? (<>
       {data.map((d, index) => {
@@ -99,9 +107,9 @@ const CoursesChart = () => {
             /> 
           </div>
         );
-      })} </> ):(<><p>statistics are loading </p> </>)}
+      })} </> ):(<><Loader /> </>)}
            
- </div>
+ </div> </animated.div>
   );
 };
 

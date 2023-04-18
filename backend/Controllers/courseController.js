@@ -50,10 +50,42 @@ findTestByCourse = asynHandler(async (req, res) => {
   return res.status(404).json({ error: 'Test not found' });
 });
 
+const setTestPassed = async (req, res) => {
+  const { enrollid } = req.params;
+  try {
+    const enrollment = await Enrollment.findByIdAndUpdate(enrollid, { test: 'Passed' });
+    res.json(enrollment); // send the updated enrollment as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  }
+};
 
 
+const  setTestFailed = async (req, res) => {
+  const { enrollid} = req.params;
+  try {
+    const enrollment = await Enrollment.findByIdAndUpdate(enrollid, { test: 'Failed' });
+    res.json(enrollment); // send the updated enrollment as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  }
+};
 
-
+const calculateSuccessRate = async (req, res) => {
+  const { courseId} = req.params;
+  try {
+    const enrollments = await Enrollment.find({ course: courseId });
+    const completedEnrollments = enrollments.filter(enrollment => enrollment.completionStatus === 'Completed');
+    const successRate = (completedEnrollments.length / enrollments.length) * 100;
+    return res.json(successRate);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  
+  }
+};
 
 const createTest= asynHandler(async (req, res) => {
   const {  
@@ -408,15 +440,18 @@ const createEnroll = asynHandler( async (req, res) => {
     const enrollment = new Enrollment({
       learner: learner,
       course: course,
-      completionStatus:completionStatus
+      completionStatus:completionStatus,
     });
 
     // Save the new Enrollment document to the database
     await enrollment.save();
-    await User.findByIdAndUpdate(
-      { _id: learner._id },
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: learner },
       { enrollment: enrollment._id }
-    );
+    ).populate('enrollment');
+    console.log(updatedUser);
+    console.log('User updated successfully.');
     // Return a success message to the client
     res.status(201).json({ message: 'Enrollment created successfully' });
   } catch (error) {
@@ -526,6 +561,6 @@ const countNotStartedEnrollments = async (req, res) => {
 module.exports={
 
   createCourse,createLesson,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
-  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,
-  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
+  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,
+  getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }
