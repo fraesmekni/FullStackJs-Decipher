@@ -49,6 +49,9 @@ function UserDashboard(){
     const orderApprove = useSelector((state) => state.orderApprove);
     const { loading: loadingOrderApprove, error: errorOrderApprove, success: successOrderApprove } = orderApprove;
 
+    const orderProducts = useSelector((state) => state.removeProductFromOrder);
+    const { loading: loadingOrderProduct, error: errorOrderProduct, success: successOrderProduct } = orderProducts;
+
 
 
         const deleteHandler = (id) => {
@@ -254,6 +257,12 @@ const submitHandlerj = (e) => {
 
 
             </div>
+            
+            {loadingOrderProduct && <div style={{backgroundColor: 'yellow', padding: '10px', borderRadius: '5px'}}>Loading...</div>}
+{errorOrderProduct && <div style={{backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px'}}> Oups something gets wrong </div>}
+{successOrderProduct && <div style={{backgroundColor: 'green', color: 'white', padding: '10px', borderRadius: '5px'}}>Product deleted successfully!</div>}
+
+          
             {orders && orders.length > 0 ? (
                    <table style={{ marginTop : '40px'}}>
               {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
