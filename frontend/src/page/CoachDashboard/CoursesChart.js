@@ -9,6 +9,10 @@ import Loader from "../../Components/Loader";
 
 const CoursesChart = () => {
   const [data, setData] = useState([]);
+  const [started, setStarted] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [completedd, setCompletedd] = useState(0);
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const props = useSpring({
@@ -61,32 +65,41 @@ const CoursesChart = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const courseData = await getCourse();
-      const newData = await Promise.all(courseData.map(async (course) => {
-        const notStarted = await countNotStartedEnrollments(course._id);
-        const inProgress = await countInProgressEnrollments(course._id);
-        const completed = await countCompletedEnrollments(course._id);
-        return {
-          x: course.titleCourse,
-          y: [notStarted, inProgress, completed],
-          labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
-          colorScale: ["#EFDC8D", "#F0904B", "#EFBE49"],
-          labelRadius: 10,
-       
-        };
-      }));
-      setData(newData);
+      try {
+        const courseData = await getCourse();
+        const newData = await Promise.all(courseData.map(async (course) => {
+          const notStarted = await countNotStartedEnrollments(course._id);
+          const inProgress = await countInProgressEnrollments(course._id);
+          const completed = await countCompletedEnrollments(course._id);
+          if (completed + inProgress + notStarted === 0) {
+            return { x: course.titleCourse, noData: true };
+          } else {
+            return { 
+              x: course.titleCourse,
+              y: [notStarted, inProgress, completed],
+              labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
+              colorScale: ["#EFDC8D", "#F0904B", "#EFBE49"],
+              labelRadius: 10,
+            };
+          }
+        }));
+        setData(newData.filter(d => !d.noData));
+      } catch (error) {
+        console.error(error);
+      }
     }
     fetchData();
   }, [userInfo._id]);
+  
 
   return (
     <animated.div style={props}>
 
     <div style={{display:"flex"}}> <TEST></TEST> 
+   
         {data ? (<>
-      {data.map((d, index) => {
-        return (
+      {data.map((d, index) => { 
+        return ( 
           <div key={index}>
                         <h4 style={{color: "white", marginBottom : "-30px"}}>{d.x}</h4>
 
@@ -106,11 +119,11 @@ const CoursesChart = () => {
               }}
             /> 
           </div>
-        );
+         );
       })} </> ):(<><Loader /> </>)}
-           
+    
  </div> </animated.div>
-  );
+ );
 };
 
 export default CoursesChart;
