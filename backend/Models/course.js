@@ -34,6 +34,14 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+    rating: {
+    type: Number,
+    default: 0,
+  },
+  numReviews: {
+    type: Number,
+    default: 0,
+  },
   reviews: [reviewSchema],
   lessons: [Lesson.schema]
 

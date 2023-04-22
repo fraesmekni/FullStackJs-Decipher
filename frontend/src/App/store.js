@@ -10,7 +10,7 @@ import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 
 
-import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer } from '../coursereduc/courseReducers';
+import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer,courseReviewReducer } from '../coursereduc/courseReducers';
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
 orderApproveReducer,getProductsOrderItemsByIdReducer, getDashboardProductsReducer, removeProductFromOrderReducer} from '../orderRedux/orderReducers';
 
@@ -57,6 +57,7 @@ const reducer = combineReducers({
        lessonDelete : lessonDeleteReducer,
 
        addEnroll :addEnrollReducer,
+       courseReview : courseReviewReducer
 
 
 

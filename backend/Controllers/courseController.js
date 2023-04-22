@@ -574,9 +574,46 @@ const countNotStartedEnrollments = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+//@Desc : If the user hasn't already reviewed the product, it creates a new review object with the user's name, rating, comment, and user id. It then pushes the new review into the reviews array of the product object, updates the numReviews field to reflect the new number of reviews, and calculates the new rating by taking the average of all the review ratings. 
+//Create Review 
+//@Route : POST /course/:id/reviews 
+//@Access : Private 
+const createCourseReview = asynHandler(async (req, res) => {
+  const {
+   rating , comment 
+  } = req.body
+
+  const course = await Course.findById(req.params.id) //It proceeds to find the product by its id using Product.findById()
+
+  if (course) {
+   const alreadyReviewed = course.reviews.find(r => r.user.toString() === req.user._id.toString())
+   if (alreadyReviewed){
+    res.status(400)
+    throw new Error ('Course Already Reviewed')
+   }
+   const review ={
+    name : req.user.firstName,
+    rating : Number(rating),
+    comment,
+    user : req.user._id
+   }
+     course.reviews.push(review)
+     course.numReviews = course.reviews.length 
+     course.rating =course.reviews.reduce((acc , item)=> item.rating + acc , 0 )/
+     course.reviews.length
+     await course.save()
+//   const updatedProduct = await product.save()
+    res.status(201).json({ message : "Review added"})
+  } else {
+    res.status(404)
+    throw new Error('Review not found')
+  }
+})
+
 module.exports={
 
   createCourse,createLesson,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
-  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,
+  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,createCourseReview,
   getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }
