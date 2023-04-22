@@ -46,6 +46,7 @@ const reducer = combineReducers({
 
        orderApprove : orderApproveReducer,
 
+   
        ordersItemsProducts : getProductsOrderItemsByIdReducer,
        orderProductDashboard : getDashboardProductsReducer,
        removeProductFromOrder: removeProductFromOrderReducer,

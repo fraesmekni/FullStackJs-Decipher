@@ -9,6 +9,7 @@ const order = require("../Models/order.js")
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
+
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
@@ -37,6 +38,15 @@ const addOrderItems = asyncHandler(async (req, res) => {
     })
 
     const createdOrder = await order.save()
+
+    // set a timeout for 2 minutes to delete the order if it's not approved
+    setTimeout(async () => {
+      const order = await Order.findById(createdOrder._id)
+      if (order && !order.statusOrder) {
+        await order.remove()
+        console.log(`Order ${order._id} deleted.`)
+      }
+    }, 2 * 60 * 1000)
 
     res.status(201).json(createdOrder)
   }
@@ -121,8 +131,6 @@ const OrderApprove = asyncHandler(async (req, res) => {
     throw new Error('Order not found')
   }
 });
-
-
 
 
 
@@ -258,7 +266,7 @@ if (order && user) {
   throw new Error('Order not found');
 }
 });
- 
+
 //remove product from order
 const removeProductFromOrder = asyncHandler(async (req, res) => {
   const { userId, orderId, productId } = req.params;
@@ -303,6 +311,6 @@ module.exports = {
   OrderApprove
   ,
   getProductsOrderByIdOrder,
-  removeProductFromOrder,
-  getProductsDashboard
+  getProductsDashboard,
+  removeProductFromOrder
 }

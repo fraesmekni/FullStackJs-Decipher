@@ -67,13 +67,10 @@ const handleOpenDialog = (id,order) => {
   setOpenDialog(true);
 };
 const deleteProductOrder = (id,order,product) => {
-  if (window.confirm('Are you sure you want to delete this product from the order?')) {
   dispatch(removeProductFromOrder(id, order,product));
-  handleRefreshOrder();
   console.log("id user :" , id);
   console.log("id order :" , order);
   console.log("id product :" , product);
-  }
 };
 //end details
 
@@ -347,9 +344,8 @@ const submitHandlerj = (e) => {
       <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' ,backgroundColor: '#d9d9d9', color: '#fff' }}>
         <Typography  style={{ color: '#fff' }}>Quantity</Typography>
       </TableCell>
-      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#d9d9d9', color: '#fff' }}>
-  <Typography style={{ color: '#fff' }}>Delete</Typography>
-</TableCell>
+      <TableCell>
+        </TableCell>
 
     </TableRow>
   </TableHead>
