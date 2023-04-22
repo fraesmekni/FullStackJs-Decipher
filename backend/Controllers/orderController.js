@@ -124,39 +124,6 @@ const OrderApprove = asyncHandler(async (req, res) => {
 
 
 
-const OrderNotApprove = asyncHandler(async (req, res) => {
-  // const order = await Order.findById(req.params.id)
-
-  // if (order) {
-  //   console.log('order to delete : ', order)
-  //   await order.remove();
-  //   res.json('Order removed succefully')
-  // } else {
-  //   res.status(404)
-  //   throw new Error('Order not found')
-  // }
-
-  try {
-    const order = await Order.findById(req.params.id)
-  if (order) {
-    console.log('order to delete : ', order)
-    await order.remove();
-    res.json({
-      success:true,
-      message:'Order removed succefully'
-    })
-  } else {
-    res.status(400)
-    throw new Error('Order not found')
-  }
-  } catch (error) {
-    res.send({
-      success:false,
-      message:error.message
-    })
-  }
-});
-
 
 
 
@@ -250,6 +217,83 @@ const getProductsOrderByIdOrder = asyncHandler(async (req, res) => {
   }
 
  })
+ 
+//order dashboard
+const getProductsDashboard = asyncHandler(async (req, res) => {
+  
+  const user = await User.findById(req.params.userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+ const order = await Order.findById(req.params.id).populate({
+  path: 'orderItems',
+  populate: {
+    path: 'product',
+    model: 'Product',
+    select: 'productName imageProduct countInStock category price id',
+    match: { user: req.params.userId }
+  },
+  match: { user: req.params.userId }
+});
+
+if (order && user) {
+  const filteredItems = order.orderItems.filter(item => item.product);
+    const productDetails = filteredItems.map(item => ({
+      productName: item.product.productName,
+      id: item.product.id,
+      imageProduct: item.product.imageProduct,
+      countInStock: item.product.countInStock,
+      category: item.product.category,
+      price: item.product.price,
+      qty: item.qty,
+      idOrder: order._id,
+    }));
+
+  res.json(productDetails);
+} else {
+  res.status(404);
+  throw new Error('Order not found');
+}
+});
+ 
+//remove product from order
+const removeProductFromOrder = asyncHandler(async (req, res) => {
+  const { userId, orderId, productId } = req.params;
+
+  // Find the user and order
+  const user = await User.findById(userId);
+  const order = await Order.findById(orderId);
+
+  // Check if the user and order exist
+  if (!user) {
+    res.status(404);
+    throw new Error('User  not found');
+  }
+  if (!order) {
+    res.status(404);
+    throw new Error('order not found');
+  }
+
+  // Remove the product from the order
+  if (order.orderItems && order.orderItems.length > 0) {
+    const index = order.orderItems.findIndex(item => item.product.toString() === productId);
+    if (index !== -1) {
+      order.orderItems.splice(index, 1);
+      await order.save();
+      res.status(200).json({ message: 'Product removed from order' });
+    } else {
+      res.status(404);
+      throw new Error('Product not found in order');
+    }
+  } else {
+    res.status(404);
+    throw new Error('No products found in order');
+  }
+});
+
 
 module.exports = {
   addOrderItems, getOrderById, updateOrderToPaid,
@@ -258,6 +302,7 @@ module.exports = {
   getProductUsersIdByUserId,
   OrderApprove
   ,
-  OrderNotApprove,
-  getProductsOrderByIdOrder
+  getProductsOrderByIdOrder,
+  removeProductFromOrder,
+  getProductsDashboard
 }

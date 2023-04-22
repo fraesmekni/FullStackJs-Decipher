@@ -24,14 +24,11 @@ const UpdateProduct = () => {
     const [imageProduct,setImageProduct]=useState("");
  const [successUpdateLink, setSuccessUpdateLink] = useState(false);
 
+
     const [showCreate, setShowCreate] = useState(false);
 
+
   const dispatch = useDispatch();
-  //const { productById } = useSelector((state) => state.productById);
-  //const {productInfo} =productById
-
-  
-
 const {
     loading: loadingUpdate,
     error: errorUpdate,
@@ -45,17 +42,20 @@ const handleBackClick = () => {
 const [prod, setPRod] = useState(null);
 useEffect(() => {
     axios.get(`http://localhost:5000/product/productByIdProduct/${id}`).then((response) => {
+      const { description, price, countInStock, imageProduct,productName ,category }= response.data;
+      setDescription(description);
+      setCategory(category);
+      setPrice(price);
+      setCountInStock(countInStock);
+      setProductName(productName);
+      setImageProduct(imageProduct);
     setPRod(response.data);
 });
 }, [id]);
-
 console.log(prod);
 
   const submitHandler=async(e)=>{
      e.preventDefault();
-
-
-
       dispatch(
         productUpdate(
          { id, 
@@ -143,7 +143,7 @@ if (successUpdateLink) {
           <input
           type="text"
           id="name"
-          defaultValue={prod?.productName}
+          value={productName}
           placeholder='Enter product name...'
                     onChange={(e) => setProductName(e.target.value)}
 
@@ -161,7 +161,7 @@ if (successUpdateLink) {
             <input
               type="text"
               id="category"
-              defaultValue={prod?.category}
+              value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder='Enter  product category...'
               style={{ padding: '1rem',marginLeft: '5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
@@ -180,7 +180,7 @@ if (successUpdateLink) {
             <textarea
               id="description"
               placeholder='Enter product description...'
-                  defaultValue={prod?.description}
+                  value={description}
               onChange={(e) => setDescription(e.target.value)}
               style={{ padding: '1rem',marginLeft: '3.7rem', borderRadius: '5px', border: '1px solid white', width: '500px',
               height: '100px', resize: 'none', marginBottom: '0.5rem', fontSize: '1rem', backgroundColor: 'transparent', }}
@@ -196,7 +196,7 @@ if (successUpdateLink) {
             <input
               type="number"
               id="countInStock"
-              defaultValue={prod?.countInStock}
+              value={countInStock}
               placeholder='Enter product sotck...'
               onChange={(e) => setCountInStock(e.target.value)}
               style={{ padding: '1rem',marginLeft: '7.2rem', borderRadius: '5px', backgroundColor: 'transparent',
@@ -214,7 +214,7 @@ if (successUpdateLink) {
             <input
               type="number"
               id="price"
-              defaultValue={prod?.price}
+              value={price}
               placeholder='Enter product price...'
               onChange={(e) => setPrice(e.target.value)}
               style={{ padding: '1rem',marginLeft: '7.5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
