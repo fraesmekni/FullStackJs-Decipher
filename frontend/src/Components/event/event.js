@@ -37,7 +37,14 @@ function Event({coursee}){
   }, [coursee, userInfo]);
 
   const imageClasses = ` ${isEnrolled ? "" : "card__image--disabled"}`;
+  // const updateEnrollement =async ()=>{
+  //   const response = await fetch(
 
+  //     `http://localhost:5000/course/getTest/${coursse._id}`,
+  //     { method: "GET" }
+  //   );
+  //   const data = await response.json();
+  // }
 
     return(<>
     

@@ -423,6 +423,22 @@ const GetLessons = asynHandler(  async (req, res) => {
   }
 });
 
+const updateEnrollforUser = asynHandler(async(req,res)=>
+{   try{
+    const enrollId = req.params.enrollId;
+    const userId = req.params.userId;
+    
+  const updatedUser = await User.findByIdAndUpdate(
+  { _id: userId },
+  { enrollment: enrollId }
+).populate('enrollment');
+res.json(updatedUser);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
 const createEnroll = asynHandler( async (req, res) => {
   try {
     // Get the learner and course IDs from the request body
@@ -560,7 +576,7 @@ const countNotStartedEnrollments = async (req, res) => {
 };
 module.exports={
 
-  createCourse,createLesson,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
+  createCourse,createLesson,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
   deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,
   getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser} = require('../Controllers/courseController');
 
 
 
@@ -37,9 +37,9 @@ const router = express.Router()
 router.get('/getCourses',DisplayLesson),
 router.get('/getEnroll',DisplayEnrollment),
 router.get('/getPopularCat',popularCategory),
-
 router.post('/createlesson',createLesson),
-router.post('/createnroll',createEnroll),
+
+router.put('/updateuserenroll/:enrollId/:userId',updateEnrollforUser),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
 router.delete('/deleteTest/:id' ,deleteTest),

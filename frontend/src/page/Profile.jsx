@@ -40,6 +40,7 @@ import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { FaChalkboard, FaChalkboardTeacher } from "react-icons/fa";
+import SpecialButton from "../Components/Button/button";
 
 const useStyles = makeStyles(styles);
 
@@ -191,16 +192,17 @@ const [openDialog, setOpenDialog] = React.useState(false);
                             />
                           </GridItem>
                         </GridContainer>
-                      )
-                    },
-                    {
+                      ) 
+                    }, 
+                    { 
                       tabButton: "Orders",
                       tabIcon: AssignmentIcon,
                       tabContent: (
                         <GridContainer justify="center">
 
             <table style={{ marginTop : '40px'}}>
-              {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
+              {orders ? (
+              orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
                   <tr key={order.id}>
                     <td>
@@ -238,7 +240,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
                   </tr>
                   
                 )
-              })}
+              }) ):(<><h1 style={{color:"white"}}>no orders yet</h1> <Link to="/shop"><SpecialButton name="shop with us "> Shop With Us</SpecialButton></Link></>)}
               </table>
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
             <DialogTitle style={{ backgroundColor: '#b3b3b3' ,fontWeight: 'bold', fontSize: '1.2rem', paddingBottom: '0.5rem' }}>
@@ -285,7 +287,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
 </Dialog>
 
 
-                  {  <TablePagination
+                  {  orders && <TablePagination
                 rowsPerPageOptions={[5, 10, 25]} 
                 component="div"
                 count={orders.length}
@@ -375,7 +377,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
                       )
                     }
                   ]}
-                />
+                /> 
                 <GridContainer justify="center">
                   {userInfo.role.name==="coach"  &&
                   <Button  onClick={handle}>add more Experiance</Button>
