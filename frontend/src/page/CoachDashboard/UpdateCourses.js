@@ -11,6 +11,9 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import "../../Components/Button/button.css"
+
 
 
 
@@ -30,6 +33,53 @@ function UpdateCourses(){
 
     const { id } = useParams();
     const [course, setCourse] = useState(null);
+
+
+// Validator
+
+const [ validTitleCourse, setValidTitleCourse] = useState(false); 
+const [ validDescriptionCourse, setValidDescriptionCourse] = useState(false); 
+const [ validCategory, setValidCategory] = useState(false); 
+const [validThumbnailCourse, setValidThumbnailCourse] = useState(false); 
+
+  //Controle de saisie 
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
+  const CAT_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const IMAGE_REGEX = /\.(png|jpeg|jpg)$/i;
+
+  /* use effects des controle de saisie */
+
+  useEffect(() => {
+    const result = NAME_REGEX.test(titleCourse);
+    console.log(result);
+    console.log(titleCourse);
+    setValidTitleCourse(result);
+  }, [titleCourse]);
+
+  useEffect(() => {
+    const result = DESC_REGEX.test(descriptionCourse);
+    console.log(result);
+    console.log(descriptionCourse);
+    setValidDescriptionCourse(result);
+  }, [descriptionCourse]);
+
+  useEffect(() => {
+    const result = CAT_REGEX.test(category);
+    console.log(result);
+    console.log(category);
+    setValidCategory(result);
+  }, [category]);
+
+  useEffect(() => {
+    const result = IMAGE_REGEX.test(thumbnailCourse);
+    console.log(result);
+    console.log(thumbnailCourse);
+    setValidThumbnailCourse(result);
+  }, [thumbnailCourse]);
+  
+
+
 useEffect(() => {
   axios.get(`http://localhost:5000/course/${id}`).then((response) => {
     const { titleCourse, descriptionCourse, category, thumbnailCourse } = response.data;
@@ -128,13 +178,73 @@ const coach=userInfo._id
          <>
  
  <h3 align="center" className="library_trending_title">Step 1 : Course description </h3>
+
+
 <input type="text" placeholder="Course name"  value={titleCourse}  onChange={(e) => setTitleCourse(e.target.value)}  ></input>
+
+<p
+                id="notename" 
+                className={!titleCourse || (titleCourse && !validTitleCourse) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
+                Course Name is at least 3 letters   and cannot contain special
+                characters or numbers
+                </Alert>
+            </p>
+           
+
+
  <input type="text" placeholder=" Category" value={category}  onChange={(e) => setCategory(e.target.value)} ></input>
+ <p
+                id="notename" 
+                className={!category || (category && !validCategory) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
+                Course Category is at least 3 letters   and cannot contain special
+                characters or numbers
+                </Alert>
+            </p>
                 
 <input type="text" placeholder="What is this course about?"  value={descriptionCourse}   onChange={(e) => setDescriptionCourse(e.target.value)}></input>
-                <input type="file"  name="thumbnailCourse" 
+<p
+                id="notename" 
+                className={!descriptionCourse || (descriptionCourse && !validDescriptionCourse) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '500px', height: '40px' }}>
+                Description is at least 3 letters 
+                </Alert>
+            </p>
+
+                <input type="file" accept=".png, .jpg, .jpeg"  name="thumbnailCourse" 
                 onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
-                <SpecialButton name="Update" onClick={submitHandler} type="submit"/> 
+
+<p
+                id="ima" 
+                className={thumbnailCourse && !validThumbnailCourse ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '650px', height: '40px' }}>
+                Enter Valid image type : png , jpg or jpeg{" "}
+                </Alert>
+            </p>
+            <div className="container1">
+            <button
+    onClick={submitHandler}
+    type="submit"
+    className="button"
+    style={{ borderRadius: '30%',     backgroundColor: !validTitleCourse || !validCategory || !validDescriptionCourse || !validThumbnailCourse
+    ? "grey"
+    : "initial" }}
+
+    disabled={!validTitleCourse || !validCategory || !validDescriptionCourse || !validThumbnailCourse }
+    >
+  <div className="button__line"></div>
+  <div className="button__line"></div>
+  <span className="button__text">  Update</span>
+  <div className="button__drow1"></div>
+  <div className="button__drow2"></div>
+  
+  </button>
+  </div>
                 </> 
 
                 
