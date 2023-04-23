@@ -11,7 +11,8 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-
+import Alert from 'react-bootstrap/Alert';
+import "../../Components/Button/button.css"
 
 
 function UpdateLesson(){
@@ -26,6 +27,47 @@ function UpdateLesson(){
     const [typeLesson, setTypeLesson] = useState(""); 
     /////////////////////
 
+// Validator
+
+const [ validTitleLesson, setValidTitleLesson] = useState(false); 
+const [ validDescriptionLesson, setValidDescriptionLesson] = useState(false); 
+const [ validContentLesson, setValidContentLesson] = useState(false); 
+const [validTypeLesson, setValidTypeLesson] = useState(false); 
+
+  //Controle de saisie 
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
+  const TYPE_REGEX = /^(lesson|video)$/;
+
+    /* use effects des controle de saisie */
+
+    useEffect(() => {
+      const result = NAME_REGEX.test(titleLesson);
+      console.log(result);
+      console.log(titleLesson);
+      setValidTitleLesson(result);
+    }, [titleLesson]);
+
+    useEffect(() => {
+      const result = DESC_REGEX.test(descriptionLesson);
+      console.log(result);
+      console.log(descriptionLesson);
+      setValidDescriptionLesson(result);
+    }, [descriptionLesson]);
+
+    useEffect(() => {
+      const result = NAME_REGEX.test(contentLesson);
+      console.log(result);
+      console.log(contentLesson);
+      setValidContentLesson(result);
+    }, [contentLesson]);
+
+    useEffect(() => {
+      const result = TYPE_REGEX.test(typeLesson);
+      console.log(result);
+      console.log(typeLesson);
+      setValidTypeLesson(result);
+    }, [typeLesson]);
 
     const { id, lessonId } = useParams();
     const [lesson, setLesson] = useState(null);
@@ -114,20 +156,79 @@ function UpdateLesson(){
   placeholder="Enter title here" name="titleLesson"
   value={titleLesson}
   onChange={(e) => setTitleLesson(e.target.value)} ></input>
+
+<p
+                id="notename" 
+                className={!titleLesson || (titleLesson && !validTitleLesson) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
+                Lesson Name is at least 3 letters   and cannot contain special
+                characters or numbers
+                </Alert>
+            </p>
+
 <input  type="text"
   placeholder="Enter type here" name="typeLesson"
   value={typeLesson}
-  onChange={(e) => setTypeLesson(e.target.value)}></input>                
+  onChange={(e) => setTypeLesson(e.target.value)}></input> 
+
+  <p
+                id="notename" 
+                className={!typeLesson || (typeLesson && !validTypeLesson) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '500px', height: '40px' }}>
+                U need To choose between lesson or video
+                </Alert>
+            </p>
+               
 <input   type="text"
   placeholder="Enter content here" name="contentLesson"
   value={contentLesson}
   onChange={(e) => setContentLesson(e.target.value)}></input>
+
+<p
+                id="notename" 
+                className={!contentLesson || (contentLesson && !validContentLesson) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
+                Lesson Content  is at least 3 letters   and cannot contain special
+                characters or numbers
+                </Alert>
+            </p>
 <input   type="text" name="descriptionLesson"
   placeholder="Enter description here"
   value={descriptionLesson}
   onChange={(e) => setDescriptionLesson(e.target.value)} ></input>
 
-                <SpecialButton name="Update" onClick={submitHandlerLesson} type="submit"/> 
+<p
+                id="notename" 
+                className={!descriptionLesson || (descriptionLesson && !validDescriptionLesson) ? "none" : "hide"}
+              >
+                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '500px', height: '40px' }}>
+                Description is at least 3 letters 
+                </Alert>
+            </p>
+
+                <div className="container1">
+            <button
+    onClick={submitHandlerLesson}
+    type="submit"
+    className="button"
+    style={{ borderRadius: '30%',     backgroundColor: !validTitleLesson || !validTypeLesson || !validDescriptionLesson || !validContentLesson
+    ? "grey"
+    : "initial" }}
+
+    disabled={!validTitleLesson || !validTypeLesson || !validDescriptionLesson || !validContentLesson }
+    >
+  <div className="button__line"></div>
+  <div className="button__line"></div>
+  <span className="button__text">  Update</span>
+  <div className="button__drow1"></div>
+  <div className="button__drow2"></div>
+  
+  </button>
+  </div>
+        
                 </>
                 
                
