@@ -10,9 +10,14 @@ import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../Components/Loader';
+import Certification from './Certification';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+
 const CourseDetail= () => {
   const userLogin = useSelector(state => state.userLogin)
   const {userInfo } = userLogin
+  const date = new Date().toLocaleDateString(); // get the current date as a string
+
   const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -120,6 +125,8 @@ const CourseDetail= () => {
         if (!courses || courses.length === 0) {
           return <Loader/>;
         }
+
+        console.log(coursse?.coach?.firstName);
         
   return ( 
     
@@ -258,7 +265,7 @@ const CourseDetail= () => {
                   src="https://cdn.lordicon.com/hrqqslfe.json"
                   trigger="hover"
                   colors="primary:#ffffff,secondary:#16c72e"
-                  scale="65"
+                  scale="40"
                   onClick={() => completeLesson(index)}
                  >
               </lord-icon>
@@ -329,6 +336,9 @@ const CourseDetail= () => {
             </Card> */}
 
             </Row>
+      <PDFDownloadLink document={<Certification name={userInfo.firstName } lastname={userInfo.lastName } paragraph={coursse.titleCourse}   date={date}   />} fileName="certificate.pdf">
+  {({ blob, url, loading, error }) => (loading ? 'Generating PDF...' : 'Your Certifcate')}
+</PDFDownloadLink>
 
             <h4 className="mt-5" style={{color: "white"}}>What you'll learn</h4>
             <ListGroup className="learning-list">
