@@ -18,6 +18,7 @@ function Event({coursee}){
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [EnrollmentId, setEnrollmentId]= useState(null);
     const dispatch = useDispatch();
 
   const handleEnroll = () => {
@@ -25,26 +26,57 @@ function Event({coursee}){
     setIsEnrolled(true);
     navigate(`/coursedetail/${coursee._id}`);
   };
+  // Update data here
 
   useEffect(() => {
     // fetch the enrollments data
     axios.get(`http://localhost:5000/course/getEnroll`)
       .then((response) => {
         setEnrollments(response.data);
+      
+        const foundEnrollment = response.data.find((enrollment) => enrollment.course === coursee._id && enrollment.learner === userInfo._id);
+        console.log("FOUND ")
+        console.log(foundEnrollment)
+        setEnrollmentId(foundEnrollment ? foundEnrollment._id : null);
+        console.log(foundEnrollment)
         setIsEnrolled(response.data.some((enrollment) => enrollment.course === coursee._id && enrollment.learner === userInfo._id));
       })
+     
       .catch((error) => console.log(error));
+   
   }, [coursee, userInfo]);
 
   const imageClasses = ` ${isEnrolled ? "" : "card__image--disabled"}`;
-  // const updateEnrollement =async ()=>{
-  //   const response = await fetch(
 
-  //     `http://localhost:5000/course/getTest/${coursse._id}`,
-  //     { method: "GET" }
-  //   );
-  //   const data = await response.json();
-  // }
+  
+  const updateEnrollement =async (EnrollmentId,USER) => {
+    axios.get(`http://localhost:5000/course/getEnroll`)
+    .then((response) => {
+      setEnrollments(response.data);
+    
+      const foundEnrollment = response.data.find((enrollment) => enrollment.course === coursee._id && enrollment.learner === userInfo._id);
+      console.log("FOUND ")
+      console.log(foundEnrollment)
+      setEnrollmentId(foundEnrollment ? foundEnrollment._id : null);
+      setIsEnrolled(response.data.some((enrollment) => enrollment.course === coursee._id && enrollment.learner === userInfo._id));
+      console.log(EnrollmentId)
+
+    })
+   
+    .catch((error) => console.log(error));
+    try {
+      
+      const response = await axios.put(`http://localhost:5000/course/updateuserenroll/${EnrollmentId}/${USER}`);
+      const data = response.data;
+      
+      console.log("UPDATEDDDDDDDDDD")
+      console.log(data);
+      return data;
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
     return(<>
     
@@ -52,7 +84,7 @@ function Event({coursee}){
           key={coursee._id}  className={imageClasses} >
 
     <div className="grid">
-    <div className="card">
+    <div className="card" onClick={()=>updateEnrollement(EnrollmentId,userInfo._id)}>
       <div className="card__image">
         <img src={`${process.env.PUBLIC_URL}/images/${coursee.thumbnailCourse}`} alt="">
 </img>
