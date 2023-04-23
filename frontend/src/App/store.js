@@ -14,12 +14,15 @@ import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, 
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
 orderApproveReducer,getProductsOrderItemsByIdReducer, getDashboardProductsReducer, removeProductFromOrderReducer} from '../orderRedux/orderReducers';
 
+import {commentproject,uncommentproject} from '../redux/reducer'
 
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 
 const reducer = combineReducers({
     //reducers
+    commentproject:commentproject,
+    uncommentproject:uncommentproject,
     userLogin : userLoginReducer,
     userRegister : userRegisterReducer,
     userDisplay : userReducers,

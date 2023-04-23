@@ -37,6 +37,7 @@ app.use('/api/user',require('./routes/userRoute.js'));
 app.use('/product',require('./routes/productRoute.js'));
 app.use('/course',require('./routes/courseRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
+app.use('/api/project', require('./routes/project.js'));
 app.use("/auth",authRoute) ;
 app.use('/api/orders', orderRoutes)
 app.get('/api/config/paypal' , (req ,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
