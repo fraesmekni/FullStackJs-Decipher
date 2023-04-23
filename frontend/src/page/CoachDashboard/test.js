@@ -19,7 +19,7 @@ function TEST() {
     config: { tension: 200, friction: 20 },
   });
   const [popularCourseData, setPopularCourseData] = useState([]);
-  const colorScale = ["#8B5A2B", "#CD853F", "#A0522D", "#8B4513", "#D2691E", "#A5673F", "#6B4423", "#654321", "#D2B48C", "#DEB887"];
+  const colorScale = ["#635139", "#bfbeb9", "#977d62", "#bc8e77", "#D2691E", "#A5673F", "#6B4423", "#654321", "#D2B48C", "#DEB887"];
   const animation = {
     duration: 2000,
     easing: 'bounce',
@@ -39,23 +39,24 @@ function TEST() {
   return (
     <animated.div style={props}>
 
-    <div>
-        <h4 style={{color : "white",marginBottom : "-50px"}}> Popular Course Categories</h4>
+   
+        <h4 style={{color : "white",marginBottom : "-300px"}}> Popular Course Categories</h4>
+        <div>
     {popularCourseData.length > 0 ? (
-        
+        <div>
   <VictoryPie  
   data={popularCourseData}          colorScale={colorScale}
   animate={animation}
   style={{
-  labels: { fontSize: 10 , fontWeight: "bold", fill: "white" }
+  labels: { fontSize: 3, fill: "white" }
 }}
   x="label"
   y="value"
-  labelRadius={40}
-  height={250}
-  width={250}  
+  labelRadius={14}
+  height={150}
+  width={150}  
 
-/>
+/> </div>
     ) : (
      <Loader />
     )}

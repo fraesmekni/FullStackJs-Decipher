@@ -1,129 +1,90 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { VictoryPie } from "victory";
-import { useDispatch, useSelector } from "react-redux";
-import TEST from "./test";
-import EnrollChart from "./MostEnrolled";
 import { useSpring, animated } from '@react-spring/web'
 import Loader from "../../Components/Loader";
+import AgeSectionPourcentage from "./AgeSection";
 
-const CoursesChart = () => {
-  const [data, setData] = useState([]);
-  const [started, setStarted] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [completedd, setCompletedd] = useState(0);
+const CoursesChart = ({ courseId }) => {
+  const [courseData, setCourseData] = useState(null);
+  const [notStarted, setNotStarted] = useState(0);
+  const [inProgress, setInProgress] = useState(0);
+  const [completed, setCompleted] = useState(0);
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
   const props = useSpring({
     from: { transform: 'translateY(-100%)' },
     to: { transform: 'translateY(0%)' },
     config: { tension: 200, friction: 20 },
   });
-  const getCourse = async () => {
+
+  const fetchCourseData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/course/courseById/${userInfo._id}`,
-        { method: "GET" }
-      );
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(error);
+      const res = await axios.get(`http://localhost:5000/course/courseById/${courseId}`);
+      setCourseData(res.data);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const countNotStartedEnrollments = async (courseId) => {
+  const fetchEnrollmentCounts = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/course/countNotStartedEnrollments/${courseId}`);
-      return res.data.count;
-    } catch (err) {
-      console.error(err);
-      return 0;
-    }
-  };
+      const notStartedRes = await axios.get(`http://localhost:5000/course/countNotStartedEnrollments/${courseId}`);
+      setNotStarted(notStartedRes.data.count);
 
-  const countInProgressEnrollments = async (courseId) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/course/countInProgressEnrollments/${courseId}`);
-      return res.data.count;
-    } catch (err) {
-      console.error(err);
-      return 0;
-    }
-  };
+      const inProgressRes = await axios.get(`http://localhost:5000/course/countInProgressEnrollments/${courseId}`);
+      setInProgress(inProgressRes.data.count);
 
-  const countCompletedEnrollments = async (courseId) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/course/countCompletedEnrollments/${courseId}`);
-      return res.data.count;
+      const completedRes = await axios.get(`http://localhost:5000/course/countCompletedEnrollments/${courseId}`);
+      setCompleted(completedRes.data.count);
     } catch (err) {
       console.error(err);
-      return 0;
     }
   };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const courseData = await getCourse();
-        const newData = await Promise.all(courseData.map(async (course) => {
-          const notStarted = await countNotStartedEnrollments(course._id);
-          const inProgress = await countInProgressEnrollments(course._id);
-          const completed = await countCompletedEnrollments(course._id);
-          if (completed + inProgress + notStarted === 0) {
-            return { x: course.titleCourse, noData: true };
-          } else {
-            return { 
-              x: course.titleCourse,
-              y: [notStarted, inProgress, completed],
-              labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
-              colorScale: ["#EFDC8D", "#F0904B", "#EFBE49"],
-              labelRadius: 10,
-            };
-          }
-        }));
-        setData(newData.filter(d => !d.noData));
-      } catch (error) {
-        console.error(error);
-      }
+    fetchCourseData();
+    fetchEnrollmentCounts();
+  }, [courseId]);
+
+  if (!courseData) {
+    return <Loader />;
+  }
+
+  const { titleCourse } = courseData;
+
+  const data = [
+    {
+      x: titleCourse,
+      y: [notStarted, inProgress, completed],
+      labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
+      colorScale: ["#635139", "#F0904B", "#EFBE49"],
+      labelRadius: 10,
     }
-    fetchData();
-  }, [userInfo._id]);
-  
+  ];
 
   return (
     <animated.div style={props}>
-
-    <div style={{display:"flex"}}> <TEST></TEST> 
-   
-        {data ? (<>
-      {data.map((d, index) => { 
-        return ( 
-          <div key={index}>
-                        <h4 style={{color: "white", marginBottom : "-30px"}}>{d.x}</h4>
-
-            <VictoryPie  
-              data={d.y.map((y, i) => ({ x: d.labels[i], y }))}
-              colorScale={d.colorScale}
-              labelRadius={d.labelRadius}
-              style={{ marginTop : "-500px",
-                labels: { fontSize: 12 , fontWeight: "bold", fill: "white" }
-              }}
-              height={300}
-              width={300}  
-               animate={{
-                duration: 1000,
-                easing: "bounce",
-                onLoad: { duration: 500 }
-              }}
-            /> 
-          </div>
-         );
-      })} </> ):(<><Loader /> </>)}
-    
- </div> </animated.div>
- );
+      <div style={{display:'flex',Left:'600px'}} ><AgeSectionPourcentage courseIdd={courseId} />
+      <div> <h3 style={{color:'white'}}> Completion rate </h3>
+        <h4 style={{ color: "white", marginBottom : "-30px" }}>{titleCourse}</h4>
+        <VictoryPie
+          data={data[0].y.map((y, i) => ({ x: data[0].labels[i], y }))}
+          colorScale={data[0].colorScale}
+          labelRadius={data[0].labelRadius}
+          style={{
+            labels: { fontSize: 60 , fontWeight: "bold", fill: "white" }
+          }}
+          height={1000}
+          width={1000}
+          animate={{
+            duration: 1000,
+            easing: "bounce",
+            onLoad: { duration: 500 }
+          }}
+        /> </div>
+      </div>
+    </animated.div>
+  );
 };
 
 export default CoursesChart;

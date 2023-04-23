@@ -32,6 +32,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CoursesChart from "./CoursesChart";
 import EnrollChart from "./MostEnrolled";
+import TEST from "./test";
+import AgeSectionPourcentage from "./AgeSection";
 function CoachDashboard() {
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
@@ -536,7 +538,7 @@ console.log(data);
             >
             
                         <h3 className="library_trending_title">Your Statistics </h3>
-<div className="scroll"> <CoursesChart /> </div> 
+<div className="scroll"> <TEST /> </div> 
 {/* <EnrollChart /> */}
 <h3 style={{marginTop:"-50px"}}className="library_trending_title">Your Courses </h3>
 
@@ -626,7 +628,8 @@ console.log(data);
               className={`create ${showDetail ? "show" : "hide"} ${
                 showDetail ? "library_trending" : ""
               }`}
-            >
+            > 
+            {coursse && <><h3 className="library_trending_title"> Course Statitics </h3><div style={{align:"center",width:"500px",marginLeft:"100px",display:"flex"}} > <div style={{display:"flex"}}>< CoursesChart courseId={coursse._id} /></div></div> </> }
               <h3 className="library_trending_title">
                 Lessons{" "}
                 <lord-icon
@@ -638,10 +641,12 @@ console.log(data);
                 
               </h3>
 
-              <table>
-                {coursse &&
-                  coursse.lessons.map((i, index) => {
+              <table> 
+                
+                {coursse  &&
+                  coursse.lessons.map((i, index) => { console.log(coursse._id)
                     return (
+
                       <tr key={i._id}>
                         <td>
                           <p>{index + 1}</p>
@@ -699,9 +704,9 @@ console.log(data);
                             }
                           />{" "}
                         </td>
-                      </tr>
+                      </tr>  
                     );
-                  })}
+                      })}
                    </table> 
                    <h3 className="library_trending_title">
                 The Test : Questions <lord-icon

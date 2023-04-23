@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser,createCourseReview} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser,createCourseReview, getAgePercentage} = require('../Controllers/courseController');
 
   const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
@@ -38,7 +38,6 @@ router.get('/getCourses',DisplayLesson),
 router.get('/getEnroll',DisplayEnrollment),
 router.get('/getPopularCat',popularCategory),
 router.post('/createlesson',createLesson),
-
 router.put('/updateuserenroll/:enrollId/:userId',updateEnrollforUser),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
@@ -63,7 +62,6 @@ router.post('/TestPassed/:enrollid',setTestPassed),
 router.post('/TestFailed/:enrollid',setTestFailed),
 router.get('/SuccessRate/:courseId',calculateSuccessRate),
 router.post('/:id/reviews' ,protectSimpleUser, createCourseReview)
-
-
-
+router.get('/getAgePourcentage/:courseId',getAgePercentage),
+getAgePercentage
 module.exports = router
