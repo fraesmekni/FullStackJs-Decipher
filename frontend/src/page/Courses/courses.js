@@ -8,6 +8,9 @@ import backg from "./backg.jpg";
 function Courses() {
     const dispatch = useDispatch();
     const courses = useSelector((state) => state.courseDisplay.courses);
+    const bestCourses = courses
+    ?.sort((a, b) => b.rating - a.rating)
+    ?.slice(0, 3);
   
     useEffect(() => {
       dispatch(getCourses());
@@ -22,9 +25,20 @@ function Courses() {
      console.log("after 1 second");// Refresh after 1 seconds (adjust the number as needed)
    };
   return (<body style={{backgroundImage:`url(${backg})`,height:"1900px"}}>
-    <div style={{marginTop:"100px"}}>        
-   <div><h1 className="SectionTitle">Courses</h1>
-            <p className="paragraph2">learn this amazing skill with us </p></div> 
+    <div style={{marginTop:"100px"}}>  
+
+    <div><h1 className="SectionTitle">Courses</h1>
+            <p className="paragraph2">Best Rating Courses </p></div> 
+            
+ {Array.isArray(bestCourses) && bestCourses.map((c) => (
+          
+          <Event coursee={c} key={c._id} >
+
+          </Event>
+        ))}
+          
+   <div><h1 className="SectionTitle" style={{ color : 'white'}}>Courses</h1>
+            <p className="paragraph2" style={{ color : 'white'}}>learn this amazing skill with us </p></div> 
             
  {Array.isArray(courses) && courses.map((c) => (
           

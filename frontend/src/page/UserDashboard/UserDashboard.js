@@ -49,6 +49,9 @@ function UserDashboard(){
     const orderApprove = useSelector((state) => state.orderApprove);
     const { loading: loadingOrderApprove, error: errorOrderApprove, success: successOrderApprove } = orderApprove;
 
+    const orderProducts = useSelector((state) => state.removeProductFromOrder);
+    const { loading: loadingOrderProduct, error: errorOrderProduct, success: successOrderProduct } = orderProducts;
+
 
 
         const deleteHandler = (id) => {
@@ -67,13 +70,10 @@ const handleOpenDialog = (id,order) => {
   setOpenDialog(true);
 };
 const deleteProductOrder = (id,order,product) => {
-  if (window.confirm('Are you sure you want to delete this product from the order?')) {
   dispatch(removeProductFromOrder(id, order,product));
-  handleRefreshOrder();
   console.log("id user :" , id);
   console.log("id order :" , order);
   console.log("id product :" , product);
-  }
 };
 //end details
 
@@ -257,6 +257,12 @@ const submitHandlerj = (e) => {
 
 
             </div>
+            
+            {loadingOrderProduct && <div style={{backgroundColor: 'yellow', padding: '10px', borderRadius: '5px'}}>Loading...</div>}
+{errorOrderProduct && <div style={{backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px'}}> Oups something gets wrong </div>}
+{successOrderProduct && <div style={{backgroundColor: 'green', color: 'white', padding: '10px', borderRadius: '5px'}}>Product deleted successfully!</div>}
+
+          
             {orders && orders.length > 0 ? (
                    <table style={{ marginTop : '40px'}}>
               {orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
@@ -347,9 +353,8 @@ const submitHandlerj = (e) => {
       <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold' ,backgroundColor: '#d9d9d9', color: '#fff' }}>
         <Typography  style={{ color: '#fff' }}>Quantity</Typography>
       </TableCell>
-      <TableCell style={{ fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#d9d9d9', color: '#fff' }}>
-  <Typography style={{ color: '#fff' }}>Delete</Typography>
-</TableCell>
+      <TableCell>
+        </TableCell>
 
     </TableRow>
   </TableHead>

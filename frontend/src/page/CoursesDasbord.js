@@ -142,13 +142,14 @@ const {userInfo} =userLogin
                         <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.thumbnailCourse}`} alt="My Image" />
                         </td>
                         <td>
-                            <lord-icon
-                                src="https://cdn.lordicon.com/qvbrkejx.json"
-                                trigger="morph"
-                                style={{ width:'50px' , height:'50px' }}
-                                onClick={() => Lesson( i._id)}
 
-                            />
+
+                                <lord-icon
+                                    src="https://cdn.lordicon.com/dxoycpzg.json"
+                                    trigger="morph"
+                                    style={{ width:'100px' , height:'100px' }}
+                                    onClick={() => Lesson( i._id)}>
+                                </lord-icon>
                           
                         </td>
                         </tr>

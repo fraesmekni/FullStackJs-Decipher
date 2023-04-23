@@ -11,16 +11,21 @@ import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../Components/Loader';
+
+import Certification from './Certification';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import Rating from '../../Components/Rating/Rating';
 const CourseDetail= () => {
   const userLogin = useSelector(state => state.userLogin)
   const {userInfo } = userLogin
+  const date = new Date().toLocaleDateString(); // get the current date as a string
+
   const navigate = useNavigate();
     const dispatch = useDispatch();
 
       const { id } = useParams();
       const [qty,setQty]= useState(1);
-      const [enrollId,setEnrollId]= useState(userInfo.enrollement._id);
+      const [enrollId,setEnrollId]= useState(userInfo.enrollement?._id);
       const [lessonIndex,setLessonIndex]=useState(0);
       //initialise state
       const [rating, setRating] = useState(0)
@@ -149,6 +154,8 @@ const TestFailed=(enrollId) => {
         if (!courses || courses.length === 0) {
           return <Loader/>;
         }
+
+        console.log(coursse?.coach?.firstName);
         
         const submitHandler = (e)=>{
           e.preventDefault()
@@ -296,6 +303,8 @@ const TestFailed=(enrollId) => {
                   src="https://cdn.lordicon.com/hrqqslfe.json"
                   trigger="hover"
                   colors="primary:#ffffff,secondary:#16c72e"
+
+                  scale="40"
                   onClick={() => completeLesson(index)}
                  >
               </lord-icon>
@@ -366,11 +375,17 @@ const TestFailed=(enrollId) => {
             </Card> */}
 
             </Row>
+
+      <PDFDownloadLink document={<Certification name={userInfo.firstName } lastname={userInfo.lastName } paragraph={coursse.titleCourse}   date={date}   />} fileName="certificate.pdf">
+  {({ blob, url, loading, error }) => (loading ? 'Generating PDF...' : 'Your Certifcate')}
+</PDFDownloadLink>
+
             <ListGroup.Item  style={{color: "#362824"}}> 
                   <Rating
                     style={{color: "#362824"}}
                     value={coursse.rating}
                     text={`  ${coursse.numReviews} reviews`}
+
 
                   />
                 </ListGroup.Item>

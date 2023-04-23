@@ -9,6 +9,7 @@ const order = require("../Models/order.js")
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
+
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
@@ -37,6 +38,15 @@ const addOrderItems = asyncHandler(async (req, res) => {
     })
 
     const createdOrder = await order.save()
+
+    // set a timeout for 2 minutes to delete the order if it's not approved
+    setTimeout(async () => {
+      const order = await Order.findById(createdOrder._id)
+      if (order && !order.statusOrder) {
+        await order.remove()
+        console.log(`Order ${order._id} deleted.`)
+      }
+    }, 2 * 60 * 1000)
 
     res.status(201).json(createdOrder)
   }
@@ -125,8 +135,6 @@ const OrderApprove = asyncHandler(async (req, res) => {
 
 
 
-
-
 // @desc    Update order to paid
 // @route   PUT /api/orders/:id/pay
 // @access  Private
@@ -170,6 +178,48 @@ const getOrders = asyncHandler(async (req, res) => {
     throw new Error('Order not found for this user');
   }
   res.json(orders);
+});
+const getAllOrders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+const bestSeller = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({ statusOrder: true }).populate('orderItems.product', 'productName category price imageProduct rating numReviews' );
+    const products = {};
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        if (item.product && item.product._id) {
+          if (!products[item.product._id]) {
+            products[item.product._id] = {
+              _id: item.product._id,
+              productName: item.product.productName,
+              category: item.product.category,
+              imageProduct: item.product.imageProduct,
+              price: item.product.price,
+              rating: item.product.rating,
+              numReviews: item.product.numReviews,
+              count: 0,
+            };
+          }
+          products[item.product._id].count += item.qty;
+        }
+        
+      });
+    });
+    const sortedProducts = Object.values(products).sort((a, b) => b.count - a.count);
+    const bestSellers = sortedProducts.slice(0, 3);
+    res.json(bestSellers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // @desc    Update order to delivered
@@ -258,7 +308,7 @@ if (order && user) {
   throw new Error('Order not found');
 }
 });
- 
+
 //remove product from order
 const removeProductFromOrder = asyncHandler(async (req, res) => {
   const { userId, orderId, productId } = req.params;
@@ -295,6 +345,8 @@ const removeProductFromOrder = asyncHandler(async (req, res) => {
 });
 
 
+
+
 module.exports = {
   addOrderItems, getOrderById, updateOrderToPaid,
   getOrders, updateOrderToDelivered,
@@ -303,6 +355,8 @@ module.exports = {
   OrderApprove
   ,
   getProductsOrderByIdOrder,
+  getProductsDashboard,
   removeProductFromOrder,
-  getProductsDashboard
+  getAllOrders,
+  bestSeller
 }

@@ -20,12 +20,32 @@ const UpdateProduct = () => {
   const [price,setPrice]=useState(0)
   const [category,setCategory]=useState("")
   const [countInStock,setCountInStock]=useState(0);
-    const [productName, setProductName] = useState('');
-    const [imageProduct,setImageProduct]=useState("");
+  const [productName, setProductName] = useState('');
+  const [imageProduct,setImageProduct]=useState("");
+
  const [successUpdateLink, setSuccessUpdateLink] = useState(false);
 
 
     const [showCreate, setShowCreate] = useState(false);
+
+
+//validators 
+const [validProductName, setValidProductName] = useState(false);
+const [validPrice, setValidPrice] = useState(false);
+const [validDescription, setValidDescription] = useState(false);
+const [validCategory, setValidCategory] = useState(false);
+const [validCountInStock, setValidCountInStock] = useState(false);
+const [validImageProduct, setValidImageProduct] = useState(false);
+
+
+  //Controle de saisie 
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
+  const PRICE_REGEX = /^[1-9][0-9]*(\.[0-9]{1,2})?$/;
+
+  const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|1000)$/;
+  const IMAGE_REGEX = /\.(png|jpe?g)$/i;
+
 
 
   const dispatch = useDispatch();
@@ -53,6 +73,52 @@ useEffect(() => {
 });
 }, [id]);
 console.log(prod);
+
+{
+  /* use effects des controle de saisie */
+}
+
+useEffect(() => {
+  const result = NAME_REGEX.test(productName);
+  console.log(result);
+  console.log(productName);
+  setValidProductName(result);
+}, [productName]);
+
+useEffect(() => {
+  const result = NAME_REGEX.test(category);
+  console.log(result);
+  console.log(category);
+  setValidCategory(result);
+}, [category]);
+
+useEffect(() => {
+  const result = DESC_REGEX.test(description);
+  console.log(result);
+  console.log(description);
+  setValidDescription(result);
+}, [description]);
+
+useEffect(() => {
+  const result = NUMBER_REGEX.test(countInStock);
+  console.log(result);
+  console.log(countInStock);
+  setValidCountInStock(result);
+}, [countInStock]);
+
+useEffect(() => {
+  const result = PRICE_REGEX.test(price);
+  console.log(result);
+  console.log(price);
+  setValidPrice(result);
+}, [price]);
+
+useEffect(() => {
+  const result = IMAGE_REGEX.test(imageProduct);
+  console.log(result);
+  console.log(imageProduct);
+  setValidImageProduct(result);
+}, [imageProduct]);
 
   const submitHandler=async(e)=>{
      e.preventDefault();
@@ -85,8 +151,7 @@ if (successUpdateLink) {
               setShowCreate(false);
               navigate('/userdashboard')
             };
-
-
+            
 
     return(
           
@@ -150,7 +215,13 @@ if (successUpdateLink) {
                     style={{ padding: '1rem',marginLeft: '3rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
                     backgroundColor: 'transparent',marginBottom: '0.5rem', fontSize: '1rem' }}
         />
-
+            <p
+                id="notename" style={{ color :'grey'}}
+                className={productName && !validProductName ? "none" : "hide"}
+              >
+                Product Name is at least 3 letters   and cannot contain special
+                characters or numbers
+            </p>
 
         </div>
 
@@ -167,6 +238,14 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
                 backgroundColor: 'transparent',marginBottom: '0.5rem', fontSize: '1rem' }}
             />
+             <p
+                id="categ" style={{ color :'grey'}}
+                className={category && !validCategory ? "none" : "hide"}
+              >
+                Category is at least 3 letters and cannot contain special
+                characters or numbers
+            </p>
+            
           </div>
 
               {/* description */}
@@ -185,6 +264,13 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '3.7rem', borderRadius: '5px', border: '1px solid white', width: '500px',
               height: '100px', resize: 'none', marginBottom: '0.5rem', fontSize: '1rem', backgroundColor: 'transparent', }}
             />
+            
+            <p
+                id="description" style={{ color :'grey'}}
+                className={description && !validDescription ? "none" : "hide"}
+              >
+                Description is at least 3 letters 
+            </p>
           </div>
 
               {/* count in Stock */}
@@ -203,6 +289,12 @@ if (successUpdateLink) {
                   border: '1px solid white',
                           width: '500px', marginBottom: '0.5rem', fontSize: '1rem' }}
               />
+                <p
+                id="notefirstname" style={{ color :'grey'}}
+                className={countInStock && !validCountInStock ? "none" : "hide"}
+              >
+                 2 digits long and at least 1 product
+            </p>
           </div>
 
                           {/* price */}
@@ -220,6 +312,12 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '7.5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
+             <p
+                id="price" style={{ color :'grey'}}
+                className={price && !validPrice ? "none" : "hide"}
+              >
+                Price must be a number greater than zero with up to two decimal places (e.g. 25.99).
+            </p>
           </div>
                       {/* Image */}
                       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -230,23 +328,58 @@ if (successUpdateLink) {
             <input
               id="Image"
               name="imageProduct" 
-              type="file" placeholder="Image "
+              type="file" 
+              placeholder="Image "
+              accept=".png, .jpg, .jpeg"
               onChange={(e) => setImageProduct(e.target.files[0])}
               style={{ padding: '1rem',marginLeft: '7rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
-          </div>
+            <p
+                id="ima"
+                className={imageProduct && !validImageProduct ? "none" : "hide"}
+              >
+                Enter Valid image type : png , jpg or jpeg{" "}
+              </p>
+            
+            </div>
 
                         {/* //buttons */}
 
                         
-          <div style={{ display: 'flex',justifyContent: 'space-between', width: '100%' , marginLeft:'17rem'}}>
-           
-            <SpecialButton name="SAVE" onClick={submitHandler} type="submit" style={{ marginRight: '1rem' }}/>
-            <SpecialButton name="BACK TO LIST" onClick={handleBackClick} type="submit" style={{ backgroundColor: 'gray', color: 'white' }}/>
-        </div>
-   
-
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginLeft: '17rem' }}>
+  <button
+    onClick={submitHandler}
+    type="submit"
+    style={{
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '0.5rem 1rem',
+      borderRadius: '0.25rem',
+      cursor: 'pointer',
+      marginRight: '1rem',
+      opacity: (validProductName && validCategory && validCountInStock && validDescription && validPrice &&validImageProduct) ? '1' : '0.5'
+    }}
+    disabled={!validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice || !validImageProduct }
+  >
+    SAVE
+  </button>
+  <button
+    onClick={handleBackClick}
+    type="submit"
+    style={{
+      backgroundColor: 'gray',
+      color: 'white',
+      border: 'none',
+      padding: '0.5rem 1rem',
+      borderRadius: '0.25rem',
+      cursor: 'pointer'
+    }}
+  >
+    BACK TO LIST
+  </button>
+</div>
 
         </form>
 

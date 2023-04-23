@@ -6,6 +6,7 @@ import { getProducts } from "../../productredux/productaction";
 import { Link } from "react-router-dom";
 import { Carousel, Image } from "react-bootstrap";
 import backg from "./backg.jpg";
+import axios from "axios";
 
 
 function Shop()
@@ -13,12 +14,28 @@ function Shop()
 
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productGetReducer.products);
+    const [bestSeller, setBestSeller] = useState(null);
+
   
     console.log("ena el products" + products);
     useEffect(() => {
       dispatch(getProducts());
     }, [dispatch ]);
     console.log("ena el products" + Array.isArray(products) );
+
+
+    useEffect(() => {
+      async function fetchBestSeller() {
+        try {
+          const response = await axios.get('http://localhost:5000/api/orders/best/seller');
+          setBestSeller(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      fetchBestSeller();
+    }, []);
+
 
    
    const handleRefresh = () => {
@@ -38,7 +55,21 @@ function Shop()
           </Link>
         </Carousel.Item>  
       ))}
-    </Carousel> */}  <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">Products</h1>
+    </Carousel> */} 
+    <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">Products</h1>
+            <p style={{color:"white"}} className="paragraph2">our Best Seller </p></div> 
+            
+        <div className="shopcontainer">
+        {Array.isArray(bestSeller) && bestSeller.map((p) => (
+          <Product product={p} >
+
+          </Product>
+        ))}
+        
+        </div>
+    
+    
+     <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">Products</h1>
             <p style={{color:"white"}} className="paragraph2">our students' hand-made products </p></div> 
             
         <div className="shopcontainer">
