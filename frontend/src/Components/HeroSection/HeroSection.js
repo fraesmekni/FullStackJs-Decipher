@@ -5,9 +5,8 @@ import './HeroSection.css';
 
 function HeroSection() {
   return (
-    <>
     <div className='hero-container'>
-    <video src={video} autoPlay loop muted />
+        <video src={video} autoPlay loop muted />
 
 
     <div align="center" className='textoverlay'>
@@ -20,7 +19,6 @@ function HeroSection() {
     
 <Button name="Learn More"> commandez</Button> 
     </div> </div> </div>
-    </>
   )
 }
 
