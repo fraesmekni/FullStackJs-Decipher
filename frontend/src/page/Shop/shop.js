@@ -15,6 +15,8 @@ function Shop()
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productGetReducer.products);
     const [bestSeller, setBestSeller] = useState(null);
+    const best = bestSeller
+    ?.slice(0, 3);
 
   
     console.log("ena el products" + products);
@@ -60,7 +62,7 @@ function Shop()
             <p style={{color:"white"}} className="paragraph2">our Best Seller </p></div> 
             
         <div className="shopcontainer">
-        {Array.isArray(bestSeller) && bestSeller.map((p) => (
+        {Array.isArray(best) && best.map((p) => (
           <Product product={p} >
 
           </Product>
