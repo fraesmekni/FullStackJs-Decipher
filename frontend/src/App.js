@@ -44,7 +44,8 @@ import Event from './Components/Eve/Event';
 import Updateevent from './Components/Eve/Updateevent';
 import Addevent from './Components/Eve/Addevent';
 import Calendar from './Components/FullCalendar/Calendar';
-
+import AllProject from './page/Project/AllProject'
+import DetailProject from './page/Project/DetailProject'
 import Video from './page/Video/Video'
 import HomePage from './page/Video/HomePage'
 
@@ -147,7 +148,8 @@ useEffect(()=>
 
    
     <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
-    <Route path="/projects" element={<>    <Navbarr /> <Getallprojects/>  </> } />
+    <Route path="/projects" element={<>    <Navbarr /> <AllProject/>  </> } />
+    <Route path="/project/:id" element={<>    <Navbarr /> <DetailProject/>  </> } />
     <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
     <Route path="/updateproject/:id" element={<>   <Navbarr /> <Updateproject/>  </> } />
 

@@ -11,13 +11,14 @@ const Addproject = () => {
     const [name,setName]=useState(()=>{return ""})
     const [description,setDescription]=useState("")
     const [imageUrl, setImageUrl] = useState("");
+    const [ammounttocollect, setAmmounttocollect] = useState("");
     
     
     const userLogin =useSelector(state =>state.userLogin)
     const {userInfo} =userLogin
     const projectCreator =userInfo._id
     const [addProject] =useMutation(add_Project,{
-        variables:{name,description,imageUrl,projectCreator}
+        variables:{name,description,imageUrl,ammounttocollect:parseInt(ammounttocollect),projectCreator}
     })
 
 
@@ -55,7 +56,7 @@ const Addproject = () => {
         e.preventDefault();
         console.log(imageUrl)
 
-        addProject(name,description,imageUrl,projectCreator)
+        addProject(name,description,imageUrl,ammounttocollect,projectCreator)
       }
 
   return (
@@ -100,6 +101,19 @@ const Addproject = () => {
                  value={description}
                  onChange={(e)=>
                     setDescription(e.target.value)}>
+                </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="ammounttocollect">
+                <Form.Label>
+                ammounttocollect
+                </Form.Label>
+                <Form.Control
+                 type="number"
+                 placeholder="ammounttocollect"
+                
+                 value={ammounttocollect}
+                 onChange={(e)=>
+                  setAmmounttocollect(e.target.value)}>
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="imageUrl">

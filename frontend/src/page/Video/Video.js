@@ -21,13 +21,11 @@ import "./Video.css"
 
 const server_url =
   process.env.NODE_ENV === "production"
-    ? "https://video.sebastienbiollo.com"
-    : "http://localhost:5000"
+    && "http://localhost:5000"
 
 var connections = {}
 const peerConnectionConfig = {
   iceServers: [
-    // { 'urls': 'stun:stun.services.mozilla.com' },
     { urls: "stun:stun.l.google.com:19302" },
   ],
 }
