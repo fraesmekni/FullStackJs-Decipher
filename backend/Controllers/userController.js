@@ -20,7 +20,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin  ,
         dateOfBirth , 
         role ,
-        phone, 
+        phone, enrollment
     } = req.body
     const  imageUrl =req.file.filename 
 
@@ -68,7 +68,17 @@ const registerUser = asynHandler( async ( req , res )=> {
         phone,
         status: entrepriseName  ? 'pendingAsSponsor' : speciality  ? 'pendingAsCoach' : '',
         role: {name: "userRole"},
-                emailToken: otp
+                emailToken: otp, enrollment : {
+                  completionStatus: 'Not started',
+                  course: '6433be583b30a00a9d74e733',
+                  enrollmentDate: "2023-04-10T07:44:24.122Z",
+                  learner: '64234336c380a99f8bec23d8',
+                  test: 'Not started',
+                  createdAt: "2023-04-10T07:44:24.122Z",
+                  updatedAt: "2023-04-10T07:44:24.122Z",
+                  __v: 0,
+                  _id: '6433be583b30a00a9d74e733'
+              }
 
         
     })
@@ -188,7 +198,8 @@ const registerUser = asynHandler( async ( req , res )=> {
            cin: user.cin,
            dateOfBirth: user.dateOfBirth,
            role : user.role,    
-           verfication : user.emailToken       
+           verfication : user.emailToken,
+           enrollment : user.enrollment
        })
    }
    else{
@@ -295,6 +306,19 @@ const logIn = asynHandler( async (req,res)=>{
         const sponsor = await Sponsor.findOne({ user: user._id })
 
         if (user &&(await bcrypt.compare(password,user.password) ) ) {
+          if (!user.enrollment) {
+            user.enrollment = {
+                completionStatus: 'Not started',
+                course: 'Placeholder course id',
+                enrollmentDate: 'Placeholder enrollment date',
+                learner: 'Placeholder learner id',
+                test: 'Not started',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                __v: 0,
+                _id: 'Placeholder enrollement id'
+            };
+        }
             res.json({
                 _id: user._id,
                 email: user.email,

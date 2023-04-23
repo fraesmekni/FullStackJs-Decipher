@@ -38,6 +38,7 @@ import CoursesChart from './page/CoachDashboard/CoursesChart';
 import EnrollChart from './page/CoachDashboard/MostEnrolled';
 import SuccessRate from './page/CoachDashboard/SuccessRate';
 import AgeSectionPourcentage from './page/CoachDashboard/AgeSection';
+import OrdersStat from './page/UserDashboard/OrdersStat';
 ReactGA.initialize('G-Y1V026ZHPY');
 
 
@@ -122,7 +123,7 @@ useEffect(()=>
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/coursedashboard" element={<CoursesDasbord/>} />
-    <Route path="/oo" element={<AgeSectionPourcentage/>} />
+    <Route path="/oo" element={<OrdersStat/>} />
 
     <Route path="/lessondashboard/:id" element={<LessonDashboard/>} />
     <Route path="/shipping" element={<Shipping/>} />

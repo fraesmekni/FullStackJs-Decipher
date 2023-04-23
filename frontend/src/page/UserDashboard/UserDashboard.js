@@ -20,6 +20,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import Swal from 'sweetalert2';
+import OrdersStat from "./OrdersStat";
 
 function UserDashboard(){
     const userLogin = useSelector(state => state.userLogin)
@@ -31,7 +32,11 @@ function UserDashboard(){
     const [showOrders, setShowOrders] = useState(false);
 
     const [product, setProduct] = useState([]);
-    
+    const bestProducts = product
+    ?.sort((a, b) => b.rating - a.rating)
+    ?.slice(0, product.length);
+    console.log("besssssssssssst")
+    console.log(bestProducts)
   const orderList = useSelector((state) => state.orderdashboard);
   const { loading : loadingList , error : errorList , orders } = orderList;
   
@@ -372,7 +377,7 @@ const submitHandlerj = (e) => {
       <TableCell>
   <Button
     variant="contained"
-    color="secondary"
+    color="secondary" 
     onClick={() => deleteProductOrder(userInfo._id, orderItem.idOrder, orderItem.id)}
 
   >
@@ -424,15 +429,18 @@ const submitHandlerj = (e) => {
 
 {errorDelete  && <div className="alertgreen"> && <p>{errorDelete}</p> </div>}
 {successDelete  && <div className="alertgreen"> && <p>{successDelete}</p> </div>}
-            
+            <OrdersStat />
 <h3 className="library_trending_title">Review Your products</h3>
 </div>
       <table>
-     {product && product.map((i , index) => {
+     {bestProducts && bestProducts.map((i , index) => {
            return(
         <tr key={i.id}>
           <td>
             <p>{index + 1}</p>
+          </td>
+          <td>
+            <p>Rating : {i.rating}</p>
           </td>
           <td>
           <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageProduct}`} alt="My Image" className="song_cover" />

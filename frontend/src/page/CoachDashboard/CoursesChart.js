@@ -57,7 +57,7 @@ const CoursesChart = ({ courseId }) => {
       x: titleCourse,
       y: [notStarted, inProgress, completed],
       labels: [`${notStarted} not started`, `${inProgress} in progress`, `${completed} completed`],
-      colorScale: ["#635139", "#F0904B", "#EFBE49"],
+      colorScale: ["#b68871", "#918473", "#d09e85"],
       labelRadius: 10,
     }
   ];
