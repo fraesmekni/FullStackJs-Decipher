@@ -476,8 +476,28 @@ const createEnroll = asynHandler( async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+const getAgePercentage = asynHandler(async (req, res) => {
+  const { courseId } = req.params;
 
+  const learners = await Enrollment.find({ course: courseId })
+    .populate('learner', 'dateOfBirth')
+    .exec();
 
+  const validLearners = learners.filter((learner) => learner.learner.dateOfBirth);
+
+  const totalLearners = validLearners.length;
+  const above30 = validLearners.filter((learner) => {
+    const birthDate = new Date(learner.learner.dateOfBirth);
+    const age = Math.floor((new Date() - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+    return age > 30;
+  }).length;
+  const below30 = totalLearners - above30;
+
+  const above30Percentage = (above30 / totalLearners) * 100;
+  const below30Percentage = (below30 / totalLearners) * 100;
+
+  res.json({ above30: above30Percentage, below30: below30Percentage });
+});
 const updateCompletionStatus = async (req, res) => {
   const { enrollment, status } = req.params;
 
@@ -577,7 +597,7 @@ const countNotStartedEnrollments = async (req, res) => {
 
 //@Desc : If the user hasn't already reviewed the product, it creates a new review object with the user's name, rating, comment, and user id. It then pushes the new review into the reviews array of the product object, updates the numReviews field to reflect the new number of reviews, and calculates the new rating by taking the average of all the review ratings. 
 //Create Review 
-//@Route : POST /course/:id/reviews 
+//@Route : POST /couf**rse/:id/reviews 
 //@Access : Private 
 const createCourseReview = asynHandler(async (req, res) => {
   const {
@@ -613,7 +633,7 @@ const createCourseReview = asynHandler(async (req, res) => {
 
 module.exports={
 
-  createCourse,createLesson,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
+  createCourse,createLesson,getAgePercentage,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
   deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,createCourseReview,
   getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

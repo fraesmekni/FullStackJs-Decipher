@@ -11,7 +11,21 @@ function Products(){
         const bestProducts = products
         ?.sort((a, b) => b.rating - a.rating)
         ?.slice(0, 4);
+        const [bestSeller, setBestSeller] = useState(null);
 
+
+        useEffect(() => {
+                async function fetchBestSeller() {
+                  try {
+                    const response = await axios.get('http://localhost:5000/api/orders/best/seller');
+                    setBestSeller(response.data);
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }
+                fetchBestSeller();
+              }, []);
+          
         useEffect(() => {
                 dispatch(getProducts());
               }, [dispatch ]);

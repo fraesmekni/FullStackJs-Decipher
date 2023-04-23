@@ -214,7 +214,7 @@ const bestSeller = asyncHandler(async (req, res) => {
       });
     });
     const sortedProducts = Object.values(products).sort((a, b) => b.count - a.count);
-    const bestSellers = sortedProducts.slice(0, 3);
+    const bestSellers = sortedProducts;
     res.json(bestSellers);
   } catch (error) {
     console.error(error);

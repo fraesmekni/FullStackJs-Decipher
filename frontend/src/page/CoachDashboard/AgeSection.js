@@ -76,7 +76,7 @@ const AgeSectionPourcentage = ({ courseIdd }) => {
         <h3 style={{ marginBottom : "-20px",color:'white'}}>Students Age Group</h3>
         <VictoryPie
           data={courseData}
-          colorScale={["#EFDC8D", "#F0904B", "#EFBE49"]}
+          colorScale={["#d09e85", "#878573", "#EFBE49"]}
           labelRadius={100}
           labels={({ datum }) => `${datum.x}: ${datum.y}%`}
           style={{ marginTop:"-100px",

@@ -35,6 +35,7 @@ const router = express.Router()
   let upload = multer({ storage, fileFilter});
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
 router.get('/getCourses',DisplayLesson),
+router.post('/createnroll',createEnroll),
 router.get('/getEnroll',DisplayEnrollment),
 router.get('/getPopularCat',popularCategory),
 router.post('/createlesson',createLesson),
