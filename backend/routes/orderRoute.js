@@ -4,13 +4,17 @@ const {addOrderItems,getOrderById,updateOrderToPaid, getOrders,updateOrderToDeli
     getProductUsersIdByOrderId, getProductUsersIdByUserId,OrderApprove,OrderNotApprove,
     getProductsOrderByIdOrder,
     removeProductFromOrder,
-    getProductsDashboard} 
+    getProductsDashboard,
+    getAllOrders,
+    bestSeller} 
     =require ('../Controllers/orderController.js')
 const { protectSimpleUser,validator,isAdmin,isCoach }= require('../Middelware/userMiddelware.js')
 
 
 router.post('/',protectSimpleUser,addOrderItems)
 router.get('/:id',getOrderById)
+router.get('/orders/all',getAllOrders)
+router.get('/best/seller',bestSeller)
 router.put('/:id/pay',protectSimpleUser,updateOrderToPaid)
 router.get('/getAll/:id',protectSimpleUser,getOrders)
 router.put('/approveOrder/:id',OrderApprove)

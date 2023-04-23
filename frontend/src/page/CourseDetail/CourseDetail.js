@@ -25,7 +25,7 @@ const CourseDetail= () => {
 
       const { id } = useParams();
       const [qty,setQty]= useState(1);
-      const [enrollId,setEnrollId]= useState(userInfo.enrollement._id);
+      const [enrollId,setEnrollId]= useState(userInfo.enrollement?._id);
       const [lessonIndex,setLessonIndex]=useState(0);
       //initialise state
       const [rating, setRating] = useState(0)

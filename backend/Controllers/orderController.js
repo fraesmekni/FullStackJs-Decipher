@@ -179,6 +179,48 @@ const getOrders = asyncHandler(async (req, res) => {
   }
   res.json(orders);
 });
+const getAllOrders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+const bestSeller = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({ statusOrder: true }).populate('orderItems.product', 'productName category price imageProduct rating numReviews' );
+    const products = {};
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        if (item.product && item.product._id) {
+          if (!products[item.product._id]) {
+            products[item.product._id] = {
+              _id: item.product._id,
+              productName: item.product.productName,
+              category: item.product.category,
+              imageProduct: item.product.imageProduct,
+              price: item.product.price,
+              rating: item.product.rating,
+              numReviews: item.product.numReviews,
+              count: 0,
+            };
+          }
+          products[item.product._id].count += item.qty;
+        }
+        
+      });
+    });
+    const sortedProducts = Object.values(products).sort((a, b) => b.count - a.count);
+    const bestSellers = sortedProducts.slice(0, 3);
+    res.json(bestSellers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // @desc    Update order to delivered
 // @route   GET /api/orders/:id/deliver
@@ -303,6 +345,8 @@ const removeProductFromOrder = asyncHandler(async (req, res) => {
 });
 
 
+
+
 module.exports = {
   addOrderItems, getOrderById, updateOrderToPaid,
   getOrders, updateOrderToDelivered,
@@ -312,5 +356,7 @@ module.exports = {
   ,
   getProductsOrderByIdOrder,
   getProductsDashboard,
-  removeProductFromOrder
+  removeProductFromOrder,
+  getAllOrders,
+  bestSeller
 }
