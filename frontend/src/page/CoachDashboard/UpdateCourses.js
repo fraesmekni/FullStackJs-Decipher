@@ -33,6 +33,7 @@ function UpdateCourses(){
 
     const { id } = useParams();
     const [course, setCourse] = useState(null);
+    
 
 
 // Validator
@@ -46,7 +47,7 @@ const [validThumbnailCourse, setValidThumbnailCourse] = useState(false);
   const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
   const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
   const CAT_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
-  const IMAGE_REGEX = /\.(png|jpeg|jpg)$/i;
+  const IMAGE_REGEX = /\.(png|jpeg|jpg)$/;
 
   /* use effects des controle de saisie */
 

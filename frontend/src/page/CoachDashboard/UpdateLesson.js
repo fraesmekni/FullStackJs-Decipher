@@ -35,9 +35,10 @@ const [ validContentLesson, setValidContentLesson] = useState(false);
 const [validTypeLesson, setValidTypeLesson] = useState(false); 
 
   //Controle de saisie 
-  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ :,-]{2,88}$/;
   const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
-  const TYPE_REGEX = /^(lesson|video)$/;
+  const CON_REGEX = /^[\w\d\s\-.,!?:;"'/()À-ÖØ-öø-ÿ]{3,100000}$/;
+  const TYPE_REGEX = /^(lesson|video|Lesson|Video)$/;
 
     /* use effects des controle de saisie */
 
@@ -56,7 +57,7 @@ const [validTypeLesson, setValidTypeLesson] = useState(false);
     }, [descriptionLesson]);
 
     useEffect(() => {
-      const result = NAME_REGEX.test(contentLesson);
+      const result = CON_REGEX.test(contentLesson);
       console.log(result);
       console.log(contentLesson);
       setValidContentLesson(result);
@@ -162,8 +163,7 @@ const [validTypeLesson, setValidTypeLesson] = useState(false);
                 className={!titleLesson || (titleLesson && !validTitleLesson) ? "none" : "hide"}
               >
                 <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
-                Lesson Name is at least 3 letters   and cannot contain special
-                characters or numbers
+                Lesson Name is at least 3 letters 
                 </Alert>
             </p>
 
@@ -191,8 +191,7 @@ const [validTypeLesson, setValidTypeLesson] = useState(false);
                 className={!contentLesson || (contentLesson && !validContentLesson) ? "none" : "hide"}
               >
                 <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '700px', height: '40px' }}>
-                Lesson Content  is at least 3 letters   and cannot contain special
-                characters or numbers
+                Lesson Content  is at least 3 letters  
                 </Alert>
             </p>
 <input   type="text" name="descriptionLesson"
