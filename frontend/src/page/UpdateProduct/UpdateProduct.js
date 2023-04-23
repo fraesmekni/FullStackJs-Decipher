@@ -41,6 +41,7 @@ const [validImageProduct, setValidImageProduct] = useState(false);
   //Controle de saisie 
   const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
   const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
+  const PRICE_REGEX = /^[1-9][0-9]*(\.[0-9]{1,2})?$/;
 
   const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|1000)$/;
   const IMAGE_REGEX = /\.(png|jpe?g)$/i;
@@ -104,6 +105,13 @@ useEffect(() => {
   console.log(countInStock);
   setValidCountInStock(result);
 }, [countInStock]);
+
+useEffect(() => {
+  const result = PRICE_REGEX.test(price);
+  console.log(result);
+  console.log(price);
+  setValidPrice(result);
+}, [price]);
 
 useEffect(() => {
   const result = IMAGE_REGEX.test(imageProduct);
@@ -237,6 +245,7 @@ if (successUpdateLink) {
                 Category is at least 3 letters and cannot contain special
                 characters or numbers
             </p>
+            
           </div>
 
               {/* description */}
@@ -303,6 +312,12 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '7.5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
+             <p
+                id="price" style={{ color :'grey'}}
+                className={price && !validPrice ? "none" : "hide"}
+              >
+                Price must be a number greater than zero with up to two decimal places (e.g. 25.99).
+            </p>
           </div>
                       {/* Image */}
                       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -320,32 +335,51 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '7rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
-              <p
-                id="noteimag"
+            <p
+                id="ima"
                 className={imageProduct && !validImageProduct ? "none" : "hide"}
               >
                 Enter Valid image type : png , jpg or jpeg{" "}
               </p>
-          </div>
+            
+            </div>
 
                         {/* //buttons */}
 
                         
-          <div style={{ display: 'flex',justifyContent: 'space-between', width: '100%' , marginLeft:'17rem'}}>
-           
-            <SpecialButton
-              name="SAVE"
-              onClick={submitHandler}
-              type="submit"
-              style={{ marginRight: '1rem' }}
-              disabled={!validProductName || !validCategory || !validCountInStock  ||
-                      !validDescription || !validPrice   || !validImageProduct
-                }
-            />
-            <SpecialButton name="BACK TO LIST" onClick={handleBackClick} type="submit" style={{ backgroundColor: 'gray', color: 'white' }}/>
-        </div>
-   
-
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginLeft: '17rem' }}>
+  <button
+    onClick={submitHandler}
+    type="submit"
+    style={{
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '0.5rem 1rem',
+      borderRadius: '0.25rem',
+      cursor: 'pointer',
+      marginRight: '1rem',
+      opacity: (validProductName && validCategory && validCountInStock && validDescription && validPrice &&validImageProduct) ? '1' : '0.5'
+    }}
+    disabled={!validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice || !validImageProduct }
+  >
+    SAVE
+  </button>
+  <button
+    onClick={handleBackClick}
+    type="submit"
+    style={{
+      backgroundColor: 'gray',
+      color: 'white',
+      border: 'none',
+      padding: '0.5rem 1rem',
+      borderRadius: '0.25rem',
+      cursor: 'pointer'
+    }}
+  >
+    BACK TO LIST
+  </button>
+</div>
 
         </form>
 
