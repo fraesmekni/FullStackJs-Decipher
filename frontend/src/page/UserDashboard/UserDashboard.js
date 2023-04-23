@@ -20,6 +20,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import Swal from 'sweetalert2';
+import OrdersStat from "./OrdersStat";
 
 function UserDashboard(){
     const userLogin = useSelector(state => state.userLogin)
@@ -376,7 +377,7 @@ const submitHandlerj = (e) => {
       <TableCell>
   <Button
     variant="contained"
-    color="secondary"
+    color="secondary" 
     onClick={() => deleteProductOrder(userInfo._id, orderItem.idOrder, orderItem.id)}
 
   >
@@ -428,7 +429,7 @@ const submitHandlerj = (e) => {
 
 {errorDelete  && <div className="alertgreen"> && <p>{errorDelete}</p> </div>}
 {successDelete  && <div className="alertgreen"> && <p>{successDelete}</p> </div>}
-            
+            <OrdersStat />
 <h3 className="library_trending_title">Review Your products</h3>
 </div>
       <table>

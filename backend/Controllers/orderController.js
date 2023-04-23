@@ -188,6 +188,36 @@ const getAllOrders = asyncHandler(async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+const bestSpecificSeller = asyncHandler(async (req, res) => {
+  try {
+    const products = req.body; // assuming the products array is passed in the request body
+    const bestSellers = products.reduce((acc, curr) => {
+      acc[curr._id] = {
+        productName: curr.productName,
+        count: 0,
+      };
+      return acc;
+    }, {});
+    const orders = await Order.find({ statusOrder: true }).populate('orderItems.product', 'productName category price imageProduct rating numReviews' );
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        if (item.product && item.product._id) {
+          if (bestSellers[item.product._id]) {
+            bestSellers[item.product._id].count += item.qty;
+          }
+        }
+      });
+    });
+
+    const sortedProducts = Object.values(bestSellers).sort((a, b) => b.count - a.count);
+    const topBestSellers = sortedProducts.slice(0, 3);
+
+    res.json(topBestSellers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 const bestSeller = asyncHandler(async (req, res) => {
   try {
@@ -353,7 +383,7 @@ module.exports = {
   getProductUsersIdByOrderId,
   getProductUsersIdByUserId,
   OrderApprove
-  ,
+  ,bestSpecificSeller,
   getProductsOrderByIdOrder,
   getProductsDashboard,
   removeProductFromOrder,
