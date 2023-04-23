@@ -3,9 +3,9 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser,createCourseReview} = require('../Controllers/courseController');
 
-
+  const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
@@ -36,8 +36,10 @@ const router = express.Router()
   router.post('/createcourse',upload.single('thumbnailCourse'),createCourse),
 router.get('/getCourses',DisplayLesson),
 router.get('/getEnroll',DisplayEnrollment),
+router.get('/getPopularCat',popularCategory),
 router.post('/createlesson',createLesson),
-router.post('/createnroll',createEnroll),
+
+router.put('/updateuserenroll/:enrollId/:userId',updateEnrollforUser),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
 router.delete('/deleteTest/:id' ,deleteTest),
@@ -52,6 +54,15 @@ router.get('/courseById/:userId',getCoursesById),
 router.get('/courseByIds/:id',getCoursesByIds),
 router.get('/:id/lessons',GetLessons)
 router.get('/getTest/:course',findTestByCourse),
+router.put('/updatestatus/:enrollment/:status',updateCompletionStatus),
+router.get('/countCompletedEnrollments/:course',countCompletedEnrollments),
+router.get('/countInProgressEnrollments/:course',countinProgressEnrollments),
+router.get('/countNotStartedEnrollments/:course',countNotStartedEnrollments),
+router.get('/countEnroll/:course',countEnroll),
+router.post('/TestPassed/:enrollid',setTestPassed),
+router.post('/TestFailed/:enrollid',setTestFailed),
+router.get('/SuccessRate/:courseId',calculateSuccessRate),
+router.post('/:id/reviews' ,protectSimpleUser, createCourseReview)
 
 
 

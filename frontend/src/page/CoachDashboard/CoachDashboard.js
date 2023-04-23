@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch, useSelector } from "react-redux";
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
+
 import {
   addCourse,
   addLesson,
@@ -28,6 +30,8 @@ import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CoursesChart from "./CoursesChart";
+import EnrollChart from "./MostEnrolled";
 function CoachDashboard() {
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
@@ -68,12 +72,14 @@ function CoachDashboard() {
 
   const [details, setDetails] = useState(true);
   const [lesson_id, setLesson_id] = useState(0);
+  const [coursesData, setCoursesData] = useState([]);
 
 
 const [validOptions,setValidOptions]= useState(false);
 const [validAnswer,setValidAnswer]= useState(false);
 const ANSWER_REGEX = /^(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b([a-zA-Z]+)\b)(?=.*\b(o[0-9]*\b|[a-zA-Z]+\b))[\s\S]*$/
 const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
+const [popularCourseData, setPopularCourseData] = useState([]);
 
 
 
@@ -118,6 +124,17 @@ const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
     setQuestionAnswer("");
   };
   useEffect(() => {
+    axios.get('http://localhost:5000/course/getPopularCat')
+      .then(res => {
+        // Convert count property to numeric value
+        const data = res.data.map(item => ({ ...item, count: Number(item.count) }));
+        setPopularCourseData(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
     const result1 = OPTION_REGEX.test(questionOptions);
     if (questionOptions.includes(questionAnswer)) {
       setValidAnswer(true);
@@ -145,6 +162,44 @@ const OPTION_REGEX = /^[^,]+,[^,]+,[^,]+$/
     getCourse();
   }, [userInfo._id]);
 
+
+
+  //this use effect is to get the most enrolled in courses 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch the courses for the user
+        const courseResponse = await fetch(`http://localhost:5000/course/courseById/${userInfo._id}`);
+        const courses = await courseResponse.json();
+        console.log(courses);
+
+        // Map over the courses to fetch the enrollment count for each course
+        const countPromises = courses.map(course => {
+          return axios.get(`http://localhost:5000/course/countEnroll/${course._id}`);
+        });
+        const countResponses = await Promise.all(countPromises);
+        const counts = countResponses.map(response => response.data.count);
+        console.log(counts);
+
+        // Combine the course data and enrollment count data
+        const coursesData = courses.map((course, index) => {
+          return {
+            ...course,
+            enrollCount: counts[index]
+          };
+        });
+
+        // Sort the courses data by enrollment count
+        coursesData.sort((a, b) => b.enrollCount - a.enrollCount);
+
+        // Set the state with the courses data
+        setCoursesData(coursesData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [userInfo._id]);
   const dispatch = useDispatch();
   const coursse = course.find((p) => p._id === details);
   const gettest = async () => {
@@ -341,6 +396,12 @@ console.log(data);
                   colors="primary:#ffffff"
                   onClick={handleCreateClick}
                 />
+                <lord-icon
+                  src="https://cdn.lordicon.com/jcsudnpn.json"
+                  trigger="hover"
+                  colors="primary:#ffffff"
+                  onClick={handleCreateClick}
+                />
               </div>
               <div className="sidebar_logout">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACAklEQVRoge2ZP2tUQRTFfydEwfULJCpY5ANYqa1FlECwUhArIU0QrG1SaKG9RZZ0EWtBUEQQBC39A8GPYCEkRYqNkigYcizegMsSzMzbu3nN/JrLwpvzzr0zs+++eVCpVCqVMVCUkO0p4AZwAZhuIbEPfAVeSDqI8pWFbdl+5Rhe2s4ubMgM2F4EXgObQJ+mmqVMA/eAGWBR0psIb1nYXknVezSmzuOks5I7ZmqcGw5xIsU2lR/mz4jekUQl0Bk1ga6pCST2UtwN0sumzRPzMNaAbeB5kF42IQlI+gmsR2iV0noJ2T5r+6HtmUhDpbSaAdvngA/AHDAAnkSaKqF4BkbMfwGeRpsqoSiBZP49jfkNYEHSziSM5ZK9hGyf4V/lD2iqf992rsQ+sCppq9Tk/yjZA7dozEMzc8st7rdN8H4pSWAduA1cTL9Xge8F43eBZwXXZ5GdgKQd21eBt8Bl4DpwRdK3aFMlFG3itGEXaNb/eeCd7dlJGMul+G9U0gC4RpPEHM3e6IxWDzJJA9vzwE066H+Gad0LSfpBR/3PMCHttO3ZrvqiqPeBJeBBisdK9KnEySC9bOorZdfUBLomKoHfKZ4aU6eX4q/cAVGnEh9TvGu7R7vjldPAnRG948N2P+j7QL/kvmFfaFISl2ha7d5R1x7CHvBJ0udIT5VKpTJZ/gIArCTzj9YnhAAAAABJRU5ErkJggg==" />
@@ -473,13 +534,18 @@ console.log(data);
                 showList ? "library_trending" : ""
               }`}
             >
-              <h3 className="library_trending_title">Your Courses</h3>
+            
+                        <h3 className="library_trending_title">Your Statistics </h3>
+<div className="scroll"> <CoursesChart /> </div> 
+{/* <EnrollChart /> */}
+<h3 style={{marginTop:"-50px"}}className="library_trending_title">Your Courses </h3>
 
               <table>
-                {course &&
-                  course.map((i, index) => {
+                {coursesData &&
+                 coursesData.map((i, index) => {
                     return (
                       <tr key={i._id}>
+                        
                         <td>
                           <p>{index + 1}</p>
                         </td>
@@ -490,6 +556,9 @@ console.log(data);
                             alt="My Image"
                             className="song_cover"
                           />
+                        </td>
+                        <td>
+                          <p> Total Enrollements :  {i.enrollCount}</p>
                         </td>
                         <td className="song">
                           <Link

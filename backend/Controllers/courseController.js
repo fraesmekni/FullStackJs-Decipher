@@ -3,7 +3,7 @@ const Lesson = require('../models/lesson');
 const Test = require('../models/test');
 const Question = require ('../models/test');
 const Enrollment = require ('../models/enrollement.js');
-
+const User = require ('../Models/user.js');
 const asynHandler = require("express-async-handler")
 
 
@@ -50,10 +50,42 @@ findTestByCourse = asynHandler(async (req, res) => {
   return res.status(404).json({ error: 'Test not found' });
 });
 
+const setTestPassed = async (req, res) => {
+  const { enrollid } = req.params;
+  try {
+    const enrollment = await Enrollment.findByIdAndUpdate(enrollid, { test: 'Passed' });
+    res.json(enrollment); // send the updated enrollment as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  }
+};
 
 
+const  setTestFailed = async (req, res) => {
+  const { enrollid} = req.params;
+  try {
+    const enrollment = await Enrollment.findByIdAndUpdate(enrollid, { test: 'Failed' });
+    res.json(enrollment); // send the updated enrollment as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  }
+};
 
-
+const calculateSuccessRate = async (req, res) => {
+  const { courseId} = req.params;
+  try {
+    const enrollments = await Enrollment.find({ course: courseId });
+    const completedEnrollments = enrollments.filter(enrollment => enrollment.completionStatus === 'Completed');
+    const successRate = (completedEnrollments.length / enrollments.length) * 100;
+    return res.json(successRate);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update enrollment.' }); // send an error response
+  
+  }
+};
 
 const createTest= asynHandler(async (req, res) => {
   const {  
@@ -391,6 +423,22 @@ const GetLessons = asynHandler(  async (req, res) => {
   }
 });
 
+const updateEnrollforUser = asynHandler(async(req,res)=>
+{   try{
+    const enrollId = req.params.enrollId;
+    const userId = req.params.userId;
+    
+  const updatedUser = await User.findByIdAndUpdate(
+  { _id: userId },
+  { enrollment: enrollId }
+).populate('enrollment');
+res.json(updatedUser);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
 const createEnroll = asynHandler( async (req, res) => {
   try {
     // Get the learner and course IDs from the request body
@@ -408,12 +456,18 @@ const createEnroll = asynHandler( async (req, res) => {
     const enrollment = new Enrollment({
       learner: learner,
       course: course,
-      completionStatus:completionStatus
+      completionStatus:completionStatus,
     });
 
     // Save the new Enrollment document to the database
     await enrollment.save();
 
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: learner },
+      { enrollment: enrollment._id }
+    ).populate('enrollment');
+    console.log(updatedUser);
+    console.log('User updated successfully.');
     // Return a success message to the client
     res.status(201).json({ message: 'Enrollment created successfully' });
   } catch (error) {
@@ -422,6 +476,25 @@ const createEnroll = asynHandler( async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+const updateCompletionStatus = async (req, res) => {
+  const { enrollment, status } = req.params;
+
+  try {
+    const theEnrollement = await Enrollment.findByIdAndUpdate(
+      enrollment,
+      { completionStatus: status },
+      { new: true }
+    );
+    res.json(theEnrollement);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 const DisplayEnrollment= asynHandler(async(req,res)=>{
        
@@ -433,11 +506,114 @@ const DisplayEnrollment= asynHandler(async(req,res)=>{
   res.json(enrollmentes)
 
 })
+const countEnroll = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+const countCompletedEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'Completed' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+const countinProgressEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'In progress' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 
+const popularCategory = async (req, res) => {
+  try {
+    const courses = await Course.find();
+    const categories = {};
+
+    courses.forEach((course) => {
+      if (!categories[course.category]) {
+        categories[course.category] = 1;
+      } else {
+        categories[course.category]++;
+      }
+    });
+
+    const categoryCount = Object.keys(categories).map((category) => ({
+      category: category,
+      count: categories[category],
+    }));
+
+    categoryCount.sort((a, b) => b.count - a.count);
+
+    res.status(200).json(categoryCount);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const countNotStartedEnrollments = async (req, res) => {
+  const { course } = req.params;
+  try {
+    const count = await Enrollment.countDocuments({ course, completionStatus: 'Not started' });
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+//@Desc : If the user hasn't already reviewed the product, it creates a new review object with the user's name, rating, comment, and user id. It then pushes the new review into the reviews array of the product object, updates the numReviews field to reflect the new number of reviews, and calculates the new rating by taking the average of all the review ratings. 
+//Create Review 
+//@Route : POST /course/:id/reviews 
+//@Access : Private 
+const createCourseReview = asynHandler(async (req, res) => {
+  const {
+   rating , comment 
+  } = req.body
+
+  const course = await Course.findById(req.params.id) //It proceeds to find the product by its id using Product.findById()
+
+  if (course) {
+   const alreadyReviewed = course.reviews.find(r => r.user.toString() === req.user._id.toString())
+   if (alreadyReviewed){
+    res.status(400)
+    throw new Error ('Course Already Reviewed')
+   }
+   const review ={
+    name : req.user.firstName,
+    rating : Number(rating),
+    comment,
+    user : req.user._id
+   }
+     course.reviews.push(review)
+     course.numReviews = course.reviews.length 
+     course.rating =course.reviews.reduce((acc , item)=> item.rating + acc , 0 )/
+     course.reviews.length
+     await course.save()
+//   const updatedProduct = await product.save()
+    res.status(201).json({ message : "Review added"})
+  } else {
+    res.status(404)
+    throw new Error('Review not found')
+  }
+})
 
 module.exports={
 
-  createCourse,createLesson,DisplayLesson,getCoursesByIds,
-  deleteCourse,updateCourse,SearchCourse,getCourseById,
-  getCoursesById,updateLesson, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
+  createCourse,createLesson,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
+  deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,createCourseReview,
+  getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
 }

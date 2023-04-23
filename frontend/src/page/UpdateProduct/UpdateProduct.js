@@ -20,18 +20,34 @@ const UpdateProduct = () => {
   const [price,setPrice]=useState(0)
   const [category,setCategory]=useState("")
   const [countInStock,setCountInStock]=useState(0);
-    const [productName, setProductName] = useState('');
-    const [imageProduct,setImageProduct]=useState("");
+  const [productName, setProductName] = useState('');
+  const [imageProduct,setImageProduct]=useState("");
+
  const [successUpdateLink, setSuccessUpdateLink] = useState(false);
+
 
     const [showCreate, setShowCreate] = useState(false);
 
+
+//validators 
+const [validProductName, setValidProductName] = useState(false);
+const [validPrice, setValidPrice] = useState(false);
+const [validDescription, setValidDescription] = useState(false);
+const [validCategory, setValidCategory] = useState(false);
+const [validCountInStock, setValidCountInStock] = useState(false);
+const [validImageProduct, setValidImageProduct] = useState(false);
+
+
+  //Controle de saisie 
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
+
+  const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|1000)$/;
+  const IMAGE_REGEX = /\.(png|jpe?g)$/i;
+
+
+
   const dispatch = useDispatch();
-  //const { productById } = useSelector((state) => state.productById);
-  //const {productInfo} =productById
-
-  
-
 const {
     loading: loadingUpdate,
     error: errorUpdate,
@@ -45,17 +61,59 @@ const handleBackClick = () => {
 const [prod, setPRod] = useState(null);
 useEffect(() => {
     axios.get(`http://localhost:5000/product/productByIdProduct/${id}`).then((response) => {
+      const { description, price, countInStock, imageProduct,productName ,category }= response.data;
+      setDescription(description);
+      setCategory(category);
+      setPrice(price);
+      setCountInStock(countInStock);
+      setProductName(productName);
+      setImageProduct(imageProduct);
     setPRod(response.data);
 });
 }, [id]);
-
 console.log(prod);
+
+{
+  /* use effects des controle de saisie */
+}
+
+useEffect(() => {
+  const result = NAME_REGEX.test(productName);
+  console.log(result);
+  console.log(productName);
+  setValidProductName(result);
+}, [productName]);
+
+useEffect(() => {
+  const result = NAME_REGEX.test(category);
+  console.log(result);
+  console.log(category);
+  setValidCategory(result);
+}, [category]);
+
+useEffect(() => {
+  const result = DESC_REGEX.test(description);
+  console.log(result);
+  console.log(description);
+  setValidDescription(result);
+}, [description]);
+
+useEffect(() => {
+  const result = NUMBER_REGEX.test(countInStock);
+  console.log(result);
+  console.log(countInStock);
+  setValidCountInStock(result);
+}, [countInStock]);
+
+useEffect(() => {
+  const result = IMAGE_REGEX.test(imageProduct);
+  console.log(result);
+  console.log(imageProduct);
+  setValidImageProduct(result);
+}, [imageProduct]);
 
   const submitHandler=async(e)=>{
      e.preventDefault();
-
-
-
       dispatch(
         productUpdate(
          { id, 
@@ -85,8 +143,7 @@ if (successUpdateLink) {
               setShowCreate(false);
               navigate('/userdashboard')
             };
-
-
+            
 
     return(
           
@@ -143,14 +200,20 @@ if (successUpdateLink) {
           <input
           type="text"
           id="name"
-          defaultValue={prod?.productName}
+          value={productName}
           placeholder='Enter product name...'
                     onChange={(e) => setProductName(e.target.value)}
 
                     style={{ padding: '1rem',marginLeft: '3rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
                     backgroundColor: 'transparent',marginBottom: '0.5rem', fontSize: '1rem' }}
         />
-
+            <p
+                id="notename" style={{ color :'grey'}}
+                className={productName && !validProductName ? "none" : "hide"}
+              >
+                Product Name is at least 3 letters   and cannot contain special
+                characters or numbers
+            </p>
 
         </div>
 
@@ -161,12 +224,19 @@ if (successUpdateLink) {
             <input
               type="text"
               id="category"
-              defaultValue={prod?.category}
+              value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder='Enter  product category...'
               style={{ padding: '1rem',marginLeft: '5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
                 backgroundColor: 'transparent',marginBottom: '0.5rem', fontSize: '1rem' }}
             />
+             <p
+                id="categ" style={{ color :'grey'}}
+                className={category && !validCategory ? "none" : "hide"}
+              >
+                Category is at least 3 letters and cannot contain special
+                characters or numbers
+            </p>
           </div>
 
               {/* description */}
@@ -180,11 +250,18 @@ if (successUpdateLink) {
             <textarea
               id="description"
               placeholder='Enter product description...'
-                  defaultValue={prod?.description}
+                  value={description}
               onChange={(e) => setDescription(e.target.value)}
               style={{ padding: '1rem',marginLeft: '3.7rem', borderRadius: '5px', border: '1px solid white', width: '500px',
               height: '100px', resize: 'none', marginBottom: '0.5rem', fontSize: '1rem', backgroundColor: 'transparent', }}
             />
+            
+            <p
+                id="description" style={{ color :'grey'}}
+                className={description && !validDescription ? "none" : "hide"}
+              >
+                Description is at least 3 letters 
+            </p>
           </div>
 
               {/* count in Stock */}
@@ -196,13 +273,19 @@ if (successUpdateLink) {
             <input
               type="number"
               id="countInStock"
-              defaultValue={prod?.countInStock}
+              value={countInStock}
               placeholder='Enter product sotck...'
               onChange={(e) => setCountInStock(e.target.value)}
               style={{ padding: '1rem',marginLeft: '7.2rem', borderRadius: '5px', backgroundColor: 'transparent',
                   border: '1px solid white',
                           width: '500px', marginBottom: '0.5rem', fontSize: '1rem' }}
               />
+                <p
+                id="notefirstname" style={{ color :'grey'}}
+                className={countInStock && !validCountInStock ? "none" : "hide"}
+              >
+                 2 digits long and at least 1 product
+            </p>
           </div>
 
                           {/* price */}
@@ -214,7 +297,7 @@ if (successUpdateLink) {
             <input
               type="number"
               id="price"
-              defaultValue={prod?.price}
+              value={price}
               placeholder='Enter product price...'
               onChange={(e) => setPrice(e.target.value)}
               style={{ padding: '1rem',marginLeft: '7.5rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
@@ -230,11 +313,19 @@ if (successUpdateLink) {
             <input
               id="Image"
               name="imageProduct" 
-              type="file" placeholder="Image "
+              type="file" 
+              placeholder="Image "
+              accept=".png, .jpg, .jpeg"
               onChange={(e) => setImageProduct(e.target.files[0])}
               style={{ padding: '1rem',marginLeft: '7rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
+              <p
+                id="noteimag"
+                className={imageProduct && !validImageProduct ? "none" : "hide"}
+              >
+                Enter Valid image type : png , jpg or jpeg{" "}
+              </p>
           </div>
 
                         {/* //buttons */}
@@ -242,7 +333,15 @@ if (successUpdateLink) {
                         
           <div style={{ display: 'flex',justifyContent: 'space-between', width: '100%' , marginLeft:'17rem'}}>
            
-            <SpecialButton name="SAVE" onClick={submitHandler} type="submit" style={{ marginRight: '1rem' }}/>
+            <SpecialButton
+              name="SAVE"
+              onClick={submitHandler}
+              type="submit"
+              style={{ marginRight: '1rem' }}
+              disabled={!validProductName || !validCategory || !validCountInStock  ||
+                      !validDescription || !validPrice   || !validImageProduct
+                }
+            />
             <SpecialButton name="BACK TO LIST" onClick={handleBackClick} type="submit" style={{ backgroundColor: 'gray', color: 'white' }}/>
         </div>
    

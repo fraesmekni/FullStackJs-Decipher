@@ -10,9 +10,9 @@ import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
 
 
-import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer } from '../coursereduc/courseReducers';
+import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer,courseReviewReducer } from '../coursereduc/courseReducers';
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
-orderApproveReducer,orderUnApproveReducer,getProductsOrderItemsByIdReducer} from '../orderRedux/orderReducers';
+orderApproveReducer,getProductsOrderItemsByIdReducer, getDashboardProductsReducer, removeProductFromOrderReducer} from '../orderRedux/orderReducers';
 
 
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
@@ -45,9 +45,11 @@ const reducer = combineReducers({
        orderDeliver : orderDeliverReducer,
 
        orderApprove : orderApproveReducer,
-       orderUnApprove : orderUnApproveReducer,
 
+   
        ordersItemsProducts : getProductsOrderItemsByIdReducer,
+       orderProductDashboard : getDashboardProductsReducer,
+       removeProductFromOrder: removeProductFromOrderReducer,
 
 
         testdelete:testDeleteReducer,
@@ -56,6 +58,7 @@ const reducer = combineReducers({
        lessonDelete : lessonDeleteReducer,
 
        addEnroll :addEnrollReducer,
+       courseReview : courseReviewReducer
 
 
 
@@ -63,6 +66,7 @@ const reducer = combineReducers({
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 
+
 const ProductInfoFromStorage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : null 
 const cartItemsFromStorage = localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')) : []
 const ShippingAddressFromStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {} 

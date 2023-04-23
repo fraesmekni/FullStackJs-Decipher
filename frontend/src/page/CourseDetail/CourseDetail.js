@@ -1,18 +1,20 @@
 import React, { useState, useEffect  } from 'react';
 import { useParams,useNavigate, Link } from 'react-router-dom'; 
 import "./CourseDetail.css"
-import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup} from 'react-bootstrap';
+import { Container, Row, Col, Button, Card ,CardGroup, Accordion, ListGroup, Form} from 'react-bootstrap';
 import { useDispatch , useSelector , } from "react-redux";
-import { getCourses } from '../../coursereduc/courseActions';
+import { getCourses,createCourseReview } from '../../coursereduc/courseActions';
 import backg from "./backg.jpg";
+import axios from 'axios'
 import SpecialButton from '../../Components/Button/button';
 import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../Components/Loader';
+
 import Certification from './Certification';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-
+import Rating from '../../Components/Rating/Rating';
 const CourseDetail= () => {
   const userLogin = useSelector(state => state.userLogin)
   const {userInfo } = userLogin
@@ -23,9 +25,13 @@ const CourseDetail= () => {
 
       const { id } = useParams();
       const [qty,setQty]= useState(1);
-      
+      const [enrollId,setEnrollId]= useState(userInfo.enrollement._id);
       const [lessonIndex,setLessonIndex]=useState(0);
-
+      //initialise state
+      const [rating, setRating] = useState(0)
+      const [comment, setComment] = useState('')
+      const courseReviewCreate = useSelector((state) => state.courseReviewCreate) 
+      const successProductReview = courseReviewCreate ? courseReviewCreate.success : false;
       const courses = useSelector((state) => state.courseDisplay.courses);
       console.log(courses);
       const [lessonCompletionStatus, setLessonCompletionStatus] = useState([]);
@@ -51,7 +57,9 @@ const CourseDetail= () => {
     useEffect(() => {
       dispatch(getCourses());
     }, [id]);
-      console.log("///////courses");
+      console.log("///////enrollllllllllllllllll");
+      console.log(enrollId)
+
       const coursse = courses && courses.find((p) => p._id === id);
 
         const [isExpanded, setIsExpanded] = useState(true);
@@ -81,7 +89,25 @@ const CourseDetail= () => {
        
           //test handeling 
         const [selectedAnswers, setSelectedAnswers] = useState([]);
+const TestPassed=(enrollId) => {
+  axios.post(`http://localhost:5000/course/TestPassed/${enrollId}`)
+  .then(response => {
+    console.log(response.data); // log the updated enrollment object
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
 
+const TestFailed=(enrollId) => {
+  axios.post(`http://localhost:5000/course/TestFailed/${enrollId}`)
+  .then(response => {
+    console.log(response.data); // log the updated enrollment object
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
         const handleOptionClick = (questionIndex, optionIndex) => {
           const newSelectedAnswers = [...selectedAnswers];
           newSelectedAnswers[questionIndex] = optionIndex;
@@ -108,10 +134,13 @@ const CourseDetail= () => {
               particleCount: 200,
               spread: 100
             });
+            TestPassed(enrollId);
             toast("Congrats for passing this course! Check your e-mail!");
             document.getElementById("testbutton").disabled = true;
 
           } else {
+            TestFailed(enrollId);
+
             toast.error("Oops... You can redo this test by reloading the page !", {
               hideProgressBar: true});
                           document.getElementById("testbutton").disabled = true;
@@ -128,6 +157,15 @@ const CourseDetail= () => {
 
         console.log(coursse?.coach?.firstName);
         
+        const submitHandler = (e)=>{
+          e.preventDefault()
+          
+          dispatch(createCourseReview(id,{
+            rating,
+            comment,
+          }))
+        
+        }
   return ( 
     
     <body style={{backgroundImage:`url(${backg})`,color:"white",height:"1900px"}}>
@@ -265,6 +303,7 @@ const CourseDetail= () => {
                   src="https://cdn.lordicon.com/hrqqslfe.json"
                   trigger="hover"
                   colors="primary:#ffffff,secondary:#16c72e"
+
                   scale="40"
                   onClick={() => completeLesson(index)}
                  >
@@ -336,10 +375,20 @@ const CourseDetail= () => {
             </Card> */}
 
             </Row>
+
       <PDFDownloadLink document={<Certification name={userInfo.firstName } lastname={userInfo.lastName } paragraph={coursse.titleCourse}   date={date}   />} fileName="certificate.pdf">
   {({ blob, url, loading, error }) => (loading ? 'Generating PDF...' : 'Your Certifcate')}
 </PDFDownloadLink>
 
+            <ListGroup.Item  style={{color: "#362824"}}> 
+                  <Rating
+                    style={{color: "#362824"}}
+                    value={coursse.rating}
+                    text={`  ${coursse.numReviews} reviews`}
+
+
+                  />
+                </ListGroup.Item>
             <h4 className="mt-5" style={{color: "white"}}>What you'll learn</h4>
             <ListGroup className="learning-list">
               <ListGroup.Item style={{
@@ -362,7 +411,81 @@ const CourseDetail= () => {
               
              </ListGroup> </div>
       <br />       <br />
+      <Row style={{
+          paddingTop:"30px",
+        background: "transparent",
+        background: "rgba(215, 200, 200, 0.299)",
+        backdropFilter: "blur(60px)",
+      }}>
+        <Col style={{marginLeft:"50px" , color:'black',}}md={10}>
+          <h2> Reviews({`${coursse.numReviews}`})
+</h2>
+          {coursse?.reviews.length=== 0 && <p> No Reviews </p> }
+          <ListGroup style={{
+          paddingTop:"30px",
+        background: "transparent",
+        background: "rgba(215, 200, 200, 0.299)",
+        backdropFilter: "blur(60px)",
+      }}variant="flush">
+            {coursse?.reviews.map(review=>(
+              <ListGroup.Item style={{
+                paddingTop:"30px",
+              background: "transparent",
+              background: "rgba(215, 200, 200, 0.299)",
+              backdropFilter: "blur(60px)",
+            }} key={review._id} >
+                <strong>{review.name}</strong> 
+                <Rating style={{
+          paddingTop:"30px",
+        background: "transparent",
+        background: "rgba(215, 200, 200, 0.299)",
+        backdropFilter: "blur(60px)",
+      }}
+                    value={review.rating}
+                    
 
+                  />
+                  <p>{review.createdAt?.substring(0,10)}</p>
+                  <p>{review.comment}</p>
+              </ListGroup.Item>
+            ))}
+            <ListGroup.Item style={{
+          paddingTop:"30px",
+        background: "transparent",
+        background: "rgba(215, 200, 200, 0.299)",
+        backdropFilter: "blur(60px)",
+      }}>
+              <h2 className='cust'>Write a Customer Review</h2>
+              {userInfo ? (
+              <Form onSubmit={submitHandler}>
+                <Form.Group controlId="rating" >
+                  <Form.Label>Rating</Form.Label>
+                  
+                  <Form.Control as='select' value={rating} onChange={(e)=>{
+                    
+                    setRating(+e.target.value)
+                    ;}}>
+                      <option value=''>Select...</option>
+                      <option value='1'>1 -poor</option>
+                      <option value='2'>2 -fair</option>
+                      <option value='3'>3 -good</option>
+                      <option value='4'>4 -veryGood</option>
+                      <option value='5'>5 -Excellent</option>
+                    </Form.Control>
+                </Form.Group >
+
+                <Form.Group controlId="comment">
+                  <Form.Label>Comment</Form.Label>
+                  <Form.Control as='textarea' rows='3' value={comment} onChange={(e)=>setComment(e.target.value)} ></Form.Control>
+
+                </Form.Group>
+                   <Button type="submit" variant="primary"> submit</Button>
+              </Form>): (<alert> please <Link to='/login'>sign in</Link> to write a review </alert>)}
+            </ListGroup.Item>
+
+          </ListGroup>
+        </Col>
+      </Row>
           <div className="mt-4">
             <h4>Related Courses</h4>
             <CardGroup>

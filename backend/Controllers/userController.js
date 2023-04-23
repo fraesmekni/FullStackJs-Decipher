@@ -290,7 +290,7 @@ const user = await User.findOne({emailToken});
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
-        const user = await User.findOne({ email: email })
+        const user = await User.findOne({ email: email }).populate('enrollment');
         const coach = await Coach.findOne({ user: user._id })
         const sponsor = await Sponsor.findOne({ user: user._id })
 
@@ -310,6 +310,7 @@ const logIn = asynHandler( async (req,res)=>{
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
                 certified : user.certified,
+                enrollement : user.enrollment,
                 coach: coach,
                 sponsor: sponsor
             })

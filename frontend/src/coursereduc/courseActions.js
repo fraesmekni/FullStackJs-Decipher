@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, DELETE_COURSE_FAIL, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_LESSON_FAIL, DELETE_LESSON_REQUEST, DELETE_LESSON_SUCCESS, DELETE_TEST_FAIL, DELETE_TEST_REQUEST, DELETE_TEST_SUCCESS ,ENROLL_ADD_REQUEST,ENROLL_ADD_SUCCESS,LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, TEST_ADD_FAIL, TEST_ADD_REQUEST, TEST_ADD_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST } from "./courseConstants";
+import { COURSE_ADD_FAIL, COURSE_ADD_REQUEST, COURSE_ADD_SUCCESS, COURSE_GET_SUCCESS, DELETE_COURSE_FAIL, DELETE_COURSE_REQUEST, DELETE_COURSE_SUCCESS, DELETE_LESSON_FAIL, DELETE_LESSON_REQUEST, DELETE_LESSON_SUCCESS, DELETE_TEST_FAIL, DELETE_TEST_REQUEST, DELETE_TEST_SUCCESS ,ENROLL_ADD_REQUEST,ENROLL_ADD_SUCCESS,LESSON_ADD_REQUEST, LESSON_ADD_SUCCESS, SET_COURSE_ID, TEST_ADD_FAIL, TEST_ADD_REQUEST, TEST_ADD_SUCCESS, UPDATE_COURSE_FAIL, UPDATE_COURSE_REQUEST, UPDATE_COURSE_SUCCESS, UPDATE_LESSON_REQUEST,CREATE_COURSE_REVIEW_FAIL, CREATE_COURSE_REVIEW_REQUEST,CREATE_COURSE_REVIEW_RESET,CREATE_COURSE_REVIEW_SUCCESS } from "./courseConstants";
 
 
 export const addCourse = ({ titleCourse ,
@@ -319,6 +319,44 @@ export const addLesson = ({ titleLesson,
    // localStorage.setItem('userInfo', JSON.stringify(data))
 
    
+}
+
+//reviewProductAction
+export const createCourseReview = (id , review) => async (dispatch, getState)=>{
+  try {
+      dispatch({
+          type:CREATE_COURSE_REVIEW_REQUEST
+      })
+      const {
+        userLogin: {userInfo},
+      }= getState()
+      const config = {
+          headers:{  
+            'Content-Type' : 'application/json',
+          Authorization : `Bearer ${userInfo.token}`,
+              
+          }
+      }
+      
+     await axios.post(
+          `http://localhost:5000/course/${id}/reviews`,review,config
+      )
+
+      dispatch({
+          type : CREATE_COURSE_REVIEW_SUCCESS,
+          
+          
+      })
+  } catch(error){
+      dispatch({
+          type: CREATE_COURSE_REVIEW_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        })
+
+  }
 }
 
 

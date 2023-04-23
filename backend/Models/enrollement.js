@@ -19,6 +19,11 @@ const enrollmentSchema = new mongoose.Schema({
     type: String,
     enum: ['Not started', 'In progress', 'Completed'],
     default: 'Not started'
+  },
+  test: {
+    type: String,
+    enum: ['Passed', 'Failed', 'Not started'],
+    default: 'Not started'
   }
 }, { timestamps: true });
 
