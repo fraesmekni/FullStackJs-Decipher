@@ -39,11 +39,10 @@ const [validImageProduct, setValidImageProduct] = useState(false);
 
 
   //Controle de saisie 
-  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,23}$/;
-  const DESC_REGEX = /^[\w\d\s-]{3,100}$/;
+  const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
 
-
-  const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|100)$/;
+  const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|1000)$/;
   const IMAGE_REGEX = /\.(png|jpe?g)$/i;
 
 
@@ -111,7 +110,7 @@ useEffect(() => {
   console.log(result);
   console.log(imageProduct);
   setValidImageProduct(result);
-}, [countInStock]);
+}, [imageProduct]);
 
   const submitHandler=async(e)=>{
      e.preventDefault();
@@ -144,8 +143,7 @@ if (successUpdateLink) {
               setShowCreate(false);
               navigate('/userdashboard')
             };
-
-
+            
 
     return(
           
