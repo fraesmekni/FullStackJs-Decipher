@@ -1,6 +1,6 @@
 const express = require("express");
  const {
-  accessChat, fetchChats,
+  accessChat, fetchChats, createGroupChat, renameGroup, removeFromGroup, addToGroup,
   /*
   fetchChats,
   createGroupChat,
@@ -15,10 +15,9 @@ const router = express.Router();
 
 router.route("/").post(protectSimpleUser, accessChat);
 router.route("/").get(protectSimpleUser, fetchChats);
-/*
 router.route("/group").post(protectSimpleUser, createGroupChat);
 router.route("/rename").put(protectSimpleUser, renameGroup);
-router.route("/groupremove").put(proprotectSimpleUsertect, removeFromGroup);
+router.route("/groupremove").put(protectSimpleUser, removeFromGroup);
 router.route("/groupadd").put(protectSimpleUser, addToGroup);
- */
+
 module.exports = router;
