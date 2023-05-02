@@ -9,6 +9,7 @@ const passport = require('passport')
 const passportSetUp=require('./passport.js')
 const authRoute = require('./routes/auth.js')
 const orderRoutes = require ('./routes/orderRoute.js')
+const chatRoute = require ('./routes/chatRoute.js');
 //connect database
 mongodb() 
 
@@ -38,7 +39,8 @@ app.use('/product',require('./routes/productRoute.js'));
 app.use('/course',require('./routes/courseRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute) ;
-app.use('/api/orders', orderRoutes)
+app.use('/api/orders', orderRoutes);
+app.use('/chat', chatRoute)
 app.get('/api/config/paypal' , (req ,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
 // npm run dev
 app.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))
