@@ -39,6 +39,8 @@ import EnrollChart from './page/CoachDashboard/MostEnrolled';
 import SuccessRate from './page/CoachDashboard/SuccessRate';
 import AgeSectionPourcentage from './page/CoachDashboard/AgeSection';
 import OrdersStat from './page/UserDashboard/OrdersStat';
+import VideoPlayer from './page/VideoChat/VideoPlayer';
+import Video from './page/VideoChat/Video';
 ReactGA.initialize('G-Y1V026ZHPY');
 
 
@@ -123,7 +125,7 @@ useEffect(()=>
     <Route path="/courses" element={<><div className='yo'><Navbarr /> <Courses/></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
     <Route path="/coursedashboard" element={<CoursesDasbord/>} />
-    <Route path="/oo" element={<OrdersStat/>} />
+    <Route path="/oo" element={<Video/>} />
 
     <Route path="/lessondashboard/:id" element={<LessonDashboard/>} />
     <Route path="/shipping" element={<Shipping/>} />
