@@ -3,7 +3,7 @@ const express = require('express');
 
 const { DisplayLesson, createCourse,createLesson,deleteCourse,updateCourse,
   SearchCourse,getCourseById,getCoursesById,getCoursesByIds, updateLesson,
-  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser,createCourseReview} = require('../Controllers/courseController');
+  getLessonById,deleteLesson,deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest, updateCompletionStatus, countEnroll, countCompletedEnrollments, countinProgressEnrollments, countNotStartedEnrollments, popularCategory, setTestFailed, setTestPassed, calculateSuccessRate, updateEnrollforUser,createCourseReview, SendMail} = require('../Controllers/courseController');
 
   const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
@@ -39,6 +39,7 @@ router.post('/createnroll',createEnroll),
 router.get('/getEnroll',DisplayEnrollment),
 router.get('/getPopularCat',popularCategory),
 router.post('/createlesson',createLesson),
+router.post('/send-email',SendMail),
 router.put('/updateuserenroll/:enrollId/:userId',updateEnrollforUser),
 router.post('/createTest',createTest),
 router.delete('/delete/:id' ,deleteCourse),
