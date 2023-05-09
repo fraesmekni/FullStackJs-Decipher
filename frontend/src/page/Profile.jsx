@@ -250,7 +250,8 @@ const [openDialog, setOpenDialog] = React.useState(false);
   height: "500px",
   width: "800px"
 }}> 
-              {orders ? (
+                {orders && orders.length > 0 ? (
+                  
               orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
                   <tr key={order.id}>
