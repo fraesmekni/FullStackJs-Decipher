@@ -7,7 +7,7 @@ import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import backg from "./backg.jpg";
+import backg from "./test.jpg";
 import {listOrders,getProductsOrderItemsById} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
@@ -108,7 +108,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
     <div>
 
     {loading && <Loader></Loader>} 
-      <Parallax small filter image="/images/handmade.jpg" />       
+      <Parallax small filter image="/images/test.jpg" />       
 
       <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
@@ -162,50 +162,20 @@ const [openDialog, setOpenDialog] = React.useState(false);
                   alignCenter
                   color="#000"
                   tabs={[
-                    {
-                      tabButton: "Course",
-                      tabIcon: Camera,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      ) 
-                    }, 
+                    
                     { 
-                      tabButton: "Orders",
-                      tabIcon: AssignmentIcon,
+                    
                       tabContent: (
                         <GridContainer justify="center">
+<h2 className={classes.title} style={{ textAlign: 'center', marginBottom: '20px', color: '#FCFFE7' }}>Your Orders</h2>
 
-            <table style={{marginTop:"160px",
+            <table style={{marginTop:"80px",
     paddingTop:"30px",
   background: "rgba(215, 200, 200, 0.299)",
   backdropFilter: "blur(60px)",
   borderRadius: "30px",
-  height:"auto"
+  height: "500px",
+  width: "800px"
 }}> 
               {orders ? (
               orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
@@ -305,80 +275,6 @@ const [openDialog, setOpenDialog] = React.useState(false);
                   setPage(0);
                 }}
               /> }
-                        </GridContainer>
-                      )
-                    },
-                    {
-                      tabButton: "Events",
-                      tabIcon: Palette,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
-                    },
-                    {
-                      tabButton: "Favorite",
-                      tabIcon: Favorite,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
                         </GridContainer>
                       )
                     }
