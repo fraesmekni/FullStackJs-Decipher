@@ -47,6 +47,7 @@ const [validThumbnailCourse, setValidThumbnailCourse] = useState(false);
   const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
   const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
   const CAT_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
+  
 
   /* use effects des controle de saisie */
 

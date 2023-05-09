@@ -38,6 +38,7 @@ import CoursesChart from './page/CoachDashboard/CoursesChart';
 import EnrollChart from './page/CoachDashboard/MostEnrolled';
 import SuccessRate from './page/CoachDashboard/SuccessRate';
 import AgeSectionPourcentage from './page/CoachDashboard/AgeSection';
+import RoomPage from './page/room';
 import OrdersStat from './page/UserDashboard/OrdersStat';
 import VideoPlayer from './page/VideoChat/VideoPlayer';
 import Video from './page/VideoChat/Video';
@@ -136,6 +137,9 @@ useEffect(()=>
    
 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
+
+    <Route path="/room/:roomId" element={<RoomPage/>} />
+
         </Routes>)}
     </Router>
     
