@@ -7,15 +7,7 @@
   }
 }
 .popup{
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color : white;
-  scroll-behavior: smooth;
-  overflow: hidden!important;
+ 
 
 }
 .shepherd-modal-background {
@@ -24,9 +16,11 @@
 .shepherd-highlight {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
+  padding: auto;
+  box-shadow: 0 0 10px rgba(241, 251, 251, 0.8);
+  outline: 1px solid rgba(252, 255, 255, 0.8);  backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  padding : 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .shepherd-highlight.shepherd-element-active {

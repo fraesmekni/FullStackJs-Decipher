@@ -6,6 +6,9 @@ import Partenairec from '../../Components/partenairescarousel/partenairec';
 import Products from '../../Components/Products/products';
 import Crowdfunding from "../../Components/crowdfunding/crowdfunding";
 import Popchat from '../ChatPop/Popchat.js'
+import Navbarr from "../../Components/Navbar/navbar";
+import Shepherd from 'shepherd.js';
+
 function Home(){
 
 const msgs = ['hey, whatsup!', 'my oh, how ya doin ??', 
@@ -18,6 +21,7 @@ const getMessage = (msg) => {
 return(
 
 <>
+<Navbarr />
 <HeroSection />
 {/* <div align="center" className="eventbackground">
 <Events/> </div> */}
