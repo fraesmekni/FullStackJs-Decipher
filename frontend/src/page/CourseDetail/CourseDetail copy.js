@@ -11,11 +11,11 @@ import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../Components/Loader';
-import Video from '../../page/VideoChat/Video';
 
 import Certification from './Certification';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import Rating from '../../Components/Rating/Rating';
+import VideoPlayer from '../VideoChat/VideoPlayer';
 const CourseDetail= () => {
   const userLogin = useSelector(state => state.userLogin)
   const {userInfo } = userLogin
@@ -182,14 +182,20 @@ const TestFailed=(enrollId) => {
   borderRadius: "10px",
   height:"auto"
 }}>
+{showMeet === true
+          (           <Card.Body >
 
+            <VideoPlayer />
+            </Card.Body >
+
+          )}
       {coursse ? (
      <>
                       < ToastContainer style={{marginRight: "400px"}}/>
 
     <Row >
         <Col md={8}>
-
+          
         { showLessons === true && coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
 <>
           <iframe

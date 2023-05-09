@@ -200,7 +200,13 @@ const [openDialog, setOpenDialog] = React.useState(false);
                       tabContent: (
                         <GridContainer justify="center">
 
-            <table style={{ marginTop : '40px'}}>
+            <table style={{marginTop:"160px",
+    paddingTop:"30px",
+  background: "rgba(215, 200, 200, 0.299)",
+  backdropFilter: "blur(60px)",
+  borderRadius: "30px",
+  height:"auto"
+}}> 
               {orders ? (
               orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (

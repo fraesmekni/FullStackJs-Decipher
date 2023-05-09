@@ -9,7 +9,6 @@ const passport = require('passport')
 const passportSetUp=require('./passport.js')
 const authRoute = require('./routes/auth.js')
 const orderRoutes = require ('./routes/orderRoute.js')
-const chatRoute = require ('./routes/chatRoute.js');
 
 //connect database
 mongodb() 
@@ -33,12 +32,13 @@ app.use(cors({
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST'],
     credentials: true
-  },
-  allowEIO3: true // add this option to support Socket.IO 4.1.2 protocol
+  } , allowEIO3: true // add this option to support Socket.IO 4.1.2 protocol
+
 });
+
 io.on('connection', (socket)=> {
   socket.emit('me', socket.id);
   socket.on('disconnect', ()=> {
@@ -60,9 +60,12 @@ app.use('/product',require('./routes/productRoute.js'));
 app.use('/course',require('./routes/courseRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute) ;
-app.use('/chat', chatRoute)
-
 app.use('/api/orders', orderRoutes)
-app.get('/api/config/paypal' , (req ,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
-// npm run dev
-app.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))
+
+app.get('/', (req, res) => {
+  res.send('Running');
+});
+
+server.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});

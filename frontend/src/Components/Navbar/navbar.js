@@ -14,8 +14,106 @@ import LinkContainer from 'react-bootstrap/NavLink';
 import { useDispatch , useSelector } from 'react-redux';
 import { Logout } from '../../userredux/useraction';
 import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
+import Shepherd from 'shepherd.js';
 
 function Navbarr () {
+
+
+ 
+  useEffect(() => {
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true
+        },
+        classes: 'popup',
+        scrollTo: { behavior: 'smooth', block: 'center' },
+        modal: true,
+        highlightClass: 'shepherd-highlight'
+        
+      }
+    });     
+    
+    tour.addStep({
+      title: 'Creating a Shepherd Tour',
+      text: `Creating a Shepherd tour is easy. too!\
+      Just create a \`Tour\` instance, and add as many steps as you want.`,
+      attachTo: {
+        element: '#home',
+        on: 'bottom'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating'
+    });
+    tour.addStep({
+      title: 'Another Step',
+      text: 'This is another step in the tour.',
+      attachTo: {
+        element: '#shop',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      title: 'Another Step',
+      text: 'This is another step in the tour.',
+      attachTo: {
+        element: '#courses',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.start();
+  }, []);
+  
+  // rest of the code...
+
+  
   const dispatch = useDispatch()
   const userLogin =useSelector(state =>state.userLogin)
   const {userInfo} =userLogin
@@ -62,33 +160,33 @@ function Navbarr () {
   
         return( <>
 
-        <Navbar id='mynav' className={"fixed-top" } expand="lg" background-color="transparent"><nav className="NavbarItems">
+        <Navbar id="me" className={"fixed-top" } expand="lg" background-color="transparent"><nav className="NavbarItems">
             
             <ul>
            
             
-                        <li > <Link className="nav_links"  to="/">
+                        <li > <Link id="home" className="nav_links"  to="/">
                             
                             HOME
                           
 
                              </Link>
-                            <Link  className="nav_links" to="/shop">
+                            <Link  id="shop" className="nav_links" to="/shop">
                            
                             SHOP
                             
                              </Link>
-                            <Link to="/courses" className="nav_links">
+                            <Link id="courses" to="/courses" className="nav_links">
 
                             COURSES
                             
                              </Link>
-                            <Link to="/aboutus" className="nav_links">
+                            <Link id="about us" to="/aboutus" className="nav_links">
 
                             ABOUT US                            
                              </Link>
                            
-                               <Link to="/register" style={{marginLeft: '600px'}} className="nav_links">
+                               <Link id="register"to="/register" style={{marginLeft: '600px'}} className="nav_links">
 
 REGISTER                         </Link>
 
@@ -116,7 +214,7 @@ REGISTER                         </Link>
 
                             
                               <a className="nav_links">    
-                              <FontAwesomeIcon icon={faMicrophone}  onClick={SpeechRecognition.startListening} size="lg" />
+                              <FontAwesomeIcon id="ho"icon={faMicrophone}  onClick={SpeechRecognition.startListening} size="lg" />
                               <a className="nav_links smalltext" id="transcript"> {transcript}</a>
 </a>
                             </li>

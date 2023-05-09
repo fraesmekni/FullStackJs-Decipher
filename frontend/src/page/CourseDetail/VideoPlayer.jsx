@@ -28,7 +28,7 @@ console.log(name)
     <Grid container className={classes.gridContainer}>
       
      
-            <video playsInline muted ref={myVideo} autoPlay style={{width:"700px",height:"400px",zIndex:"899",marginTop:"10px"}}/>
+            <video playsInline muted ref={myVideo} autoPlay style={{width:"300px",height:"200px",zIndex:"899",marginTop:"300px"}}/>
        
             <video playsInline ref={userVideo} autoPlay style={{width:"300px",height:"200px",zIndex:"899",marginTop:"600px"}} />
           
