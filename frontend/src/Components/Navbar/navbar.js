@@ -21,6 +21,8 @@ function Navbarr () {
 
  
   useEffect(() => {
+    const hasCompletedTour = localStorage.getItem('hasCompletedTour');
+    if (hasCompletedTour) {
     const tour = new Shepherd.Tour({
       defaultStepOptions: {
         cancelIcon: {
@@ -35,9 +37,8 @@ function Navbarr () {
     });     
     
     tour.addStep({
-      title: 'Creating a Shepherd Tour',
-      text: `Creating a Shepherd tour is easy. too!\
-      Just create a \`Tour\` instance, and add as many steps as you want.`,
+      text: `Home sweet home!\
+      `,
       attachTo: {
         element: '#home',
         on: 'bottom'
@@ -58,11 +59,10 @@ function Navbarr () {
           text: 'Next'
         }
       ],
-      id: 'creating'
+      id: 'creating1'
     });
     tour.addStep({
-      title: 'Another Step',
-      text: 'This is another step in the tour.',
+      text: 'Shop from our students!.',
       attachTo: {
         element: '#shop',
         on: 'top'
@@ -85,8 +85,7 @@ function Navbarr () {
       id: 'another-step'
     });
     tour.addStep({
-      title: 'Another Step',
-      text: 'This is another step in the tour.',
+      text: 'Learn courses on various topics.',
       attachTo: {
         element: '#courses',
         on: 'top'
@@ -108,7 +107,59 @@ function Navbarr () {
       ],
       id: 'another-step'
     });
+    tour.addStep({
+      text: `You can make an account with us\
+   `,
+      attachTo: {
+        element: '#register',
+        on: 'bottom'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating2'
+    });
+    tour.addStep({
+      text: `Navigate through our app using your voice!\
+      `,
+      attachTo: {
+        element: '#ho',
+        on: 'bottom'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating3'
+    })
     tour.start();
+    // localStorage.setItem('hasCompletedTour', true);
+  }
   }, []);
   
   // rest of the code...

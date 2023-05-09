@@ -22,7 +22,8 @@ import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
-
+import Shepherd from 'shepherd.js';
+import "../Components/Navbar/navbar.css"
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -103,6 +104,78 @@ const [openDialog, setOpenDialog] = React.useState(false);
     classes.imgRoundedCircle,
     classes.imgFluid
   );
+  useEffect(() => {
+    const hasCompletedTour = localStorage.getItem('hasCompletedTour');
+    if (hasCompletedTour) {
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true
+        },
+        classes: 'popup',
+        scrollTo: { behavior: 'smooth', block: 'center' },
+        modal: true,
+        highlightClass: 'shepherd-highlight'
+        
+      }
+    });     
+    
+    tour.addStep({
+      text: `This is your dashboard where you can visit your products\
+      `,
+      attachTo: {
+        element: '#shopicon',
+        on: 'left'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating1'
+    });
+    tour.addStep({
+      text: `This is where you find your courses\
+      `,
+      attachTo: {
+        element: '#courseicon',
+        on: 'right'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating2'
+    });
+   
+    tour.start();
+    // localStorage.setItem('hasCompletedTour', true);
+  }
+  }, []);
+  
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
   return (
     <div>
@@ -123,14 +196,14 @@ const [openDialog, setOpenDialog] = React.useState(false);
                     />
                   </div>
                   {userInfo.certified ? (
-   <><FontAwesomeIcon className="iconn"style={{marginTop:"-300px",marginRight:"30px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="3x" />
+   <><FontAwesomeIcon   id="shopicon" className="iconn"style={{marginTop:"-300px",marginRight:"30px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="3x" />
 
   </>
 
 ) : (  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="3x" />
 )}
  { userInfo.role.name === "coach" ? 
-  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
+  <FontAwesomeIcon id="courseicon" className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
 
 ( <></>
 )}
