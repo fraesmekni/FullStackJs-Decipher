@@ -37,13 +37,13 @@ const Video = () => {
 
   return (
     <div className={classes.wrapper}>
-      <AppBar className={classes.appBar} position="static" color="inherit">
+      {/* <AppBar className={classes.appBar} position="static" color="inherit">
         <Typography variant="h2" align="center">Video Chat</Typography>
-      </AppBar>
+      </AppBar> */}
       <VideoPlayer />
-      <Sidebar>
+      <div style={{zIndex:'1000'}}> <Sidebar>
         <Notifications />
-      </Sidebar>
+      </Sidebar>  </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ function Courses() {
     const courses = useSelector((state) => state.courseDisplay.courses);
     const bestCourses = courses
     ?.sort((a, b) => b.rating - a.rating)
-    ?.slice(0, 3);
+    ?.slice(0, 4);
   
     useEffect(() => {
       dispatch(getCourses());
@@ -29,13 +29,12 @@ function Courses() {
 
     <div><h1 className="SectionTitle">Courses</h1>
             <p className="paragraph2">Best Rating Courses </p></div> 
-            
  {Array.isArray(bestCourses) && bestCourses.map((c) => (
           
           <Event coursee={c} key={c._id} >
 
           </Event>
-        ))}
+        ))} 
           
    <div><h1 className="SectionTitle" style={{ color : 'white'}}>Courses</h1>
             <p className="paragraph2" style={{ color : 'white'}}>learn this amazing skill with us </p></div> 

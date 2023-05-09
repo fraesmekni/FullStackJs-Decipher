@@ -4,8 +4,7 @@ import Peer from 'simple-peer';
 
 const SocketContext = createContext();
 
- const socket = io('http://localhost:5000');
-//const socket = io('https://warm-wildwood-81069.herokuapp.com');
+const socket = io('http://localhost:5000');
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
@@ -14,67 +13,52 @@ const ContextProvider = ({ children }) => {
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
   const [me, setMe] = useState('');
-
+  const [peer, setPeer] = useState(null);
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-
         myVideo.current.srcObject = currentStream;
-        console.log(myVideo.current)
       });
 
-    socket.on('me', (id) => setMe(id)    );
+    socket.on('me', (id) => {
+      setMe(id);
+      console.log('My ID:', id);
+      // initialize peer to a new instance of Peer
+      setPeer(new Peer({ initiator: false, trickle: false, stream }));
+    });
+
     socket.on('callUser', ({ from, name: callerName, signal }) => {
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
-  }, []);
+  }, [me,socket]);
 
   const answerCall = () => {
     setCallAccepted(true);
-
-    const peer = new Peer({ initiator: false, trickle: false, stream });
-
-    peer.on('signal', (data) => {
-      socket.emit('answerCall', { signal: data, to: call.from });
-    });
-
-    peer.on('stream', (currentStream) => {
-      userVideo.current.srcObject = currentStream;
-    });
-
     peer.signal(call.signal);
-
-    connectionRef.current = peer;
   };
 
   const callUser = (id) => {
-    try{
-    console.log("calling user with id: ", id);
+    setCall({ isReceivingCall: true, from: me, name });
+console.log(id);
+    const newPeer = new Peer({ initiator: true, trickle: false, stream });
+    newPeer.signal(id);
 
-    const peer = new Peer({ initiator: true, trickle: false, stream });
-
-    peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
-    });
-
-    peer.on('stream', (currentStream) => {
-      userVideo.current.srcObject = currentStream;
+    newPeer.on('signal', (data) => {
+      socket.emit('answerCall', { signal: data, to: call.from });
     });
 
     socket.on('callAccepted', (signal) => {
       setCallAccepted(true);
-
-      peer.signal(signal);
+      newPeer.signal(signal);
     });
 
-    connectionRef.current = peer; 
-  } catch (error) {
-    console.error(error);
-  }
+    connectionRef.current = newPeer;
+    setPeer(newPeer);
   };
 
   const leaveCall = () => {

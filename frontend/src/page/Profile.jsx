@@ -7,7 +7,7 @@ import { Row, Col, ListGroup, Image, Card, } from 'react-bootstrap'
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import backg from "./backg.jpg";
+import backg from "./test.jpg";
 import {listOrders,getProductsOrderItemsById} from '../orderRedux/orderActions';
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
@@ -22,7 +22,8 @@ import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
-
+import Shepherd from 'shepherd.js';
+import "../Components/Navbar/navbar.css"
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -103,12 +104,83 @@ const [openDialog, setOpenDialog] = React.useState(false);
     classes.imgRoundedCircle,
     classes.imgFluid
   );
+  useEffect(() => {
+    const hasCompletedTour = localStorage.getItem('hasCompletedTour');
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true
+        },
+        classes: 'popup',
+        scrollTo: { behavior: 'smooth', block: 'center' },
+        modal: true,
+        highlightClass: 'shepherd-highlight'
+        
+      }
+    });     
+    
+    tour.addStep({
+      text: `This is your dashboard where you can visit your products\
+      `,
+      attachTo: {
+        element: '#shopicon',
+        on: 'left'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating1'
+    });
+    tour.addStep({
+      text: `This is where you find your courses\
+      `,
+      attachTo: {
+        element: '#courseicon',
+        on: 'right'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating2'
+    });
+   
+    tour.start();
+    // localStorage.setItem('hasCompletedTour', true);
+  
+  }, []);
+  
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
   return (
     <div>
 
     {loading && <Loader></Loader>} 
-      <Parallax small filter image="/images/handmade.jpg" />       
+      <Parallax small filter image="/images/test.jpg" />       
 
       <div style={{backgroundColor: "#43312d",backgroundImage:`url(${backg})`}} className={classNames(classes.main, classes.mainRaised)}>        <div> <div></div>
           <div className={classes.container}>
@@ -123,14 +195,14 @@ const [openDialog, setOpenDialog] = React.useState(false);
                     />
                   </div>
                   {userInfo.certified ? (
-   <><FontAwesomeIcon className="iconn"style={{marginTop:"-300px",marginRight:"30px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="3x" />
+   <><FontAwesomeIcon   id="shopicon" className="iconn"style={{marginTop:"-300px",marginRight:"30px"}} onClick={GotoUserDashboard} icon={faShop}   color="#FCFFE7" size="3x" />
 
   </>
 
 ) : (  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}}  icon={faShopLock}   color="#FCFFE7" size="3x" />
 )}
  { userInfo.role.name === "coach" ? 
-  <FontAwesomeIcon  className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
+  <FontAwesomeIcon id="courseicon" className="iconn" style={{marginTop:"-300px"}} onClick={GotoCoachDashboard} icon={faChalkboardTeacher}  color="#FCFFE7" size="3x" /> : 
 
 ( <></>
 )}
@@ -162,46 +234,23 @@ const [openDialog, setOpenDialog] = React.useState(false);
                   alignCenter
                   color="#000"
                   tabs={[
-                    {
-                      tabButton: "Course",
-                      tabIcon: Camera,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      ) 
-                    }, 
+                    
                     { 
-                      tabButton: "Orders",
-                      tabIcon: AssignmentIcon,
+                    
                       tabContent: (
                         <GridContainer justify="center">
+<h2 className={classes.title} style={{ textAlign: 'center', marginBottom: '20px', color: '#FCFFE7' }}>Your Orders</h2>
 
-            <table style={{ marginTop : '40px'}}>
-              {orders ? (
+            <table style={{marginTop:"80px",
+    paddingTop:"30px",
+  background: "rgba(215, 200, 200, 0.299)",
+  backdropFilter: "blur(60px)",
+  borderRadius: "30px",
+  height: "500px",
+  width: "800px"
+}}> 
+                {orders && orders.length > 0 ? (
+                  
               orders && orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
                 return (
                   <tr key={order.id}>
@@ -299,80 +348,6 @@ const [openDialog, setOpenDialog] = React.useState(false);
                   setPage(0);
                 }}
               /> }
-                        </GridContainer>
-                      )
-                    },
-                    {
-                      tabButton: "Events",
-                      tabIcon: Palette,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
-                    },
-                    {
-                      tabButton: "Favorite",
-                      tabIcon: Favorite,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
                         </GridContainer>
                       )
                     }

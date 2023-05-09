@@ -30,6 +30,8 @@ const CourseDetail= () => {
       //initialise state
       const [rating, setRating] = useState(0)
       const [comment, setComment] = useState('')
+      const [showMeet, setShowMeet] = useState(false)
+
       const courseReviewCreate = useSelector((state) => state.courseReviewCreate) 
       const successProductReview = courseReviewCreate ? courseReviewCreate.success : false;
       const courses = useSelector((state) => state.courseDisplay.courses);
@@ -238,6 +240,7 @@ const TestFailed=(enrollId) => {
 
     <Row >
         <Col md={8}>
+
         { showLessons === true && coursse.lessons[lessonIndex].typeLesson ==="Video"?         (
 <>
           <iframe
@@ -252,7 +255,10 @@ const TestFailed=(enrollId) => {
             height:"410px",
             backdropFilter: "blur(60px)",
       }}className="lessons description-card">
-          <Card.Body > { test.existingTest && validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
+
+          <Card.Body >
+            
+             { test.existingTest && validTest===true &&  <Card.Text style={{color: "#362824"}}> <h4 style={{color:"white"}}>
            Test </h4>
            
            
@@ -397,7 +403,14 @@ const TestFailed=(enrollId) => {
   setValidTest(true);
   setShowLessons(false);
 }}>Test</Link>
+  <Link style={{color: "white"}} onClick={() => {
+  setValidTest(false);
+  setShowLessons(false);
+  setShowMeet(true);
+
+}}>Meet</Link>
                           <div>
+                            
                             <i className="far fa-check-circle text-success mr-2"></i>
                             <span style={{color: "#362824"}}className="text-muted">Test</span>
                           </div>
