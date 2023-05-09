@@ -11,7 +11,6 @@ import confetti from "https://esm.run/canvas-confetti@1";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../Components/Loader';
-import Video from '../../page/VideoChat/Video';
 
 import Certification from './Certification';
 import { PDFDownloadLink } from '@react-pdf/renderer';

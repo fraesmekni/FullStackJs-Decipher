@@ -106,7 +106,6 @@ const [openDialog, setOpenDialog] = React.useState(false);
   );
   useEffect(() => {
     const hasCompletedTour = localStorage.getItem('hasCompletedTour');
-    if (hasCompletedTour) {
     const tour = new Shepherd.Tour({
       defaultStepOptions: {
         cancelIcon: {
@@ -173,7 +172,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
    
     tour.start();
     // localStorage.setItem('hasCompletedTour', true);
-  }
+  
   }, []);
   
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);

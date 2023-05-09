@@ -6,6 +6,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch, useSelector } from "react-redux";
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
+import Shepherd from 'shepherd.js';
 
 import {
   addCourse,
@@ -375,6 +376,96 @@ console.log(data);
     console.log(test.existingTest );
 
   }, [details]);
+  useEffect(() => {
+   
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true
+        },
+        classes: 'popup',
+        scrollTo: { behavior: 'smooth', block: 'center' },
+        modal: true,
+        highlightClass: 'hi'
+        
+      }
+    });     
+    
+    tour.addStep({
+      text: `Courses Information\
+      `,
+      attachTo: {
+        element: '#addicon',
+        on: 'right'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating'
+    });
+    tour.addStep({
+      text: 'Add a new course with lessons!.',
+      attachTo: {
+        element: '#listicon',
+        on: 'right'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'Now You are ready to start uploading courses!',
+      attachTo: {
+        element: '#orderr',
+        on: 'right'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+  
+    tour.start();
+  
+  }, []);
   return (
     <>
       <body className="coach">
@@ -386,24 +477,20 @@ console.log(data);
               </div>
 
               <div className="sidebar_menu">
-                <lord-icon
+                <lord-icon id="addicon"
                   src="https://cdn.lordicon.com/slduhdil.json"
                   trigger="hover"
                   colors="primary:#ffffff"
                   onClick={handleListClick}
                 />
                 <lord-icon
+                id="listicon"
                   src="https://cdn.lordicon.com/mrdiiocb.json"
                   trigger="hover"
                   colors="primary:#ffffff"
                   onClick={handleCreateClick}
                 />
-                <lord-icon
-                  src="https://cdn.lordicon.com/jcsudnpn.json"
-                  trigger="hover"
-                  colors="primary:#ffffff"
-                  onClick={handleCreateClick}
-                />
+               
               </div>
               <div className="sidebar_logout">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACAklEQVRoge2ZP2tUQRTFfydEwfULJCpY5ANYqa1FlECwUhArIU0QrG1SaKG9RZZ0EWtBUEQQBC39A8GPYCEkRYqNkigYcizegMsSzMzbu3nN/JrLwpvzzr0zs+++eVCpVCqVMVCUkO0p4AZwAZhuIbEPfAVeSDqI8pWFbdl+5Rhe2s4ubMgM2F4EXgObQJ+mmqVMA/eAGWBR0psIb1nYXknVezSmzuOks5I7ZmqcGw5xIsU2lR/mz4jekUQl0Bk1ga6pCST2UtwN0sumzRPzMNaAbeB5kF42IQlI+gmsR2iV0noJ2T5r+6HtmUhDpbSaAdvngA/AHDAAnkSaKqF4BkbMfwGeRpsqoSiBZP49jfkNYEHSziSM5ZK9hGyf4V/lD2iqf992rsQ+sCppq9Tk/yjZA7dozEMzc8st7rdN8H4pSWAduA1cTL9Xge8F43eBZwXXZ5GdgKQd21eBt8Bl4DpwRdK3aFMlFG3itGEXaNb/eeCd7dlJGMul+G9U0gC4RpPEHM3e6IxWDzJJA9vzwE066H+Gad0LSfpBR/3PMCHttO3ZrvqiqPeBJeBBisdK9KnEySC9bOorZdfUBLomKoHfKZ4aU6eX4q/cAVGnEh9TvGu7R7vjldPAnRG948N2P+j7QL/kvmFfaFISl2ha7d5R1x7CHvBJ0udIT5VKpTJZ/gIArCTzj9YnhAAAAABJRU5ErkJggg==" />
@@ -537,10 +624,11 @@ console.log(data);
               }`}
             >
             
-                        <h3 className="library_trending_title">Your Statistics </h3>
-<div className="scroll"> <TEST /> </div> 
+                        {/* <h3 className="library_trending_title">Your Statistics </h3>
+<div className="scroll"> <TEST /> </div>  */}
 {/* <EnrollChart /> */}
-<h3 style={{marginTop:"-50px"}}className="library_trending_title">Your Courses </h3>
+{/* <h3 style={{marginTop:"-50px"}}className="library_trending_title">Your Courses </h3> */}
+<h3 style={{marginTop:"50px"}}className="library_trending_title">Your Courses </h3>
 
               <table>
                 {coursesData &&

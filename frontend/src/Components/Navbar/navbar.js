@@ -59,7 +59,7 @@ function Navbarr () {
           text: 'Next'
         }
       ],
-      id: 'creating1'
+      id: 'creating'
     });
     tour.addStep({
       text: 'Shop from our students!.',
@@ -130,7 +130,7 @@ function Navbarr () {
           text: 'Next'
         }
       ],
-      id: 'creating2'
+      id: 'creating'
     });
     tour.addStep({
       text: `Navigate through our app using your voice!\
@@ -155,10 +155,10 @@ function Navbarr () {
           text: 'Next'
         }
       ],
-      id: 'creating3'
+      id: 'creating'
     })
     tour.start();
-    // localStorage.setItem('hasCompletedTour', true);
+     localStorage.setItem('hasCompletedTour', true);
   }
   }, []);
   
