@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ZegoUIKitPrebuilt} from '@zegocloud/zego-uikit-prebuilt'
 import { useParams} from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,30 +10,55 @@ function RoomPage() {
 const {userInfo} =userLogin
 
     const {roomId} = useParams()
+    const myMeeting = useRef(null);
 
 
 
-    const myMeeting = async (element) =>{
+
+    const joinRoom = async (element) =>{
          // generate Kit Token
-  const appID = 1651094763;
-  const serverSecret = "1d7ae60d06d0e4a98e5d2720f121aaac";
+  const appID = 2142803818;
+  const serverSecret = "322714394c01725fc119dbb7e61b14f8";
   const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(
     appID, serverSecret, roomId, Date.now().toString(), userInfo.firstName
     );
     const zp = ZegoUIKitPrebuilt.create(kitToken);
+
     zp.joinRoom({
         container: element,
+        sharedLinks: [
+            {
+              name: 'Personal link',
+              url:
+               window.location.protocol + '//' + 
+               window.location.host + window.location.pathname +
+                '?roomId=' +
+                roomId,
+            },
+          ],
         scenario: {
-            mode: ZegoUIKitPrebuilt.LiveStreaming,
+            mode: ZegoUIKitPrebuilt.OneONoneCall,
           },
 
     });
     }
 
-    return ( <div className='room-page'>
-<div ref={myMeeting}/>
+  
+    useEffect(() => {
+      joinRoom(myMeeting.current);
+      // Return a function to clean up when the component unmounts
+      return () => {
+        if (myMeeting.current) {
+          myMeeting.current.innerHTML = '';
+        }
+      };
+    }, []);
 
-    </div> );
+    return (    <div
+        className="myCallContainer"
+        ref={myMeeting}
+        style={{ width: '100vw', height: '100vh' }}
+      ></div>);
 }
 
 export default RoomPage;
