@@ -49,10 +49,9 @@ const UploadfFile = ({setFile ,setFi}) => {
     }
   return (
     <>
-    <Container>
+    
     {upload && <Loader></Loader>}
     <FileUplload key={Math.random()}  handle={handlesubmit} />
-    </Container>
     </>
   )
 }

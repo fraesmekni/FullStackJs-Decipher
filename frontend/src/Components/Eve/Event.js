@@ -8,31 +8,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Input from '../../page/Input';
-import {  participateEvent,getPart} from "../../redux/action";
+import {  participateEvent,unparticipateEvent,getPart} from "../../redux/action";
 
 
 const Event = () => {
   const [d,setD]=useState(false)
   const [b,setB]=useState(false)
   const {id}=useParams()
+  const {loading,error,data,client,refetch} = useQuery(getEvent,{variables:{id:id}})
+
   const navigate = useNavigate()
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+
+  const unparticipateevent = useSelector((state) => state.unparticipateevent);
+  const { part:unpart } = unparticipateevent;
+  const participateevent = useSelector((state) => state.participateevent);
+  const { part:partici } = participateevent;
   const dispatch =useDispatch()
 
-  const participateevent = useSelector((state) => state.participateevent);
-  const { success,part } = participateevent;
-  console.log(part)
+  const getpart = useSelector((state) => state.getpart);
+  const { success,part } = getpart;
   useEffect(() => {
-    dispatch(getPart())
-    { part?.ev.map((e)=>{
-      if (e.participant.find(d=>d===userInfo._id)) {
-        console.log('hey')
-      }else
-      console.log('t')
-    })}
+    dispatch(getPart(id))
     
-   }, []);
+    
+   }, [unpart]);
+
+   useEffect(() => {
+    dispatch(getPart(id))
+    
+    
+   }, [partici]);
+
+   
+
 
   const [deleteEvent] =useMutation(delete_Event)
   const deleteevent=(id)=>{
@@ -46,6 +57,16 @@ const Event = () => {
     navigate(`/updateevent/${id}`)
 
   }
+  const unParticipate=(eventId,userId) =>{
+    if (window.confirm('are you sure')){
+      dispatch(
+        dispatch(unparticipateEvent({eventId:eventId,userId:userId}))
+       
+      );
+      setD(true)
+      console.log('done')}else
+      window.alert('cancled')
+  }
   const gotomeet=(id)=>{
     navigate(`/video/${id}`)
 
@@ -57,15 +78,13 @@ const Event = () => {
       participateEvent(
         {eventId:idevent,userId:userid}
       )
-     
+      
     );
     setD(true)
     console.log('done')}else
     window.alert('cancled')
-
   }
-    const {loading,error,data,client} = useQuery(getEvent,{variables:{id:id}})
-
+    
     client.resetStore()
 
   return (
@@ -84,13 +103,19 @@ const Event = () => {
    {/* <h1 className="h1detail">{data?.event.data?.eventName}</h1> */}
    <h2 className="h2detail">{data?.event?.participantsnumber} Member </h2>
    <p className="desc pdetail">{data?.event?.description}</p>
-   
-  {d ?<Button variant='info' className='btn-sm'onClick={() => {gotomeet(data?.event.id)}} >
-                        Meet
-                     </Button>:<Button variant='dark' className='btn-sm'onClick={() => {gotoparticipate(data?.event.id,userInfo._id)}} >
-                        Participate
-                     </Button>}
-  {userInfo.role.name==='sponsorRole'&& <> <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(data?.event.id)}}>
+   {userInfo && part?.ev?.participant.length ===0 && <Button variant='dark' className='btn-sm'onClick={() => {gotoparticipate(data?.event.id,userInfo._id)}} >
+    Participate 
+ </Button> }
+   {part?.ev?.participant.map((e)=>
+    
+    e!==userInfo?._id ? <Button variant='dark' className='btn-sm'onClick={() => {gotoparticipate(data?.event.id,userInfo._id)}} >
+    Participate 
+ </Button> :<Button variant='dark' className='btn-sm'onClick={() => {unParticipate(data?.event.id,userInfo._id)}} >
+    unParticipate
+ </Button>
+   )}
+  
+  {userInfo?.role?.name==='sponsorRole'&& <> <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(data?.event.id)}}>
                          <i className='fas fa-edit'></i>
                      </Button>
                      <Button variant='success' 

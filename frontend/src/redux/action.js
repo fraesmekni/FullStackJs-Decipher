@@ -145,7 +145,7 @@ export const unprojectcomment = ({comentid,id}) => async (dispatch)=>{
     }
   }
 
-  export const getPart = () => async (dispatch)=>{
+  export const getPart = (eventId) => async (dispatch)=>{
     try {
         dispatch({
             type:GET_PARTI_EVENT_REQUEST
@@ -157,7 +157,7 @@ export const unprojectcomment = ({comentid,id}) => async (dispatch)=>{
         }
   
         const {data } =await axios.get(
-           'http://localhost:5000/api/event/getparti',
+           'http://localhost:5000/api/event/getparti/'+eventId,
            
             config
         )

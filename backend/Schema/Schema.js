@@ -19,7 +19,7 @@ const EventType = new GraphQLObjectType({
         dateStart: {type:GraphQLDate},
         participantsnumber:{type:GraphQLInt} ,
         imageUrl: {type:GraphQLString},
-        participant: {type:GraphQLList(UserType),
+        participant: {type:(UserType),
            
         },
         eventCreator: {type:(UserType),

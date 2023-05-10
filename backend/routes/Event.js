@@ -5,5 +5,5 @@ const {participate,outparticipate,getparti} = require('../Controllers/crowfundin
 
 router.post('/participate',participate)
 router.post('/exiteparticipate',outparticipate)
-router.get('/getparti',getparti)
+router.get('/getparti/:eventId',getparti)
 module.exports = router

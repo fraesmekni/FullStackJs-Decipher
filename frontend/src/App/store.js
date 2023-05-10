@@ -8,8 +8,7 @@ import { productAddReducer, productDetailReducer, productGetReducer, productDele
   productReviewReducer, productUpdateReducer} from '../productredux/productreducer';
 import { productDetails } from '../productredux/productaction';
 import { cartReducer } from '../cartredux/cartreducer';
-import { participateevent,getpart } from '../redux/reducer';
-import { unparticipateevent } from '../redux/reducer';
+import { participateevent,getpart,unparticipateevent } from '../redux/reducer';
 
 import { addCourseReducer, addLessonReducer,courseReducers,courseDeleteReducer, lessonDeleteReducer, addTestReducer, testDeleteReducer, addEnrollReducer,courseReviewReducer } from '../coursereduc/courseReducers';
 import {orderCreateReducer,orderDetailsReducer,orderListReducer,orderPayReducer,orderDeliverReducer,orderDashboardReducer,
@@ -21,6 +20,7 @@ orderApproveReducer,getProductsOrderItemsByIdReducer, getDashboardProductsReduce
 
 const reducer = combineReducers({
     //reducers
+    
     getpart:getpart,
     unparticipateevent:unparticipateevent,
     participateevent:participateevent,

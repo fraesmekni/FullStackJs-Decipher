@@ -19,6 +19,8 @@ const outparticipate = asynHandler(async(req,res)=>{
     const {eventId , userId} = req.body
     const event = await Event.findById(eventId);
     const user = await User.findById(userId);
+    console.log(event)
+    console.log(user)
     if (event && user){
         event.participant.pop(user)
         event.save()
@@ -27,7 +29,8 @@ const outparticipate = asynHandler(async(req,res)=>{
     res.json({"message":"failed"}).status(400)
   })
 const getparti = asynHandler(async(req,res)=>{
-    const ev = await Event.find();
+  const {eventId} =req.params
+    const ev = await Event.findById(eventId);
     if (ev ){
        
         res.json({ev}).status(200)
