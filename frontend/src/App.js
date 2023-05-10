@@ -41,6 +41,25 @@ import AgeSectionPourcentage from './page/CoachDashboard/AgeSection';
 import RoomPage from './page/room';
 import OrdersStat from './page/UserDashboard/OrdersStat';
 
+
+
+import {client} from './apollo.js'
+import { ApolloProvider } from '@apollo/client';
+import Project from './Components/Project/Project';
+import Getallprojects from './Components/Project/Getallprojects';
+import Addproject from './Components/Project/Addproject';
+import Updateproject from './Components/Project/Updateproject';
+import Getallevents from './Components/Eve/Getallevents';
+import Event from './Components/Eve/Event';
+import Updateevent from './Components/Eve/Updateevent';
+import Addevent from './Components/Eve/Addevent';
+import Calendar from './Components/FullCalendar/Calendar';
+import AllProject from './page/Project/AllProject'
+import DetailProject from './page/Project/DetailProject'
+import Video from './page/Video/Video'
+import HomePage from './page/Video/HomePage'
+
+
 ReactGA.initialize('G-Y1V026ZHPY');
 
 
@@ -76,6 +95,8 @@ useEffect(()=>
 })
 
   return (
+    <ApolloProvider client={client}>
+
     <Suspense fallback={<Loader />}>
     <Router>
     {isAdmin ? (
@@ -135,6 +156,49 @@ useEffect(()=>
     <Route path="/updateProduct/:id" element={<><div className='yo'><Navbarr /> <UpdateProduct></UpdateProduct></div></> } /> 
    
 
+
+
+
+
+
+
+
+
+
+
+
+    <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
+    <Route path="/projects" element={<>    <Navbarr /> <AllProject/>  </> } />
+    <Route path="/project/:id" element={<>    <Navbarr /> <DetailProject/>  </> } />
+    <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
+    <Route path="/updateproject/:id" element={<>   <Navbarr /> <Updateproject/>  </> } />
+
+
+
+    <Route path="/events" element={<>  <Navbarr />  <Getallevents/>  </> } />
+    <Route path="/events" element={<>  <Navbarr />  <Getallevents/>  </> } />
+    <Route path="/event/:id" element={<>   <Navbarr /> <Event/>  </> } />
+    <Route path="/addevent" element={<> <Navbarr />   <Addevent/>  </> } />
+    <Route path="/updateevent/:id" element={<> <Navbarr />   <Updateevent/>  </> } />
+
+		<Route path="/video/:url" element={<><Navbarr /> <Video /></>} />
+		<Route path="/meet" element={<><Navbarr /> <HomePage /></>} />
+
+
+    <Route path="/calendar" element={<>  <Navbarr />  <Calendar/>  </> } />
+
+
+
+
+
+
+
+
+
+
+
+
+
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
 
     <Route path="/room/:roomId" element={<RoomPage/>} />
@@ -143,6 +207,8 @@ useEffect(()=>
     </Router>
     
     </Suspense>
+    </ApolloProvider>
+
     
   );
 }

@@ -227,47 +227,88 @@ function Navbarr () {
                             SHOP
                             
                              </Link>
-                            <Link id="courses" to="/courses" className="nav_links">
-
-                            COURSES
-                            
-                             </Link>
-                            <Link id="about us" to="/aboutus" className="nav_links">
-
-                            ABOUT US                            
-                             </Link>
-                           
-                               <Link id="register"to="/register" style={{marginLeft: '600px'}} className="nav_links">
-
-REGISTER                         </Link>
+                             <Link id="courses" to="/courses" className="nav_links">
+                COURSES
+              </Link>
+                             <Link to="/projects" className="nav_links">
+                Project
+              </Link>
+              <Link id="about us" to="/aboutus" className="nav_links">
+                ABOUT US
+              </Link>
+              <a className="nav_links">
+                <FontAwesomeIcon
+                  icon={faMicrophone}
+                  onClick={SpeechRecognition.startListening}
+                  size="lg"
+                />
+                <a className="nav_links smalltext" id="transcript">
+                  {" "}
+                  {transcript}
+                </a>
+              </a>
 
            
-       {userInfo?(
-           <div style={{marginLeft: '1120px',marginTop: '-27.8px'}} > 
-                    <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName } id="username">
-                      
-                        <LinkContainer  to='/profile'>
-                            <NavDropdown.Item > <Link to="/profile" >PROFILE</Link> </NavDropdown.Item>
-                        </LinkContainer>
-                        <LinkContainer  to='/userupdate'>
-                            <NavDropdown.Item > <Link to="/userupdate" >UPDATE PROFILE</Link> </NavDropdown.Item>
-                        </LinkContainer>
-                        <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
-                    </NavDropdown>  </div>
-            
-            )  : 
-            <Link className="nav_links" to={"/login"}>
-                SIGNIN
-                </Link>         
-            }  
+              {userInfo ? (
+                <div style={{ marginLeft: "1120px", marginTop: "-27.8px" }}>
+                  <NavDropdown
+                    title={userInfo.lastName + " " + userInfo.firstName}
+                    id="username"
+                  >
+                    {userInfo.role.name === "userRole" && (
+                      <LinkContainer to="/projects">
+                        <NavDropdown.Item>
+                          {" "}
+                          <Link to="/projects">Project</Link>{" "}
+                        </NavDropdown.Item>
+                      </LinkContainer>
+                    )}
+                    {userInfo.role.name === "sponsorRole" && (
+                      <LinkContainer to="/events">
+                        <NavDropdown.Item>
+                          {" "}
+                          <Link to="/events">Events</Link>{" "}
+                        </NavDropdown.Item>
+                      </LinkContainer>
+                    )}
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/profile">PROFILE</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/userupdate">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/userupdate">UPDATE PROFILE</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
 
-                          
-
-                            
-                              <a className="nav_links">    
-                              <FontAwesomeIcon id="ho"icon={faMicrophone}  onClick={SpeechRecognition.startListening} size="lg" />
-                              <a className="nav_links smalltext" id="transcript"> {transcript}</a>
-</a>
+                    <LinkContainer to="/calendar">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/calendar">Calendar</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      LOGOUT
+                    </NavDropdown.Item>
+                  </NavDropdown>{" "}
+                </div>
+              ) : (
+                <>
+                  <Link
+                    to="/register"
+                    style={{ marginLeft: "500px" }}
+                    className="nav_links"
+                  >
+                    REGISTER{" "}
+                  </Link>
+                  <Link className="nav_links" to={"/login"}>
+                    SIGNIN
+                  </Link>
+                </>
+              )}
                             </li>
             </ul>
            <div>
