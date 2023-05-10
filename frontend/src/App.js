@@ -40,6 +40,7 @@ import SuccessRate from './page/CoachDashboard/SuccessRate';
 import AgeSectionPourcentage from './page/CoachDashboard/AgeSection';
 import RoomPage from './page/room';
 import OrdersStat from './page/UserDashboard/OrdersStat';
+import Roomi from './page/room/rommi';
 
 ReactGA.initialize('G-Y1V026ZHPY');
 
@@ -137,7 +138,7 @@ useEffect(()=>
 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
 
-    <Route path="/room/:roomId" element={<RoomPage/>} />
+    <Route path="/room" element={<Roomi/>} />
 
         </Routes>)}
     </Router>

@@ -43,6 +43,7 @@ const {userInfo} =userLogin
           turnOnCameraWhenJoining:true
 
     });
+      console.log(zp.getVideo()); 
     }
    
     useEffect(() => {
