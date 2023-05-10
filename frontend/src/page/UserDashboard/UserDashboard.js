@@ -13,7 +13,7 @@ import { Link, useParams } from 'react-router-dom';
 import { TablePagination  } from '@material-ui/core';
 import {  Table, TableHead, TableRow, TableCell, TableBody,Typography } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
-
+import Shepherd from 'shepherd.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -169,7 +169,212 @@ const submitHandlerj = (e) => {
     setShowCreate(false);
     dispatch(getOrderByIdAndUserId(userInfo._id));
   }
-
+  useEffect(() => {
+   
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true
+        },
+        classes: 'popup',
+        scrollTo: { behavior: 'smooth', block: 'center' },
+        modal: true,
+        highlightClass: 'hi'
+        
+      }
+    });     
+    
+    tour.addStep({
+      text: `These are all of your products\
+      `,
+      attachTo: {
+        element: '#displayall',
+        on: 'left'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating'
+    });
+    tour.addStep({
+      text: 'This is information about your product',
+      attachTo: {
+        element: '#yourproducts',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can delete your product.',
+      attachTo: {
+        element: '#deletingp',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'or Edit it!',
+      attachTo: {
+        element: '#editingp',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'Here you can add a product!',
+      attachTo: {
+        element: '#addproductdisplay',
+        on: 'right'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'These are the orders you recieved',
+      attachTo: {
+        element: '#yourordershop',
+        on: 'right'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can choose to either approve an order or not',
+      attachTo: {
+        element: '#orderapp',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can display your product detail in this order',
+      attachTo: {
+        element: '#orderdet',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+   
+    tour.start();
+  
+  }, []);
+  
     return(
 
         <><body className="yoo">
@@ -187,18 +392,18 @@ const submitHandlerj = (e) => {
     </div>
 
     <div className="sidebar_menu">
-    <lord-icon
+    <lord-icon id="displayall"
     src="https://cdn.lordicon.com/slduhdil.json"
     trigger="hover" colors="primary:#ffffff"
     onClick={handleListClick} 
     />
             {/* <img onClick={handleListClick} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABEElEQVRIie2TMUqDQRCF34T8hdgELYVYpdAmnY05QTyCpLHzBJZioTdIo50B7YWkUSzVIs1/nghfCkdYAstOfkkh+mCbnXnvzczOSn8KwAgYbULYgHOg9nMBtCJcC4hXkq4knUha+HUlaSrp0swWOW4RwBYw9qrfgWPgCHjzuztgu6l4B5i40CtwkMR6wLPHHoHddcX3gCcXmALdQs4M2I+K94AXJz4AO4Uu75MuD0vi6XxvI/NdeacPYJBLHALzZBXbJfGE2054c2D4HWt5wqmka32tnyTJzD6jBiu5laQb4CxXTQ3UUfESLzSGnKGZ9Uvc0Hf/CdYyMLN+pOrGBk3w+w2yWxRZ1UjOxjv4RxFLW3QYbNPY/+0AAAAASUVORK5CYII=" /> */}
-<lord-icon
+<lord-icon id="addproductdisplay"
     src="https://cdn.lordicon.com/mrdiiocb.json"
     trigger="hover" colors="primary:#ffffff"
     onClick={handleCreateClick} 
   />
-<lord-icon
+<lord-icon id="yourordershop"
     src="https://cdn.lordicon.com/ogkplaef.json"
     trigger="hover" colors="primary:#ffffff"
     onClick={ListOrder} 
@@ -298,7 +503,7 @@ const submitHandlerj = (e) => {
                     </td>
                     <td>
   {!order.statusOrder && (
-    <button
+    <button id="orderapp"
       onClick={() => {
         Swal.fire({
           title: 'Do you want to Approve this Order?',
@@ -324,7 +529,7 @@ const submitHandlerj = (e) => {
 
                     <td>
                            
-<Button style={{ fontSize: 'smaller', marginLeft:'10px' }} onClick={() => handleOpenDialog(userInfo._id, order)}>
+<Button id="orderdet"style={{ fontSize: 'smaller', marginLeft:'10px' }} onClick={() => handleOpenDialog(userInfo._id, order)}>
                                     Details
                                   </Button>
                     </td>
@@ -435,7 +640,7 @@ const submitHandlerj = (e) => {
       <table>
      {bestProducts && bestProducts.map((i , index) => {
            return(
-        <tr key={i.id}>
+        <tr id='yourproducts' key={i.id}>
           <td>
             <p>{index + 1}</p>
           </td>
@@ -459,7 +664,7 @@ const submitHandlerj = (e) => {
             <p>{i.countInStock}</p>
           </td>
           <td>
-          <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json"
+          <lord-icon id='deletingp'src="https://cdn.lordicon.com/jmkrnisz.json"
                               trigger="hover" colors="primary:#ffffff" onClick={() => {
                                 Swal.fire({
                                   title: 'Do you want to Delete this Product?',
@@ -480,7 +685,7 @@ const submitHandlerj = (e) => {
             </lord-icon>
           
                  </td>
-          <td>
+          <td id='editingp'>
              <Link to={`/updateProduct/${i._id}`}>
                 <FontAwesomeIcon icon={faEdit} size="xl" />
             </Link>           

@@ -439,11 +439,12 @@ console.log(data);
       ],
       id: 'another-step'
     });
+   
     tour.addStep({
-      text: 'Now You are ready to start uploading courses!',
+      text: 'Heres global information on the course!',
       attachTo: {
-        element: '#orderr',
-        on: 'right'
+        element: '#courserow',
+        on: 'top'
       },
       buttons: [
         {
@@ -462,7 +463,190 @@ console.log(data);
       ],
       id: 'another-step'
     });
-  
+    tour.addStep({
+      text: 'You can delete a course',
+      attachTo: {
+        element: '#deletee',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'or Edit it !',
+      attachTo: {
+        element: '#editt',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can display specific courses by clicking here',
+      attachTo: {
+        element: '#deeetail',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'These are the lessons of the course',
+      attachTo: {
+        element: '#yourlessons',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can directly add a lesson to this course',
+      attachTo: {
+        element: '#addlessontocourse',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'You can delete a lesson',
+      attachTo: {
+        element: '#deletelesson',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'or Edit it!',
+      attachTo: {
+        element: '#editlesson',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
+    tour.addStep({
+      text: 'And finally you can add or delete a test for your students ! Happy teaching!',
+      attachTo: {
+        element: '#testi',
+        on: 'top'
+      },
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'another-step'
+    });
     tour.start();
   
   }, []);
@@ -634,7 +818,7 @@ console.log(data);
                 {coursesData &&
                  coursesData.map((i, index) => {
                     return (
-                      <tr key={i._id}>
+                      <tr id="courserow" key={i._id}>
                         
                         <td>
                           <p>{index + 1}</p>
@@ -650,7 +834,7 @@ console.log(data);
                         <td>
                           <p> Total Enrollements :  {i.enrollCount}</p>
                         </td>
-                        <td className="song">
+                        <td id="deeetail"className="song">
                           <Link
                             onClick={() => (
                               setDetails(i._id),
@@ -670,7 +854,7 @@ console.log(data);
                           <p>{i.DateCourse}</p>
                         </td>
 
-                        <td>
+                        <td id="deletee">
                           <lord-icon
                             src="https://cdn.lordicon.com/jmkrnisz.json"
                             trigger="hover"
@@ -698,7 +882,7 @@ console.log(data);
                             }}
                           ></lord-icon>
                         </td>
-                        <td>
+                        <td id="editt">
                           <FontAwesomeIcon
                             icon={faEdit}
                             size="xl"
@@ -721,6 +905,7 @@ console.log(data);
               <h3 className="library_trending_title">
                 Lessons{" "}
                 <lord-icon
+                id="addlessontocourse"
                   src="https://cdn.lordicon.com/mrdiiocb.json"
                   trigger="hover"
                   colors="primary:#ffffff"
@@ -735,7 +920,7 @@ console.log(data);
                   coursse.lessons.map((i, index) => { console.log(coursse._id)
                     return (
 
-                      <tr key={i._id}>
+                      <tr id="yourlessons" key={i._id}>
                         <td>
                           <p>{index + 1}</p>
                         </td>
@@ -751,7 +936,7 @@ console.log(data);
                           <p>{i.DateCourse}</p>
                         </td>
 
-                        <td>
+                        <td id="deletelesson">
                           <lord-icon
                             src="https://cdn.lordicon.com/jmkrnisz.json"
                             trigger="hover"
@@ -779,7 +964,7 @@ console.log(data);
                             }}
                           ></lord-icon>
                         </td>
-                        <td>
+                        <td id="editlesson">
                           <FontAwesomeIcon
                             icon={faEdit}
                             size="xl"
@@ -833,7 +1018,7 @@ console.log(data);
                           ></lord-icon>
                 
                 </h3>
-                             <table>
+                             <table id="testi">
             {test.existingTest && test.existingTest.questions.map((question,i) => (
   <tr key={question._id}>
      <td>

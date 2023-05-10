@@ -2,6 +2,7 @@ import React from 'react'
 import video from "./pottery2.mp4"
 import Button from '../Button/button';
 import './HeroSection.css';
+import img from "./ddd.png"
 
 function HeroSection() {
   return (
@@ -10,8 +11,8 @@ function HeroSection() {
 
 
     <div align="center" className='textoverlay'>
-    <h1 className="H1">Carthage Cares
-    </h1>      
+    <img style={{height:"70px"}}src={img} ></img>
+      
     <h1 className="H2">Become a member of our team and choose your dream
     </h1>      
 

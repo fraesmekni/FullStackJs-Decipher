@@ -170,6 +170,32 @@ const [openDialog, setOpenDialog] = React.useState(false);
       id: 'creating2'
     });
    
+    tour.addStep({
+      text: `These are the things you ordered\
+      `,
+      attachTo: {
+        element: '#orders',
+        on: 'right'
+      },
+      
+      buttons: [
+        {
+          action() {
+            return this.back();
+          },
+          classes: 'shepherd-button-secondary',
+          text: 'Back'
+        },
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Next'
+        }
+      ],
+      id: 'creating2'
+    });
+   
     tour.start();
     // localStorage.setItem('hasCompletedTour', true);
   
@@ -239,7 +265,7 @@ const [openDialog, setOpenDialog] = React.useState(false);
                     
                       tabContent: (
                         <GridContainer justify="center">
-<h2 className={classes.title} style={{ textAlign: 'center', marginBottom: '20px', color: '#FCFFE7' }}>Your Orders</h2>
+<h2 id='orders'className={classes.title} style={{ textAlign: 'center', marginBottom: '20px', color: '#FCFFE7' }}>Your Orders</h2>
 
             <table style={{marginTop:"80px",
     paddingTop:"30px",

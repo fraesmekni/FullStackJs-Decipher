@@ -39,20 +39,15 @@ const {userInfo} =userLogin
         scenario: {
             mode: ZegoUIKitPrebuilt.OneONoneCall,
           },
+          useFrontFacingCamera:true,
+          turnOnCameraWhenJoining:true
 
     });
     }
-
-  
+   
     useEffect(() => {
-      joinRoom(myMeeting.current);
-      // Return a function to clean up when the component unmounts
-      return () => {
-        if (myMeeting.current) {
-          myMeeting.current.innerHTML = '';
-        }
-      };
-    }, []);
+        joinRoom();
+      }, []);
 
     return (    <div
         className="myCallContainer"
@@ -62,4 +57,3 @@ const {userInfo} =userLogin
 }
 
 export default RoomPage;
-
