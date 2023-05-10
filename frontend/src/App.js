@@ -134,11 +134,13 @@ useEffect(()=>
     <Route path="/cart/:id?" element={<><Navbarr /><Cart/></>} />
     <Route path="/coursedetail/:id?" element={<><Navbarr /><CourseDetail/></>} />
     <Route path="/dashboard" element={<Dashboard/>} />
-    <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
+
+    <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 
     <Route path="/coachupdate" element={<> <Navbarr /> <UpdateCoach></UpdateCoach> </>} />
     <Route path="/spnsorupdate" element={<> <Navbarr /> <UpdateSponsor></UpdateSponsor> </>} />
+
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/coachdashboard" element={<><div className='yo'><Navbarr /> <CoachDashboard/></div></> } /> 
     <Route path="/updatecourses/:id" element={<><div className='yo'><Navbarr /> <UpdateCourses/></div></> } /> 

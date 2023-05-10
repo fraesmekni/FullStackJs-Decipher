@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import {Button,Table,Pagination} from 'react-bootstrap'
 import  Loader  from '../Loader'
 import  Message  from '../Message'
-import './Projectsss.css'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 

@@ -1,15 +1,24 @@
 const asynHandler = require("express-async-handler")
 const Event = require('../../Models/event')
 const User = require('../../Models/user')
+const {  mailTransport } = require('../utils/mail.js')
 
 const participate = asynHandler(async(req,res)=>{
     const {eventId , userId} = req.body
-    const event = await Event.findById(eventId);
+    const event = await Event.findById(eventId).populate("participant");
     const user = await User.findById(userId);
     if (event && user){
         if(event.participantsnumber>event.participant.length){
         event.participant.push(user)
         event.save()
+        event.participant.map((e)=>{
+        mailTransport().sendMail({
+          from:"testtest150007@gmail.com",
+          to: e.email,
+          subject: "Meet Link",
+          html: `<p> http://localhost:3000/video/${event._id} </p>`
+      })
+    })
         res.json({event}).status(200)
     }
     }else
@@ -126,4 +135,7 @@ const updateEvent = asynHandler(async (req, res) => {
   }
 })
 
-  module.exports = { participate,outparticipate,getparti,getAllEvents }
+
+
+
+module.exports = { participate,outparticipate,getparti,getAllEvents }

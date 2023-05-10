@@ -277,12 +277,46 @@ function Navbarr () {
                         <Link to="/profile">PROFILE</Link>{" "}
                       </NavDropdown.Item>
                     </LinkContainer>
-                    <LinkContainer to="/userupdate">
+
+
+
+                    {userInfo?.role.name === "sponsorRole" && (
+                      <>
+                      <LinkContainer to="/spnsorupdate">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/spnsorupdate">UPDATE PROFILE</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                      <LinkContainer to="/meet">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/meet">Create Meet</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                    </>
+                    )}
+
+                    {userInfo?.role.name === "userRole" && (
+                      <LinkContainer to="/userupdate">
                       <NavDropdown.Item>
                         {" "}
                         <Link to="/userupdate">UPDATE PROFILE</Link>{" "}
                       </NavDropdown.Item>
                     </LinkContainer>
+                    )}
+
+                      {userInfo?.role.name === "coachRole" && (
+                      <LinkContainer to="/coachupdate">
+                      <NavDropdown.Item>
+                        {" "}
+                        <Link to="/coachupdate">UPDATE PROFILE</Link>{" "}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                    )}
+                    
+
+
 
                     <LinkContainer to="/calendar">
                       <NavDropdown.Item>
@@ -296,7 +330,7 @@ function Navbarr () {
                   </NavDropdown>{" "}
                 </div>
               ) : (
-                <>
+                <> 
                   <Link
                     to="/register"
                     style={{ marginLeft: "500px" }}

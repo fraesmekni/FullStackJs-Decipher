@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import {Button,Table} from 'react-bootstrap'
 import  Loader  from '../Loader'
 import  Message  from '../Message'
-import './Eve.css'
 import { useDispatch, useSelector } from 'react-redux';
 import {  participateEvent,getPart} from "../../redux/action";
 import { useEffect } from 'react';
