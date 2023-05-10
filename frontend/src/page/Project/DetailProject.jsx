@@ -20,7 +20,7 @@ const DetailProject = () => {
     const [comment,setComment]=useState({
         like:false,
         msg:"",
-        user:userInfo._id
+        user:userInfo?._id
     })
     const [deleteProject] =useMutation(delete_Project
       )
@@ -87,7 +87,7 @@ const DetailProject = () => {
     {/* <h1 className="h1detail">{data?.project.data?.projectName}</h1> */}
     <h2 className="h2detail">{data?.project?.ammounttocollect} Dt </h2>
     <p className="desc pdetail">{data?.project?.description}</p>
-    {userInfo.email===data?.project?.projectCreator.email&& <> <Button variant='light' className='btn-sm' onClick={() => {navigate(`/updateproject/${data?.project?.id}`)}}>
+    {userInfo?.email===data?.project?.projectCreator.email&& <> <Button variant='light' className='btn-sm' onClick={() => {navigate(`/updateproject/${data?.project?.id}`)}}>
                          <i className='fas fa-edit'></i>
                      </Button>
                      <Button variant='success' 
