@@ -1,14 +1,16 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
-import Loader from '../../Components/Loader';
-import React, { useState } from 'react';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
 const Roomi = () => {
+  const { roomName } = useParams();
+
   return (
     <div>
       <JitsiMeeting
-    roomName = { 'MOMO' }
-    getIFrameRef = { node => node.style.height = '800px' }
-/>
+        roomName={roomName}
+        getIFrameRef={(node) => (node.style.height = '800px')}
+      />
     </div>
   );
 };

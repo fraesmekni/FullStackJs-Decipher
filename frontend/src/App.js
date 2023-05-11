@@ -138,7 +138,7 @@ useEffect(()=>
 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
 
-    <Route path="/room" element={<Roomi/>} />
+    <Route path="/room/:roomName" element={<Roomi/>} />
 
         </Routes>)}
     </Router>
