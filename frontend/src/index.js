@@ -8,11 +8,14 @@ import { Provider } from 'react-redux';
 import Dashboard from './page/Dashboard';
 import './bootstrap.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { TransactionProvider } from './Context/Transaction';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-      <App />
+         <TransactionProvider>
+    <App />
+    </TransactionProvider>
      </Provider>
 );
 

@@ -378,7 +378,7 @@ if (!email ){
             };
             var htmlToSend = template(replacements);
     mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
+        from:"testtest150007@gmail.com",
         to: user.email,
         subject: "Rest Password Mail",
         html: htmlToSend
@@ -408,7 +408,7 @@ const reset = asynHandler(async ( req,res)=>{
             };
             var htmlToSend = template(replacements);
     mailTransport().sendMail({
-        from: 'hazemmega55@gmail.com',
+        from: 'testtest150007@gmail.com',
         to: user.email,
         subject: 'password changed',
         html: htmlToSend

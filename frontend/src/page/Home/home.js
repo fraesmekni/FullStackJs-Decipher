@@ -32,8 +32,7 @@ return(
 <Popchat messages={msgs} getMessage={getMessage} />
 </div>
      <Products/>
-     <div align="center">
-     <Crowdfunding /></div>
+     <Crowdfunding />
 <br />
 
      <Partenairec />
