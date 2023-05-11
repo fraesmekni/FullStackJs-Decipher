@@ -11,11 +11,6 @@ import Shepherd from 'shepherd.js';
 
 function Home(){
 
-const msgs = ['hey, whatsup!', 'my oh, how ya doin ??', 
-'you know, chhht, like that..', 'wanna meet ? afternoon']
-const getMessage = (msg) => {
-     console.log(msg)
-}
 
 
 return(
@@ -29,7 +24,6 @@ return(
 
      <Section1 />
      <div>
-<Popchat messages={msgs} getMessage={getMessage} />
 </div>
      <Products/>
      <Crowdfunding />
