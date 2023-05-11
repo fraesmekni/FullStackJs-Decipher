@@ -2,7 +2,6 @@ import React, {  useState ,useEffect} from 'react'
 import backg from "./backg.jpg";
 import {useQuery,useMutation} from '@apollo/client'
 import { delete_Project } from '../../Mutation/projetMutation';
-
 import  {getProject} from '../../Query/projectQuery'
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
@@ -82,7 +81,6 @@ const DetailProject = () => {
   <img className="img" src={`${process.env.PUBLIC_URL}/images/${data?.project?.imageUrl}`}  />
   </div>
   <div className="product1"> 
-  
     <p className="pdetail"> {data?.project?.name}- by {data?.project?.projectCreator?.firstName} {data?.project?.projectCreator?.lastName}</p>
     {/* <h1 className="h1detail">{data?.project.data?.projectName}</h1> */}
     <h2 className="h2detail">{data?.project?.ammounttocollect} Dt </h2>

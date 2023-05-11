@@ -6,9 +6,11 @@ import backg from "./backg.jpg";
 import { Button,  Col, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Input from '../../page/Input';
 import {  participateEvent,unparticipateEvent,getPart} from "../../redux/action";
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import { TransactionContext } from '../../Context/Transaction';
 
 
 const Event = () => {
@@ -43,8 +45,9 @@ const Event = () => {
    }, [partici]);
 
    
-
-
+   const { connectWallet,connectedaccount,formdata,sendTransaction,handleChangeIput } = useContext(TransactionContext)
+     const {addresto,amount,message,keyword} =formdata;
+   
   const [deleteEvent] =useMutation(delete_Event)
   const deleteevent=(id)=>{
     deleteEvent({
@@ -86,6 +89,7 @@ const Event = () => {
   }
     
     client.resetStore()
+    console.log(amount)
 
   return (
     <>
@@ -140,6 +144,9 @@ const Event = () => {
 </div>
 <Row>  
             <Col style={{marginLeft:"50px" ,marginBottom:'50px'}}md={10}>
+              
+            <ProgressBar animated now={20 +amount*18.419329*3}   variant='info' style={{backgroundColor:"gold",height:"30px"}} />
+
             <h2>Donation</h2>
             
                 {b? <Input/> :<Button variant='info' 
