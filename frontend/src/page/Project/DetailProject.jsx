@@ -85,6 +85,12 @@ const DetailProject = () => {
     {/* <h1 className="h1detail">{data?.project.data?.projectName}</h1> */}
     <h2 className="h2detail">{data?.project?.ammounttocollect} Dt </h2>
     <p className="desc pdetail">{data?.project?.description}</p>
+    {data?.project?.name==="Medecines" && <Button variant='dark' className='btn-sm' onClick={() => {navigate(`/pills`)}}>
+                         3D Model
+                     </Button>}
+    {data?.project?.name==="Drone Pla" && <Button variant='dark' className='btn-sm' onClick={() => {navigate(`/dron`)}}>
+    3D Model    
+    </Button>}
     {userInfo?.email===data?.project?.projectCreator.email&& <> <Button variant='light' className='btn-sm' onClick={() => {navigate(`/updateproject/${data?.project?.id}`)}}>
                          <i className='fas fa-edit'></i>
                      </Button>

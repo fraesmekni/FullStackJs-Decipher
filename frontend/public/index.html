@@ -17,6 +17,17 @@
 <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shepherd.js/8.0.0/js/shepherd.min.js"></script>
 <script src="shepherd.js/dist/js/shepherd.min.js"></script>
+
+<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "./jsm/"
+				}
+			}
+		</script>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/

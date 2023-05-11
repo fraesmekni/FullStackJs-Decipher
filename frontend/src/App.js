@@ -59,6 +59,9 @@ import AllProject from './page/Project/AllProject'
 import DetailProject from './page/Project/DetailProject'
 import Video from './page/Video/Video'
 import HomePage from './page/Video/HomePage'
+import Mod from './page/Mod';
+import Kore from './page/3D/Kore';
+import Korean from './page/3D/Korean';
 
 
 ReactGA.initialize('G-Y1V026ZHPY');
@@ -186,6 +189,8 @@ useEffect(()=>
 
 		<Route path="/video/:url" element={<><Navbarr /> <Video /></>} />
 		<Route path="/meet" element={<><Navbarr /> <HomePage /></>} />
+		<Route path="/dron" element={<><Navbarr /> <Mod /></>} />
+		<Route path="/pills" element={<><Navbarr /> <Korean /></>} />
 
 
     <Route path="/calendar" element={<>  <Navbarr />  <Calendar/>  </> } />
