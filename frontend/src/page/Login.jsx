@@ -126,6 +126,7 @@ const Login = (props) => {
            
                   
               <Button type="submit" variant="primary"  >Sign In</Button> 
+              <Link to="/forget-password"  >Forget Password</Link>
              <div className="google">
             <img src={g} alt="" onClick={google} className="icon" />
             <img src={git} alt="" onClick={github} className="icon" />
@@ -134,7 +135,7 @@ const Login = (props) => {
                   <Col>
                           New Customer?{''}  <Link to="/register" >
 
-Register                        </Link>
+                        Register                        </Link>
                   </Col>
                   <Link to="/forget-password"  >Forget Password</Link>
               </Row>
